@@ -1,0 +1,137 @@
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+:root {
+  color-scheme: light;
+  --color-navy: #1d3487;
+  --color-deep-navy: #101422;
+  --color-ink: #1b1b1d;
+  --color-paper: #f2f3f5;
+  --color-paper-warm: #edeeee;
+  --color-paper-muted: #e7e7e8;
+  --color-route-blue: #4a77dc;
+  --color-soft-blue: #8990a9;
+  --color-muted: #707380;
+}
+
+*,
+*::before,
+*::after {
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+  scroll-padding-top: 88px;
+}
+
+body {
+  margin: 0;
+  min-width: 320px;
+  background:
+    radial-gradient(rgba(16, 20, 34, 0.045) 1px, transparent 1px),
+    var(--color-paper);
+  background-size: 4px 4px;
+  color: var(--color-ink);
+  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  line-height: 1.55;
+  -webkit-font-smoothing: antialiased;
+  text-rendering: optimizeLegibility;
+}
+
+button,
+a {
+  -webkit-tap-highlight-color: transparent;
+}
+
+::selection {
+  background: rgba(29, 52, 135, 0.16);
+  color: var(--color-deep-navy);
+}
+
+:focus-visible {
+  outline: 3px solid rgba(74, 119, 220, 0.34);
+  outline-offset: 3px;
+}
+
+@layer components {
+  .container-shell {
+    @apply mx-auto w-full max-w-[1200px] px-6 sm:px-8 lg:px-16;
+  }
+
+  .section-shell {
+    @apply scroll-mt-24 py-16 md:py-24;
+  }
+
+  .framed-section {
+    @apply rounded-[24px] border border-sluice-navy/95 bg-sluice-paper/80 p-6 shadow-none md:rounded-frame md:p-12 lg:p-[72px];
+  }
+
+  .section-label {
+    @apply font-sans text-sm font-medium leading-none tracking-normal text-sluice-navy;
+  }
+
+  .hero-title {
+    @apply font-display text-7xl font-bold leading-[0.88] tracking-normal text-sluice-navy md:text-8xl lg:text-[8.75rem];
+  }
+
+  .hero-kicker {
+    @apply font-display text-5xl font-bold leading-[0.95] tracking-normal text-sluice-navy md:text-7xl;
+  }
+
+  .section-title {
+    @apply font-display text-5xl font-bold leading-[0.92] tracking-normal text-sluice-navy md:text-7xl lg:text-8xl;
+  }
+
+  .card-title {
+    @apply font-display text-3xl font-bold leading-none tracking-normal text-sluice-navy md:text-4xl;
+  }
+
+  .body-copy {
+    @apply max-w-[600px] font-sans text-base leading-7 tracking-normal text-sluice-ink md:text-lg;
+  }
+
+  .caption {
+    @apply font-sans text-sm leading-6 tracking-normal text-sluice-muted;
+  }
+
+  .quiet-card {
+    @apply rounded-card border border-sluice-navy/20 bg-sluice-paper/75 p-6 shadow-soft;
+  }
+
+  .diagram-frame {
+    @apply overflow-hidden rounded-[24px] border border-sluice-navy bg-sluice-paper/70 p-4 md:rounded-frame md:p-8;
+  }
+
+  .top-line {
+    @apply fixed left-0 right-0 top-0 z-50 h-[3px] bg-top-line;
+  }
+}
+
+@keyframes rise-in {
+  from {
+    opacity: 0;
+    transform: translateY(16px);
+  }
+
+  to {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+.reveal-soft {
+  animation: rise-in 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *,
+  *::before,
+  *::after {
+    animation-duration: 0.01ms !important;
+    animation-iteration-count: 1 !important;
+    scroll-behavior: auto !important;
+    transition-duration: 0.01ms !important;
+  }
+}

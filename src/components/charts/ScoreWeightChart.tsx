@@ -1,0 +1,37 @@
+import type { ScoreWeight } from "../../types";
+
+type ScoreWeightChartProps = {
+  weights: ScoreWeight[];
+};
+
+export function ScoreWeightChart({ weights }: ScoreWeightChartProps) {
+  return (
+    <div className="flex flex-col gap-4" aria-label="Validator scoring weights">
+      {weights.map((weight) => (
+        <div
+          key={weight.label}
+          className="rounded-card border border-sluice-navy/20 bg-sluice-paper/75 p-5"
+        >
+          <div className="flex items-center justify-between gap-4">
+            <div>
+              <h3 className="font-sans text-base font-semibold tracking-normal text-sluice-ink">
+                {weight.label}
+              </h3>
+              <p className="caption mt-1">{weight.detail}</p>
+            </div>
+            <span className="font-display text-3xl font-bold leading-none tracking-normal text-sluice-navy">
+              {weight.value.toFixed(2)}
+            </span>
+          </div>
+          <div className="mt-4 h-2 overflow-hidden rounded-full bg-sluice-paperMuted">
+            <div
+              className="h-full rounded-full bg-sluice-navy"
+              style={{ width: `${weight.value * 100}%` }}
+              aria-hidden="true"
+            />
+          </div>
+        </div>
+      ))}
+    </div>
+  );
+}
