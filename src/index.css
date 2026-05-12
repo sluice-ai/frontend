@@ -24,17 +24,28 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
+  overflow-x: clip;
 }
 
 body {
   margin: 0;
   min-width: 320px;
+  overflow-x: clip;
   background:
-    radial-gradient(rgba(16, 20, 34, 0.045) 1px, transparent 1px),
+    linear-gradient(180deg, rgba(242, 243, 245, 0.92), rgba(237, 238, 238, 0.74)),
+    radial-gradient(rgba(29, 52, 135, 0.1) 1px, transparent 1.2px),
+    radial-gradient(rgba(74, 119, 220, 0.06) 1px, transparent 1.2px),
     var(--color-paper);
-  background-size: 4px 4px;
+  background-position:
+    0 0,
+    0 0,
+    12px 12px;
+  background-size:
+    auto,
+    18px 18px,
+    18px 18px;
   color: var(--color-ink);
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   line-height: 1.55;
   -webkit-font-smoothing: antialiased;
   text-rendering: optimizeLegibility;
@@ -55,25 +66,67 @@ a {
   outline-offset: 3px;
 }
 
+svg [role="button"]:focus,
+svg [role="button"]:focus-visible {
+  outline: none;
+}
+
+svg [role="button"] .svg-focus-ring {
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 160ms ease;
+}
+
+svg [role="button"]:focus-visible .svg-focus-ring {
+  opacity: 1;
+}
+
 @layer components {
   .container-shell {
-    @apply mx-auto w-full max-w-[1200px] px-6 sm:px-8 lg:px-16;
+    @apply mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-16;
   }
 
   .section-shell {
     @apply scroll-mt-24 py-16 md:py-24;
   }
 
+  .surface-panel {
+    @apply rounded-[24px] border border-sluice-navy/15 bg-sluice-paper/45 p-6 shadow-soft backdrop-blur-[2px] md:rounded-frame md:p-12 lg:p-[72px];
+  }
+
   .framed-section {
-    @apply rounded-[24px] border border-sluice-navy/95 bg-sluice-paper/80 p-6 shadow-none md:rounded-frame md:p-12 lg:p-[72px];
+    @apply surface-panel;
   }
 
   .section-label {
     @apply font-sans text-sm font-medium leading-none tracking-normal text-sluice-navy;
   }
 
+  .hero-stage {
+    @apply relative grid grid-cols-[minmax(0,1fr)] gap-y-8 py-14 md:py-20;
+  }
+
+  .hero-copy,
+  .hero-actions {
+    @apply relative z-10 min-w-0;
+  }
+
   .hero-title {
-    @apply font-display text-7xl font-bold leading-[0.88] tracking-normal text-sluice-navy md:text-8xl lg:text-[8.75rem];
+    @apply m-0 w-full max-w-[690px] font-display text-[2.5rem] font-normal leading-[1.05] tracking-normal text-sluice-navy min-[420px]:text-[3rem] sm:text-[3.5rem] md:text-[3.8rem] lg:text-[4rem] xl:text-[4.5rem];
+  }
+
+  .hero-actions {
+    @apply flex flex-col items-start gap-3 sm:flex-row;
+  }
+
+  .hero-figure {
+    @apply relative z-0 -mb-5 -mt-6 w-full min-w-0;
+  }
+
+  .hero-route-map {
+    width: min(128vw, 620px);
+    max-width: none;
+    margin-inline: auto;
   }
 
   .hero-kicker {
@@ -81,11 +134,11 @@ a {
   }
 
   .section-title {
-    @apply font-display text-5xl font-bold leading-[0.92] tracking-normal text-sluice-navy md:text-7xl lg:text-8xl;
+    @apply font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-sluice-navy md:text-5xl lg:text-[3.5rem];
   }
 
   .card-title {
-    @apply font-display text-3xl font-bold leading-none tracking-normal text-sluice-navy md:text-4xl;
+    @apply font-display text-2xl font-normal leading-[1.1] tracking-[-0.01em] text-sluice-navy md:text-3xl;
   }
 
   .body-copy {
@@ -97,15 +150,63 @@ a {
   }
 
   .quiet-card {
-    @apply rounded-card border border-sluice-navy/20 bg-sluice-paper/75 p-6 shadow-soft;
+    @apply rounded-card border border-sluice-navy/15 bg-sluice-paper/40 p-6 shadow-soft backdrop-blur-[1px] transition-colors duration-200 ease-sluice hover:border-sluice-navy/30 hover:bg-sluice-paper/50;
   }
 
   .diagram-frame {
-    @apply overflow-hidden rounded-[24px] border border-sluice-navy bg-sluice-paper/70 p-4 md:rounded-frame md:p-8;
+    @apply overflow-hidden rounded-[24px] border border-sluice-navy/20 bg-transparent p-4 md:rounded-frame md:p-8;
   }
 
   .top-line {
-    @apply fixed left-0 right-0 top-0 z-50 h-[3px] bg-top-line;
+    @apply fixed left-0 top-0 z-50 h-[3px] bg-sluice-navy;
+  }
+}
+
+@media (min-width: 768px) {
+  .hero-route-map {
+    width: min(118vw, 880px);
+  }
+}
+
+@media (min-width: 1024px) {
+  .hero-stage {
+    min-height: clamp(700px, 62vw, 820px);
+    padding-top: clamp(72px, 8vw, 108px);
+    padding-bottom: 120px;
+  }
+
+  .hero-title {
+    max-width: min(700px, 62vw);
+  }
+
+  .hero-actions {
+    margin-top: 30px;
+  }
+
+  .hero-figure {
+    position: absolute;
+    top: clamp(300px, 27vw, 365px);
+    right: clamp(-120px, -6vw, -48px);
+    width: auto;
+    margin: 0;
+  }
+
+  .hero-route-map {
+    width: clamp(900px, 88vw, 1180px);
+    margin: 0;
+  }
+}
+
+@media (min-width: 1360px) {
+  .hero-route-map {
+    width: clamp(1080px, 80vw, 1260px);
+  }
+}
+
+@supports not (overflow: clip) {
+  html,
+  body {
+    overflow-x: hidden;
   }
 }
 

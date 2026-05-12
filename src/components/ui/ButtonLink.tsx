@@ -31,7 +31,7 @@ export function ButtonLink({
   return (
     <a
       className={cn(
-        "inline-flex min-h-12 items-center justify-center gap-2 rounded-pill border px-5 py-3 font-sans text-base font-medium tracking-normal transition-colors duration-200 ease-sluice",
+        "inline-flex min-h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-pill border px-5 py-3 font-sans text-base font-medium tracking-normal transition-colors duration-200 ease-sluice",
         variantClasses[variant],
         className,
       )}

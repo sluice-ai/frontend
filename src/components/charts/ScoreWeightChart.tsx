@@ -10,7 +10,7 @@ export function ScoreWeightChart({ weights }: ScoreWeightChartProps) {
       {weights.map((weight) => (
         <div
           key={weight.label}
-          className="rounded-card border border-sluice-navy/20 bg-sluice-paper/75 p-5"
+          className="rounded-card border border-sluice-navy/15 bg-transparent p-5"
         >
           <div className="flex items-center justify-between gap-4">
             <div>
@@ -19,11 +19,11 @@ export function ScoreWeightChart({ weights }: ScoreWeightChartProps) {
               </h3>
               <p className="caption mt-1">{weight.detail}</p>
             </div>
-            <span className="font-display text-3xl font-bold leading-none tracking-normal text-sluice-navy">
+            <span className="font-display text-3xl font-normal leading-none tracking-normal text-sluice-navy">
               {weight.value.toFixed(2)}
             </span>
           </div>
-          <div className="mt-4 h-2 overflow-hidden rounded-full bg-sluice-paperMuted">
+          <div className="mt-4 h-2 overflow-hidden rounded-full border border-sluice-navy/10 bg-sluice-paper/35">
             <div
               className="h-full rounded-full bg-sluice-navy"
               style={{ width: `${weight.value * 100}%` }}

@@ -12,7 +12,7 @@ export function Card({ children, className, isActive, ...props }: CardProps) {
     <div
       className={cn(
         "quiet-card",
-        isActive && "border-sluice-navy/20 bg-sluice-navy/5",
+        isActive && "border-sluice-routeBlue/45 bg-sluice-routeBlue/10",
         className,
       )}
       {...props}

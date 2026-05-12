@@ -9,7 +9,7 @@ export function CallToAction() {
       className="scroll-mt-24 bg-sluice-deepNavy px-6 py-20 text-center md:px-16 md:py-28"
     >
       <div className="mx-auto max-w-3xl">
-        <h2 className="font-display text-5xl font-bold leading-[0.95] tracking-normal text-sluice-paper md:text-7xl">
+        <h2 className="font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-sluice-paper md:text-5xl lg:text-[3.5rem]">
           Build the routing layer for decentralized AI.
         </h2>
         <p className="mx-auto mt-7 max-w-2xl font-sans text-base leading-7 tracking-normal text-sluice-paper/70 md:text-lg">

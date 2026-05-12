@@ -7,30 +7,40 @@ import { cn } from "../lib/cn";
 export function Navbar() {
   const [isOpen, setIsOpen] = useState(false);
   const [hasShadow, setHasShadow] = useState(false);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
-    const updateShadow = () => setHasShadow(window.scrollY > 32);
+    const handleScroll = () => {
+      setHasShadow(window.scrollY > 32);
+      
+      const totalScroll = document.documentElement.scrollTop;
+      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
+      const progress = windowHeight > 0 ? (totalScroll / windowHeight) * 100 : 0;
+      setScrollProgress(progress);
+    };
 
-    updateShadow();
-    window.addEventListener("scroll", updateShadow, { passive: true });
-
-    return () => window.removeEventListener("scroll", updateShadow);
+    handleScroll();
+    window.addEventListener("scroll", handleScroll, { passive: true });
+    return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
   return (
     <>
-      <div className="top-line" />
+      <div 
+        className="top-line transition-all duration-75 ease-out" 
+        style={{ width: `${scrollProgress}%` }} 
+      />
       <nav
         className={cn(
-          "fixed left-0 right-0 top-[3px] z-40 border-b border-sluice-navy/10 bg-sluice-paper/85 backdrop-blur-xl transition-shadow duration-200",
+          "fixed left-0 right-0 top-[3px] z-40 border-b border-sluice-navy/10 bg-sluice-paper/60 backdrop-blur-xl transition-shadow duration-200",
           hasShadow && "shadow-soft",
         )}
         aria-label="Primary navigation"
       >
         <div className="container-shell flex h-16 items-center justify-between">
           <a
-            href="#hero"
-            className="font-display text-2xl font-bold tracking-normal text-sluice-navy"
+            href="/"
+            className="font-sans text-2xl font-semibold tracking-tight text-sluice-navy"
             onClick={() => setIsOpen(false)}
           >
             Sluice
@@ -67,7 +77,7 @@ export function Navbar() {
         <div
           id="mobile-navigation"
           className={cn(
-            "border-t border-sluice-navy/10 bg-sluice-paper/95 px-6 py-5 backdrop-blur-xl md:hidden",
+            "border-t border-sluice-navy/10 bg-sluice-paper/75 px-6 py-5 backdrop-blur-xl md:hidden",
             !isOpen && "hidden",
           )}
         >

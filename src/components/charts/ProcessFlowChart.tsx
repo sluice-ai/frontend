@@ -9,19 +9,9 @@ const flowNodes = [
 
 export function ProcessFlowChart() {
   const [activeIndex, setActiveIndex] = useState(0);
-  const activeNode = flowNodes[activeIndex];
 
   return (
-    <figure className="overflow-hidden rounded-[24px] bg-sluice-paper/70 md:rounded-frame">
-      <div className="mb-3 rounded-[14px] border border-sluice-navy/15 bg-sluice-paperWarm/50 px-4 py-3">
-        <span className="font-sans text-sm font-semibold tracking-normal text-sluice-navy">
-          {activeNode.label}
-        </span>
-        <span className="mx-2 text-sluice-muted">/</span>
-        <span className="font-sans text-sm text-sluice-ink">
-          {activeNode.detail}
-        </span>
-      </div>
+    <figure className="overflow-hidden">
       <svg
         viewBox="0 0 560 200"
         role="img"
@@ -50,7 +40,7 @@ export function ProcessFlowChart() {
           width="540"
           height="168"
           rx="28"
-          fill="#F2F3F5"
+          fill="transparent"
         />
 
         {flowNodes.slice(0, -1).map((node, index) => {
@@ -82,13 +72,24 @@ export function ProcessFlowChart() {
               if (event.key === "Enter" || event.key === " ") {
                 setActiveIndex(index);
               }
-            }}
-          >
+          }}
+        >
+            <circle
+              className="svg-focus-ring"
+              cx={node.x}
+              cy="100"
+              r="48"
+              stroke="#4A77DC"
+              strokeWidth="2.5"
+              fill="none"
+            />
             <circle
               cx={node.x}
               cy="100"
               r="40"
-              fill={index === activeIndex ? "#1D3487" : "#F2F3F5"}
+              fill={
+                index === activeIndex ? "#1D3487" : "rgba(242,243,245,0.58)"
+              }
               stroke="#1D3487"
               strokeWidth={index === activeIndex ? "2" : "1.25"}
             />

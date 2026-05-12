@@ -61,7 +61,7 @@ const defaultProviders: RouteProvider[] = [
     id: "chutes",
     name: "Chutes",
     caption: "compute",
-    y: 66,
+    y: 54,
     scores: {
       quality: 77,
       cost: 83,
@@ -74,7 +74,7 @@ const defaultProviders: RouteProvider[] = [
     id: "targon",
     name: "Targon",
     caption: "private",
-    y: 142,
+    y: 124,
     scores: {
       quality: 84,
       cost: 72,
@@ -87,7 +87,7 @@ const defaultProviders: RouteProvider[] = [
     id: "external",
     name: "External",
     caption: "api",
-    y: 218,
+    y: 194,
     scores: {
       quality: 88,
       cost: 58,
@@ -100,7 +100,7 @@ const defaultProviders: RouteProvider[] = [
     id: "subnet",
     name: "Subnet",
     caption: "market",
-    y: 292,
+    y: 264,
     scores: {
       quality: 72,
       cost: 91,
@@ -127,10 +127,10 @@ function getRouteScore(provider: RouteProvider, policy: RoutePolicy) {
 }
 
 function getRoutePath(provider: RouteProvider) {
-  const centerY = 186;
-  const exitX = 342;
-  const targetX = 446;
-  const controlOffset = Math.abs(provider.y - centerY) > 90 ? 58 : 42;
+  const centerY = 160;
+  const exitX = 348;
+  const targetX = 542;
+  const controlOffset = Math.abs(provider.y - centerY) > 82 ? 72 : 54;
 
   return `M${exitX} ${centerY} C${exitX + controlOffset} ${centerY}, ${
     targetX - controlOffset
@@ -175,37 +175,9 @@ export function RoutingFlowDiagram({
   };
 
   return (
-    <figure className="overflow-visible rounded-[24px] p-2 md:rounded-frame md:p-4 lg:p-0">
-      <div className="mb-4 lg:hidden">
-        <div className="flex flex-wrap gap-2" aria-label="Route policy controls">
-          {policies.map((policy) => {
-            const isActive = policy.id === activePolicy.id;
-
-            return (
-              <button
-                key={policy.id}
-                type="button"
-                aria-pressed={isActive}
-                className={cn(
-                  "rounded-pill border px-3.5 py-2 font-sans text-sm font-medium tracking-normal transition-colors",
-                  isActive
-                    ? "border-sluice-navy bg-sluice-navy text-sluice-paper"
-                    : "border-sluice-navy/25 text-sluice-navy hover:bg-sluice-navy/5",
-                )}
-                onClick={() => {
-                  setActivePolicyId(policy.id);
-                  setFocusedProviderId(null);
-                }}
-              >
-                {policy.label}
-              </button>
-            );
-          })}
-        </div>
-      </div>
-
+    <figure className="overflow-visible">
       <svg
-        viewBox="0 0 560 360"
+        viewBox="0 0 640 320"
         role="img"
         aria-label="Sluice route map"
         className="h-auto w-full"
@@ -213,8 +185,8 @@ export function RoutingFlowDiagram({
         <rect
           x="12"
           y="12"
-          width="536"
-          height="336"
+          width="616"
+          height="296"
           rx="28"
           fill="transparent"
         />
@@ -231,10 +203,25 @@ export function RoutingFlowDiagram({
             }
           }}
         >
-          <circle cx="78" cy="186" r="36" fill="#F2F3F5" stroke="#1D3487" />
+          <circle
+            className="svg-focus-ring"
+            cx="68"
+            cy="160"
+            r="45"
+            stroke="#4A77DC"
+            strokeWidth="2.5"
+            fill="none"
+          />
+          <circle
+            cx="68"
+            cy="160"
+            r="36"
+            fill="rgba(242,243,245,0.58)"
+            stroke="#1D3487"
+          />
           <text
-            x="78"
-            y="179"
+            x="68"
+            y="153"
             textAnchor="middle"
             fill="#1D3487"
             fontSize="14"
@@ -243,8 +230,8 @@ export function RoutingFlowDiagram({
             REQ
           </text>
           <text
-            x="78"
-            y="199"
+            x="68"
+            y="173"
             textAnchor="middle"
             fill="#707380"
             fontSize="10"
@@ -254,7 +241,7 @@ export function RoutingFlowDiagram({
         </g>
 
         <path
-          d="M114 186 H176"
+          d="M104 160 H174"
           fill="none"
           stroke="#1D3487"
           strokeWidth="1.8"
@@ -262,18 +249,18 @@ export function RoutingFlowDiagram({
 
         <g>
           <rect
-            x="182"
-            y="126"
-            width="160"
-            height="120"
+            x="180"
+            y="104"
+            width="168"
+            height="112"
             rx="22"
-            fill="rgba(29,52,135,0.06)"
+            fill="rgba(242,243,245,0.44)"
             stroke="#1D3487"
             strokeWidth="1.35"
           />
           <text
-            x="262"
-            y="171"
+            x="264"
+            y="148"
             textAnchor="middle"
             fill="#1D3487"
             fontSize="18"
@@ -282,8 +269,8 @@ export function RoutingFlowDiagram({
             Sluice
           </text>
           <text
-            x="262"
-            y="196"
+            x="264"
+            y="173"
             textAnchor="middle"
             fill="#707380"
             fontSize="12"
@@ -291,8 +278,8 @@ export function RoutingFlowDiagram({
             {activePolicy.label} policy
           </text>
           <text
-            x="262"
-            y="218"
+            x="264"
+            y="195"
             textAnchor="middle"
             fill="#707380"
             fontSize="11"
@@ -319,6 +306,15 @@ export function RoutingFlowDiagram({
                 }
               }}
             >
+              <circle
+                className="svg-focus-ring"
+                cx="570"
+                cy={provider.y}
+                r="35"
+                stroke="#4A77DC"
+                strokeWidth="2.5"
+                fill="none"
+              />
               <path
                 d={getRoutePath(provider)}
                 fill="none"
@@ -327,15 +323,15 @@ export function RoutingFlowDiagram({
                 strokeWidth={isSelected ? "3" : "1.35"}
               />
               <circle
-                cx="488"
+                cx="570"
                 cy={provider.y}
                 r="28"
-                fill={isSelected ? "#1D3487" : "#F2F3F5"}
-                stroke="#1D3487"
+                fill={isSelected ? "#1D3487" : "rgba(242,243,245,0.58)"}
+                stroke={isSelected ? "#1D3487" : "rgba(29,52,135,0.72)"}
                 strokeWidth="1.35"
               />
               <text
-                x="488"
+                x="570"
                 y={provider.y - 7}
                 textAnchor="middle"
                 fill={isSelected ? "#F2F3F5" : "#1D3487"}
@@ -345,7 +341,7 @@ export function RoutingFlowDiagram({
                 {provider.name}
               </text>
               <text
-                x="488"
+                x="570"
                 y={provider.y + 9}
                 textAnchor="middle"
                 fill={isSelected ? "#DCE7FF" : "#707380"}

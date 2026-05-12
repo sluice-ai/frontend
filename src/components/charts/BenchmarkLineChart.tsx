@@ -50,7 +50,7 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
   const activeValue = activeSeries?.values[activeIndex] ?? 0;
 
   return (
-    <figure className="rounded-card border border-sluice-navy/20 bg-sluice-paper/75 p-4 md:p-6">
+    <figure className="rounded-card border border-sluice-navy/15 bg-transparent p-4 md:p-6">
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <h3 className="font-sans text-base font-semibold tracking-normal text-sluice-ink">
@@ -83,7 +83,7 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
         </div>
       </div>
 
-      <div className="mb-4 rounded-[14px] border border-sluice-navy/15 bg-sluice-paperWarm/50 px-4 py-3">
+      <div className="mb-4 rounded-[14px] border border-sluice-navy/15 bg-transparent px-4 py-3">
         <span className="font-sans text-sm font-semibold tracking-normal text-sluice-navy">
           W{activeIndex + 1}
         </span>
@@ -110,7 +110,7 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
           width={width - 2}
           height={height - 2}
           rx="20"
-          fill="#F2F3F5"
+          fill="transparent"
           stroke="rgba(29,52,135,0.12)"
         />
 
@@ -188,7 +188,7 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
                   fill={
                     item.label === activeSeries?.label && index === activeIndex
                       ? item.stroke
-                      : "#F2F3F5"
+                      : "rgba(242,243,245,0.64)"
                   }
                   stroke={item.stroke}
                   strokeWidth="1.8"

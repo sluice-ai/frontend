@@ -22,7 +22,7 @@ import type {
 } from "../types";
 
 export const navItems: NavItem[] = [
-  { label: "Why now", href: "#why-now" },
+  { label: "Solution", href: "#solution" },
   { label: "How it works", href: "#how-it-works" },
   { label: "Benchmark", href: "#benchmark" },
   { label: "Roadmap", href: "#roadmap" },

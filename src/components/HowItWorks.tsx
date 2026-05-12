@@ -1,6 +1,5 @@
 import { steps } from "../data/siteContent";
 import { ProcessFlowChart } from "./charts/ProcessFlowChart";
-import { Card } from "./ui/Card";
 import { Container } from "./ui/Container";
 import { SectionHeader } from "./ui/SectionHeader";
 
@@ -8,7 +7,7 @@ export function HowItWorks() {
   return (
     <section id="how-it-works" className="section-shell">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[0.9fr_1.1fr] lg:items-end">
+        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <SectionHeader
             title="Four steps. One best route."
             copy="The network treats routing as a measurable competition rather than a static provider list."
@@ -16,17 +15,22 @@ export function HowItWorks() {
           <ProcessFlowChart />
         </div>
 
-        <div className="mt-10 grid gap-5 md:grid-cols-2 xl:grid-cols-4">
-          {steps.map((step) => (
-            <Card key={step.number} className="flex min-h-[260px] flex-col">
-              <div className="font-display text-6xl font-bold leading-none tracking-normal text-sluice-navy/20">
+        <div className="mt-12 grid gap-px overflow-hidden rounded-card border border-sluice-navy/15 md:grid-cols-4">
+          {steps.map((step, index) => (
+            <div
+              key={step.number}
+              className={`bg-sluice-paper/40 p-6 backdrop-blur-[1px] ${
+                index < steps.length - 1 ? "md:border-r md:border-sluice-navy/10" : ""
+              }`}
+            >
+              <div className="font-display text-4xl font-normal leading-none tracking-normal text-sluice-navy/15">
                 {step.number}
               </div>
-              <h3 className="mt-7 font-display text-3xl font-bold leading-none tracking-normal text-sluice-navy">
+              <h3 className="mt-4 font-display text-xl font-normal leading-[1.1] tracking-[-0.01em] text-sluice-navy">
                 {step.title}
               </h3>
-              <p className="caption mt-5">{step.description}</p>
-            </Card>
+              <p className="caption mt-3">{step.description}</p>
+            </div>
           ))}
         </div>
       </Container>

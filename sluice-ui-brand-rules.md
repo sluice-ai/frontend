@@ -63,8 +63,8 @@ Avoid visual decisions that feel:
 
 The brand uses two main fonts:
 
-1. **Roca Two** for display typography
-2. **TT Chocolates** for body and UI typography
+1. **Instrument Serif** for display typography
+2. **Inter** for body and UI typography
 
 Do not replace these fonts unless absolutely necessary. If the fonts are not available in development, use the fallback stacks defined below until the licensed font files are installed.
 
@@ -72,9 +72,9 @@ Do not replace these fonts unless absolutely necessary. If the fonts are not ava
 
 ## 4. Font Usage Rules
 
-### 4.1 Display Font: Roca Two
+### 4.1 Display Font: Instrument Serif
 
-Use **Roca Two** for:
+Use **Instrument Serif** for:
 
 - Hero headlines
 - Section titles
@@ -84,7 +84,7 @@ Use **Roca Two** for:
 - Short punchy brand statements
 - Major page headers
 
-Do not use Roca Two for:
+Do not use Instrument Serif for:
 
 - Paragraphs
 - Long descriptions
@@ -97,16 +97,16 @@ Do not use Roca Two for:
 Recommended CSS:
 
 ```css
-font-family: "Roca Two", Georgia, serif;
+font-family: "Instrument Serif", Georgia, serif;
 ```
 
-Roca Two should feel bold, editorial, and distinctive. Use it at large sizes with tight line-height.
+Instrument Serif should feel bold, editorial, and distinctive. Use it at large sizes with tight line-height.
 
 ---
 
-### 4.2 Body Font: TT Chocolates
+### 4.2 Body Font: Inter
 
-Use **TT Chocolates** for:
+Use **Inter** for:
 
 - Paragraphs
 - Navigation
@@ -122,10 +122,10 @@ Use **TT Chocolates** for:
 Recommended CSS:
 
 ```css
-font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+font-family: "Inter", system-ui, sans-serif;
 ```
 
-TT Chocolates should feel clean, modern, and readable. Use it with generous line-height and restrained font weights.
+Inter should feel clean, modern, and readable. Use it with generous line-height and restrained font weights.
 
 ---
 
@@ -137,11 +137,11 @@ Use for the main landing page statement.
 
 ```css
 .hero-title {
-  font-family: "Roca Two", Georgia, serif;
-  font-size: clamp(72px, 10vw, 150px);
-  line-height: 0.84;
-  letter-spacing: -0.06em;
-  font-weight: 700;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(46px, 7vw, 82px);
+  line-height: 0.96;
+  letter-spacing: 0;
+  font-weight: 400;
   color: #1D3487;
 }
 ```
@@ -161,11 +161,11 @@ Use for major sections.
 
 ```css
 .section-title {
-  font-family: "Roca Two", Georgia, serif;
-  font-size: clamp(56px, 7vw, 104px);
-  line-height: 0.88;
-  letter-spacing: -0.055em;
-  font-weight: 700;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(40px, 5vw, 72px);
+  line-height: 1.02;
+  letter-spacing: 0;
+  font-weight: 400;
   color: #1D3487;
 }
 ```
@@ -186,11 +186,11 @@ Use for feature cards, benchmark cards, and smaller editorial blocks.
 
 ```css
 .card-title {
-  font-family: "Roca Two", Georgia, serif;
-  font-size: clamp(32px, 4vw, 56px);
-  line-height: 0.95;
-  letter-spacing: -0.04em;
-  font-weight: 700;
+  font-family: "Instrument Serif", Georgia, serif;
+  font-size: clamp(28px, 3vw, 42px);
+  line-height: 1.05;
+  letter-spacing: 0;
+  font-weight: 400;
   color: #1D3487;
 }
 ```
@@ -203,7 +203,7 @@ Use for normal website paragraphs.
 
 ```css
 .body-text {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 18px;
   line-height: 1.55;
   letter-spacing: -0.015em;
@@ -227,7 +227,7 @@ Use for chart captions, sources, labels, and helper text.
 
 ```css
 .caption {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 14px;
   line-height: 1.4;
   letter-spacing: -0.01em;
@@ -244,7 +244,7 @@ Use for small interface labels.
 
 ```css
 .label {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 13px;
   line-height: 1;
   letter-spacing: 0.02em;
@@ -261,16 +261,16 @@ Use this structure when the licensed font files are available in the project.
 
 ```css
 @font-face {
-  font-family: "Roca Two";
-  src: url("/fonts/roca-two.woff2") format("woff2");
-  font-weight: 400 800;
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "TT Chocolates";
-  src: url("/fonts/tt-chocolates.woff2") format("woff2");
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
@@ -642,7 +642,7 @@ Do not use more than 1 or 2 per section.
   display: flex;
   align-items: center;
   justify-content: center;
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 34px;
   font-weight: 700;
   line-height: 1;
@@ -669,7 +669,7 @@ Navigation should be minimal, quiet, and editorial.
 
 ```css
 .nav {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 15px;
   color: #1D3487;
 }
@@ -708,7 +708,7 @@ Rules:
 
 ```css
 .button-primary {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   background: #1D3487;
   color: #F2F3F5;
   border: 1px solid #1D3487;
@@ -732,7 +732,7 @@ Rules:
 
 ```css
 .button-secondary {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   background: transparent;
   color: #1D3487;
   border: 1px solid #1D3487;
@@ -831,7 +831,7 @@ Chart title:
 
 ```css
 .chart-title {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 15px;
   color: #1B1B1D;
 }
@@ -841,7 +841,7 @@ Chart source:
 
 ```css
 .chart-source {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   font-size: 13px;
   color: #707380;
 }
@@ -978,8 +978,8 @@ Recommended structure:
 
 ```text
 Left side:
-- Huge Roca Two headline
-- Short TT Chocolates subheadline
+- Huge Instrument Serif headline
+- Short Inter subheadline
 - Primary CTA
 - Secondary CTA
 
@@ -1100,7 +1100,7 @@ Request enters
 Prompt metadata, budget, latency target, quality threshold, and privacy needs are submitted to the network.
 ```
 
-Use large Roca Two numbers.
+Use large Instrument Serif numbers.
 
 ---
 
@@ -1146,7 +1146,7 @@ Design rules:
 - Use navy borders
 - No heavy table styling
 - Keep rows spacious
-- Use Roca Two only for the main title, not every cell
+- Use Instrument Serif only for the main title, not every cell
 
 ---
 
@@ -1158,7 +1158,7 @@ Tables should look editorial, not spreadsheet-heavy.
 .table {
   width: 100%;
   border-collapse: collapse;
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
 }
 
 .table th {
@@ -1191,7 +1191,7 @@ Input fields should be minimal and outlined.
 
 ```css
 .input {
-  font-family: "TT Chocolates", Inter, system-ui, sans-serif;
+  font-family: "Inter", system-ui, sans-serif;
   background: rgba(242, 243, 245, 0.72);
   border: 1px solid rgba(29, 52, 135, 0.28);
   border-radius: 14px;
@@ -1254,14 +1254,37 @@ Rules:
 - Keep hero headline large but not overflowing.
 - Avoid tiny charts on mobile; simplify them.
 - Hide decorative starbursts if they cause layout issues.
+- Keep oversized hero diagrams clipped inside the hero section or page viewport; never create horizontal page scroll.
+- Do not scale hero diagrams with CSS transforms as the main sizing mechanism because transforms do not reserve layout space.
+- On mobile, place hero CTAs below the hero figure and keep CTA labels on one line.
 
 Mobile hero title:
 
 ```css
 @media (max-width: 768px) {
   .hero-title {
-    font-size: clamp(56px, 18vw, 86px);
-    line-height: 0.9;
+    font-size: clamp(46px, 12vw, 68px);
+    line-height: 0.98;
+  }
+}
+```
+
+Hero route map:
+
+```css
+.hero-route-map {
+  width: min(128vw, 620px);
+  max-width: none;
+}
+
+@media (min-width: 1024px) {
+  .hero-figure {
+    position: absolute;
+    right: clamp(-120px, -6vw, -48px);
+  }
+
+  .hero-route-map {
+    width: clamp(900px, 88vw, 1180px);
   }
 }
 ```
@@ -1285,8 +1308,8 @@ Use these repeatedly:
 
 - Framed paper sections
 - Thin blue borders
-- Large Roca Two headlines
-- Small TT Chocolates explanations
+- Large Instrument Serif headlines
+- Small Inter explanations
 - Simple line charts
 - Route maps
 - Side starburst markers
@@ -1423,8 +1446,8 @@ theme: {
       }
     },
     fontFamily: {
-      display: ["Roca Two", "Georgia", "serif"],
-      sans: ["TT Chocolates", "Inter", "system-ui", "sans-serif"]
+      display: ["Instrument Serif", "Georgia", "serif"],
+      sans: ["Inter", "system-ui", "sans-serif"]
     },
     borderRadius: {
       frame: "32px",
@@ -1444,8 +1467,8 @@ theme: {
 
 ```css
 :root {
-  --font-display: "Roca Two", Georgia, serif;
-  --font-body: "TT Chocolates", Inter, system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 
   --color-navy: #1D3487;
   --color-deep-navy: #101422;
@@ -1485,24 +1508,24 @@ theme: {
 
 ```css
 @font-face {
-  font-family: "Roca Two";
-  src: url("/fonts/roca-two.woff2") format("woff2");
-  font-weight: 400 800;
+  font-family: "Instrument Serif";
+  src: url("/fonts/instrument-serif.woff2") format("woff2");
+  font-weight: 400;
   font-style: normal;
   font-display: swap;
 }
 
 @font-face {
-  font-family: "TT Chocolates";
-  src: url("/fonts/tt-chocolates.woff2") format("woff2");
+  font-family: "Inter";
+  src: url("/fonts/inter.woff2") format("woff2");
   font-weight: 300 700;
   font-style: normal;
   font-display: swap;
 }
 
 :root {
-  --font-display: "Roca Two", Georgia, serif;
-  --font-body: "TT Chocolates", Inter, system-ui, sans-serif;
+  --font-display: "Instrument Serif", Georgia, serif;
+  --font-body: "Inter", system-ui, sans-serif;
 
   --color-navy: #1D3487;
   --color-deep-navy: #101422;
@@ -1680,8 +1703,8 @@ p {
 
 When building the Sluice website, follow these rules strictly:
 
-1. Use **Roca Two** only for display headings and large numbers.
-2. Use **TT Chocolates** for body, UI, nav, labels, captions, and buttons.
+1. Use **Instrument Serif** only for display headings and large numbers.
+2. Use **Inter** for body, UI, nav, labels, captions, and buttons.
 3. Use `#1D3487` as the main brand color.
 4. Use `#F2F3F5` as the main background color.
 5. Add subtle paper grain across the website.
@@ -1702,8 +1725,8 @@ When building the Sluice website, follow these rules strictly:
 
 Before shipping any Sluice page, check:
 
-- Does it use Roca Two for main headings?
-- Does it use TT Chocolates for body/UI text?
+- Does it use Instrument Serif for main headings?
+- Does it use Inter for body/UI text?
 - Is the main background paper/off-white?
 - Is navy the dominant brand color?
 - Are borders thin, rounded, and navy?

@@ -18,8 +18,8 @@ const config: Config = {
         },
       },
       fontFamily: {
-        display: ['"Roca Two"', "Georgia", "serif"],
-        sans: ['"TT Chocolates"', "Inter", "system-ui", "sans-serif"],
+        display: ['"DM Serif Display"', "Georgia", "serif"],
+        sans: ['"Inter"', "system-ui", "sans-serif"],
       },
       borderRadius: {
         frame: "32px",

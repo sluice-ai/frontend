@@ -6,7 +6,7 @@ const nodes = [
   { label: "TEE", x: 282, y: 102 },
   { label: "LLM", x: 410, y: 80 },
   { label: "Private", x: 112, y: 220 },
-  { label: "Fast", x: 346, y: 218 },
+  { label: "Fast", x: 380, y: 244 },
   { label: "Tools", x: 488, y: 220 },
   { label: "Code", x: 72, y: 330 },
   { label: "Chat", x: 226, y: 330 },
@@ -66,7 +66,7 @@ export function FragmentationMap() {
   }, [activeNode]);
 
   return (
-    <figure className="overflow-visible rounded-[24px] bg-transparent md:rounded-frame">
+    <figure className="overflow-visible">
       <svg
         viewBox="0 0 560 390"
         role="img"
@@ -97,7 +97,7 @@ export function FragmentationMap() {
         })}
 
         <path
-          d="M112 220 C174 172 258 162 346 218 C398 252 438 238 488 220"
+          d="M112 220 C176 174 258 164 380 244 C422 260 452 236 488 220"
           fill="none"
           stroke="#4A77DC"
           strokeDasharray="7 9"
@@ -124,11 +124,20 @@ export function FragmentationMap() {
               }}
             >
               <circle
+                className="svg-focus-ring"
+                cx={node.x}
+                cy={node.y}
+                r="35"
+                stroke="#4A77DC"
+                strokeWidth="2.5"
+                fill="none"
+              />
+              <circle
                 cx={node.x}
                 cy={node.y}
                 r={isActive ? "29" : "24"}
-                fill={isActive ? "#1D3487" : "#F2F3F5"}
-                stroke="#1D3487"
+                fill={isActive ? "#1D3487" : "rgba(242,243,245,0.58)"}
+                stroke={isActive ? "#1D3487" : "rgba(29,52,135,0.68)"}
                 strokeWidth={isActive ? "2" : "1.25"}
               />
               <text
@@ -158,12 +167,24 @@ export function FragmentationMap() {
           }}
         >
           <rect
-            x="202"
-            y="170"
+            className="svg-focus-ring"
+            x="204"
+            y="158"
+            width="168"
+            height="70"
+            rx="22"
+            stroke="#4A77DC"
+            strokeWidth="2.5"
+            fill="none"
+          />
+          <rect
+            x="210"
+            y="164"
             width="156"
             height="58"
             rx="17"
-            fill="#101422"
+            fill="rgba(16,20,34,0.9)"
+            stroke="rgba(242,243,245,0.24)"
           />
           <text
             x="280"
