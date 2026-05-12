@@ -83,44 +83,78 @@ svg [role="button"]:focus-visible .svg-focus-ring {
 
 @layer components {
   .container-shell {
-    @apply mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-16;
+    width: 100%;
+    max-width: 1280px;
+    margin-inline: auto;
+    padding-inline: 1.5rem;
   }
 
   .section-shell {
-    @apply scroll-mt-24 py-16 md:py-24;
+    scroll-margin-top: 6rem;
+    padding-block: 4rem;
   }
 
-  .surface-panel {
-    @apply rounded-[24px] border border-sluice-navy/15 bg-sluice-paper/45 p-6 shadow-soft backdrop-blur-[2px] md:rounded-frame md:p-12 lg:p-[72px];
-  }
-
+  .surface-panel,
   .framed-section {
-    @apply surface-panel;
+    padding: 1.5rem;
+    border: 1px solid rgba(29, 52, 135, 0.15);
+    border-radius: 24px;
+    background-color: rgba(242, 243, 245, 0.45);
+    box-shadow: 0 8px 30px rgba(16, 20, 34, 0.06);
+    -webkit-backdrop-filter: blur(2px);
+    backdrop-filter: blur(2px);
   }
 
   .section-label {
-    @apply font-sans text-sm font-medium leading-none tracking-normal text-sluice-navy;
+    color: var(--color-navy);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 0.875rem;
+    font-weight: 500;
+    line-height: 1;
+    letter-spacing: 0;
   }
 
   .hero-stage {
-    @apply relative grid grid-cols-[minmax(0, 1fr)] gap-y-8 py-14 md:py-20;
+    position: relative;
+    display: grid;
+    grid-template-columns: minmax(0, 1fr);
+    row-gap: 2rem;
+    padding-block: 3.5rem;
   }
 
   .hero-copy,
   .hero-actions {
-    @apply relative z-10 min-w-0;
+    position: relative;
+    z-index: 10;
+    min-width: 0;
   }
 
   .hero-title {
-    @apply m-0 w-full max-w-[690px] font-display text-[2.5rem] font-normal leading-[1.05] tracking-normal text-sluice-navy min-[420px]:text-[3rem] sm:text-[3.5rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4rem];
+    width: 100%;
+    max-width: 690px;
+    margin: 0;
+    color: var(--color-navy);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 2.5rem;
+    font-weight: 400;
+    line-height: 1.05;
+    letter-spacing: 0;
   }
 
   .hero-actions {
-    @apply flex flex-col items-start gap-3 sm:flex-row;
+    display: flex;
+    flex-direction: column;
+    align-items: flex-start;
+    gap: 0.75rem;
   }
 
   .hero-figure {
-    @apply relative z-0 -mb-5 -mt-6 w-full min-w-0;
+    position: relative;
+    z-index: 0;
+    width: 100%;
+    min-width: 0;
+    margin-top: -1.5rem;
+    margin-bottom: -1.25rem;
   }
 
   .hero-route-map {
@@ -130,45 +164,160 @@ svg [role="button"]:focus-visible .svg-focus-ring {
   }
 
   .hero-kicker {
-    @apply font-display text-5xl font-bold leading-[0.95] tracking-normal text-sluice-navy md:text-7xl;
+    color: var(--color-navy);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 3rem;
+    font-weight: 700;
+    line-height: 0.95;
+    letter-spacing: 0;
   }
 
   .section-title {
-    @apply font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-sluice-navy md:text-5xl lg:text-[3.5rem];
+    color: var(--color-navy);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 2.25rem;
+    font-weight: 400;
+    line-height: 1.08;
+    letter-spacing: -0.02em;
   }
 
   .card-title {
-    @apply font-display text-2xl font-normal leading-[1.1] tracking-[-0.01em] text-sluice-navy md:text-3xl;
+    color: var(--color-navy);
+    font-family: "DM Serif Display", Georgia, serif;
+    font-size: 1.5rem;
+    font-weight: 400;
+    line-height: 1.1;
+    letter-spacing: -0.01em;
   }
 
   .body-copy {
-    @apply max-w-[600px] font-sans text-base leading-7 tracking-normal text-sluice-ink md:text-lg;
+    max-width: 600px;
+    color: var(--color-ink);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 1rem;
+    line-height: 1.75rem;
+    letter-spacing: 0;
   }
 
   .caption {
-    @apply font-sans text-sm leading-6 tracking-normal text-sluice-muted;
+    color: var(--color-muted);
+    font-family: "Inter", system-ui, sans-serif;
+    font-size: 0.875rem;
+    line-height: 1.5rem;
+    letter-spacing: 0;
   }
 
   .quiet-card {
-    @apply rounded-card border border-sluice-navy/15 bg-sluice-paper/40 p-6 shadow-soft backdrop-blur-[1px] transition-colors duration-200 ease-sluice hover:border-sluice-navy/30 hover:bg-sluice-paper/50;
+    padding: 1.5rem;
+    border: 1px solid rgba(29, 52, 135, 0.15);
+    border-radius: 18px;
+    background-color: rgba(242, 243, 245, 0.4);
+    box-shadow: 0 8px 30px rgba(16, 20, 34, 0.06);
+    transition-property: color, background-color, border-color, text-decoration-color, fill, stroke;
+    transition-duration: 200ms;
+    transition-timing-function: cubic-bezier(0.16, 1, 0.3, 1);
+    -webkit-backdrop-filter: blur(1px);
+    backdrop-filter: blur(1px);
+  }
+
+  .quiet-card:hover {
+    border-color: rgba(29, 52, 135, 0.3);
+    background-color: rgba(242, 243, 245, 0.5);
   }
 
   .diagram-frame {
-    @apply overflow-hidden rounded-[24px] border border-sluice-navy/20 bg-transparent p-4 md:rounded-frame md:p-8;
+    overflow: hidden;
+    padding: 1rem;
+    border: 1px solid rgba(29, 52, 135, 0.2);
+    border-radius: 24px;
+    background-color: transparent;
   }
 
   .top-line {
-    @apply fixed left-0 top-0 z-50 h-[3px] bg-sluice-navy;
+    position: fixed;
+    top: 0;
+    left: 0;
+    z-index: 50;
+    height: 3px;
+    background-color: var(--color-navy);
+  }
+}
+
+@media (min-width: 420px) {
+  .hero-title {
+    font-size: 3rem;
+  }
+}
+
+@media (min-width: 640px) {
+  .container-shell {
+    padding-inline: 2rem;
+  }
+
+  .hero-title {
+    font-size: 3.5rem;
+  }
+
+  .hero-actions {
+    flex-direction: row;
   }
 }
 
 @media (min-width: 768px) {
+  .section-shell {
+    padding-block: 6rem;
+  }
+
+  .surface-panel,
+  .framed-section {
+    padding: 3rem;
+    border-radius: 32px;
+  }
+
+  .hero-stage {
+    padding-block: 5rem;
+  }
+
+  .hero-title {
+    font-size: 3.8rem;
+  }
+
   .hero-route-map {
     width: min(118vw, 880px);
+  }
+
+  .hero-kicker {
+    font-size: 4.5rem;
+  }
+
+  .section-title {
+    font-size: 3rem;
+  }
+
+  .card-title {
+    font-size: 1.875rem;
+  }
+
+  .body-copy {
+    font-size: 1.125rem;
+  }
+
+  .diagram-frame {
+    padding: 2rem;
+    border-radius: 32px;
   }
 }
 
 @media (min-width: 1024px) {
+  .container-shell {
+    padding-inline: 4rem;
+  }
+
+  .surface-panel,
+  .framed-section {
+    padding: 72px;
+  }
+
   .hero-stage {
     min-height: clamp(700px, 62vw, 820px);
     padding-top: clamp(72px, 8vw, 108px);
@@ -177,6 +326,7 @@ svg [role="button"]:focus-visible .svg-focus-ring {
 
   .hero-title {
     max-width: min(700px, 62vw);
+    font-size: 3.5rem;
   }
 
   .hero-actions {
@@ -195,9 +345,17 @@ svg [role="button"]:focus-visible .svg-focus-ring {
     width: clamp(900px, 88vw, 1180px);
     margin: 0;
   }
+
+  .section-title {
+    font-size: 3.5rem;
+  }
 }
 
 @media (min-width: 1360px) {
+  .hero-title {
+    font-size: 4rem;
+  }
+
   .hero-route-map {
     width: clamp(1080px, 80vw, 1260px);
   }
