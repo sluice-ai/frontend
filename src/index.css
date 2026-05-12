@@ -103,7 +103,7 @@ svg [role="button"]:focus-visible .svg-focus-ring {
   }
 
   .hero-stage {
-    @apply relative grid grid-cols-[minmax(0,1fr)] gap-y-8 py-14 md:py-20;
+    @apply relative grid grid-cols-[minmax(0, 1fr)] gap-y-8 py-14 md:py-20;
   }
 
   .hero-copy,
@@ -112,7 +112,7 @@ svg [role="button"]:focus-visible .svg-focus-ring {
   }
 
   .hero-title {
-    @apply m-0 w-full max-w-[690px] font-display text-[2.5rem] font-normal leading-[1.05] tracking-normal text-sluice-navy min-[420px]:text-[3rem] sm:text-[3.5rem] md:text-[3.8rem] lg:text-[4rem] xl:text-[4.5rem];
+    @apply m-0 w-full max-w-[690px] font-display text-[2.5rem] font-normal leading-[1.05] tracking-normal text-sluice-navy min-[420px]:text-[3rem] sm:text-[3.5rem] md:text-[3.8rem] lg:text-[3.5rem] xl:text-[4rem];
   }
 
   .hero-actions {
@@ -204,6 +204,7 @@ svg [role="button"]:focus-visible .svg-focus-ring {
 }
 
 @supports not (overflow: clip) {
+
   html,
   body {
     overflow-x: hidden;
@@ -227,6 +228,7 @@ svg [role="button"]:focus-visible .svg-focus-ring {
 }
 
 @media (prefers-reduced-motion: reduce) {
+
   *,
   *::before,
   *::after {

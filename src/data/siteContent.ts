@@ -26,7 +26,6 @@ export const navItems: NavItem[] = [
   { label: "How it works", href: "#how-it-works" },
   { label: "Benchmark", href: "#benchmark" },
   { label: "Roadmap", href: "#roadmap" },
-  { label: "Coming Soon", href: "#cta", isPrimary: true },
 ];
 
 export const metrics: Metric[] = [

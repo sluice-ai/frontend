@@ -19,11 +19,10 @@ export function HowItWorks() {
           {steps.map((step, index) => (
             <div
               key={step.number}
-              className={`bg-sluice-paper/40 p-6 backdrop-blur-[1px] ${
-                index < steps.length - 1 ? "md:border-r md:border-sluice-navy/10" : ""
-              }`}
+              className={`bg-sluice-paper/40 p-6 backdrop-blur-[1px] ${index < steps.length - 1 ? "md:border-r md:border-sluice-navy/10" : ""
+                }`}
             >
-              <div className="font-display text-4xl font-normal leading-none tracking-normal text-sluice-navy/15">
+              <div className="font-display text-4xl font-normal leading-none tracking-normal text-sluice-navy/40">
                 {step.number}
               </div>
               <h3 className="mt-4 font-display text-xl font-normal leading-[1.1] tracking-[-0.01em] text-sluice-navy">

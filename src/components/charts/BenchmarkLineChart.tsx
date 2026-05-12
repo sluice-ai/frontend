@@ -54,10 +54,11 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
       <div className="mb-4 flex flex-col gap-3 md:flex-row md:items-start md:justify-between">
         <div>
           <h3 className="font-sans text-base font-semibold tracking-normal text-sluice-ink">
-            Route score over benchmark windows
+            Benchmark score by run
           </h3>
-          <p className="caption">
-            Custom SVG chart comparing policy-aware routing to simpler baselines.
+          <p className="caption mt-1 max-w-[360px]">
+            Normalized 0-100 validator score across repeated benchmark batches.
+            Higher is better.
           </p>
         </div>
         <div className="flex flex-wrap gap-3">
@@ -66,11 +67,10 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
               key={item.label}
               type="button"
               aria-pressed={item.label === activeSeries?.label}
-              className={`inline-flex items-center gap-2 rounded-pill border px-3 py-1.5 font-sans text-xs font-medium transition-colors ${
-                item.label === activeSeries?.label
+              className={`inline-flex items-center gap-2 rounded-pill border px-3 py-1.5 font-sans text-xs font-medium transition-colors ${item.label === activeSeries?.label
                   ? "border-sluice-navy text-sluice-navy"
                   : "border-transparent text-sluice-muted hover:border-sluice-navy/20"
-              }`}
+                }`}
               onClick={() => setActiveSeriesLabel(item.label)}
             >
               <span
@@ -85,12 +85,17 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
 
       <div className="mb-4 rounded-[14px] border border-sluice-navy/15 bg-transparent px-4 py-3">
         <span className="font-sans text-sm font-semibold tracking-normal text-sluice-navy">
-          W{activeIndex + 1}
+          Run {activeIndex + 1}
         </span>
         <span className="mx-2 text-sluice-muted">/</span>
         <span className="font-sans text-sm text-sluice-ink">
-          {activeSeries?.label}: {activeValue}
+          {activeSeries?.label} scored {activeValue}/100
         </span>
+      </div>
+
+      <div className="mb-2 flex flex-col gap-1 font-sans text-xs text-sluice-muted sm:flex-row sm:items-center sm:justify-between">
+        <span>Y-axis: route score</span>
+        <span>X-axis: benchmark run</span>
       </div>
 
       <svg
@@ -101,8 +106,9 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
       >
         <title id="benchmark-chart-title">Benchmark route score chart</title>
         <desc id="benchmark-chart-desc">
-          Sluice route scores climb above fixed provider and cheapest only
-          baselines.
+          Normalized route scores from zero to one hundred across eight
+          benchmark runs. Sluice route scores climb above fixed provider and
+          cheapest only baselines.
         </desc>
         <rect
           x="1"
@@ -144,7 +150,7 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
             fill="#707380"
             fontSize="10"
           >
-            W{index + 1}
+            Run {index + 1}
           </text>
         ))}
 
@@ -164,7 +170,9 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
                 key={`${item.label}-${index}`}
                 role="button"
                 tabIndex={0}
-                aria-label={`${item.label} week ${index + 1}: ${value}`}
+                aria-label={`${item.label} run ${
+                  index + 1
+                } scored ${value} out of 100`}
                 className="cursor-pointer"
                 onClick={() => {
                   setActiveSeriesLabel(item.label);

@@ -241,7 +241,7 @@ export function RoutingFlowDiagram({
         </g>
 
         <path
-          d="M104 160 H174"
+          d="M104 160 H180"
           fill="none"
           stroke="#1D3487"
           strokeWidth="1.8"
