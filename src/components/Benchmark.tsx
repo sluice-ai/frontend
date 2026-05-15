@@ -1,5 +1,5 @@
-import { benchmarkSeries, scoringWeights } from "../data/siteContent";
-import { BenchmarkLineChart } from "./charts/BenchmarkLineChart";
+import { scoringWeights } from "../data/siteContent";
+import { ValidationMetrics } from "./charts/ValidationMetrics";
 import { Container } from "./ui/Container";
 import { SectionHeader } from "./ui/SectionHeader";
 
@@ -7,33 +7,53 @@ export function Benchmark() {
   return (
     <section id="benchmark" className="section-shell">
       <Container>
-        <div className="grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-[72px] lg:items-start">
-          <div>
-            <SectionHeader
-              title="Benchmark"
-              copy="Validators benchmark each routing decision across quality, cost, latency, reliability, and privacy fit."
-            />
+        <SectionHeader
+          title="Benchmark"
+          copy="Validators execute proposed routes, compare them against reference alternatives, and reward the cheapest route that still meets task requirements."
+        />
 
-            <div className="mt-8 rounded-card border border-sluice-navy/15 bg-sluice-paper/55 p-5 font-mono text-sm leading-7 text-sluice-ink shadow-soft md:p-6">
-              <div className="text-sluice-navy/70">score = gate x</div>
-              <div className="mt-1">
-                0.42 quality + 0.22 cost + 0.16 latency + 0.12 reliability
-                + 0.08 privacy
+        <div className="mt-12 grid gap-10 lg:grid-cols-[0.78fr_1.22fr] lg:gap-[72px] lg:items-end">
+          <div>
+            <div className="rounded-card border border-sluice-navy/15 bg-sluice-paper/55 p-6 shadow-soft">
+              <div className="font-mono text-[15px] leading-relaxed">
+                <span className="text-sluice-navy/60">score =</span>{" "}
+                <span className="font-semibold text-sluice-routeBlue">gate</span>{" "}
+                <span className="text-sluice-navy/60">× (</span>
               </div>
+              <div className="mt-2 grid gap-1.5 pl-4 font-mono text-[15px] sm:pl-8">
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sluice-navy">0.50</span>
+                  <span className="text-sluice-navy/70">quality</span>
+                  <span className="text-sluice-navy/40">+</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sluice-navy">0.25</span>
+                  <span className="text-sluice-navy/70">cost</span>
+                  <span className="text-sluice-navy/40">+</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sluice-navy">0.15</span>
+                  <span className="text-sluice-navy/70">latency</span>
+                  <span className="text-sluice-navy/40">+</span>
+                </div>
+                <div className="flex items-center gap-2">
+                  <span className="font-semibold text-sluice-navy">0.10</span>
+                  <span className="text-sluice-navy/70">reliability</span>
+                </div>
+              </div>
+              <div className="mt-2 font-mono text-[15px] text-sluice-navy/60">)</div>
 
               <div
-                className="mt-5 border-t border-sluice-navy/10 pt-4"
+                className="mt-6 border-t border-sluice-navy/10 pt-5"
                 aria-label="Scoring weight mix"
               >
-                <div className="mb-3 font-sans text-xs font-semibold uppercase tracking-[0.08em] text-sluice-navy/70">
-                  Weight mix
-                </div>
-                <div className="grid grid-cols-2 gap-2 font-sans text-xs leading-none sm:grid-cols-3 lg:grid-cols-1 xl:grid-cols-5">
+
+                <div className="grid gap-4 sm:grid-cols-2">
                   {scoringWeights.map((weight) => (
-                    <div key={weight.label} className="min-w-0">
-                      <div className="mb-1 flex items-baseline justify-between gap-2 text-sluice-ink">
-                        <span className="truncate">{weight.label}</span>
-                        <span className="font-semibold text-sluice-navy">
+                    <div key={weight.label}>
+                      <div className="mb-2 flex items-baseline justify-between gap-2 text-sluice-ink">
+                        <span className="text-sm font-medium">{weight.label}</span>
+                        <span className="font-mono text-[13px] font-semibold text-sluice-navy">
                           {weight.value.toFixed(2)}
                         </span>
                       </div>
@@ -51,7 +71,7 @@ export function Benchmark() {
             </div>
           </div>
 
-          <BenchmarkLineChart series={benchmarkSeries} />
+          <ValidationMetrics />
         </div>
       </Container>
     </section>

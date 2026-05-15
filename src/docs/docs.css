@@ -41,9 +41,7 @@
   align-items: center;
   justify-content: space-between;
   height: 100%;
-  max-width: 1440px;
-  margin: 0 auto;
-  padding: 0 1.25rem;
+  padding: 0 22px;
 }
 
 .docs-topbar__left {
@@ -222,7 +220,7 @@
 }
 
 .docs-sidebar__section-header:hover {
-  background: rgba(29, 52, 135, 0.04);
+  /* removed background color on hover */
 }
 
 .docs-sidebar__chevron {
@@ -264,7 +262,6 @@
 
 .docs-sidebar__link:hover {
   color: var(--color-navy);
-  background: rgba(29, 52, 135, 0.05);
 }
 
 .docs-sidebar__link--active {
@@ -653,19 +650,18 @@
 .docs-bottom-nav__link {
   display: flex;
   flex-direction: column;
-  gap: 4px;
-  padding: 14px 18px;
+  gap: 2px;
+  padding: 10px 14px;
   border: 1px solid rgba(29, 52, 135, 0.1);
   border-radius: 10px;
   text-decoration: none;
   color: inherit;
-  transition: border-color 200ms ease, background 200ms ease;
+  transition: border-color 200ms ease;
   max-width: 240px;
 }
 
 .docs-bottom-nav__link:hover {
-  border-color: rgba(29, 52, 135, 0.22);
-  background: rgba(255, 255, 255, 0.4);
+  border-color: rgba(29, 52, 135, 0.3);
 }
 
 .docs-bottom-nav__link--next {

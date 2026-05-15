@@ -1,0 +1,318 @@
+[Pitchdeck Slides Ideas](https://www.notion.so/Pitchdeck-Slides-Ideas-346b7dcc25828059bcc9e87e84730380?pvs=21)
+
+## One-liner
+
+Balancor is a decentralized market for routing policies: a Bittensor-native coordination layer where miners compete to decide the best place to send an AI request based on user goals such as cost, latency, quality, and privacy.
+
+## Executive summary
+
+AI demand is fragmenting across model APIs, specialized subnets, data pipelines, and private compute providers. The hard problem is no longer only **how to compute**; it is increasingly **where each request should go**.
+
+Balancor turns this routing decision into a competitive market. Users or applications submit a request plus constraints. Miners generate routing decisions. Validators benchmark those decisions against live execution and reference alternatives, then reward the routes that best satisfy the objective function.
+
+This makes Balancor a meta-infrastructure subnet: it does not try to outcompete every model provider. Instead, it helps the network discover, price, and route to the best provider for each job.
+
+## The problem
+
+### AI infrastructure is becoming fragmented
+
+- The best provider changes by task, price, model quality, latency, data locality, and privacy requirements.
+- Developers still rely on static routing, manual provider selection, or centralized black-box routers.
+- In Bittensor specifically, value is being created across many specialized subnets, but there is no neutral routing layer that coordinates demand across them efficiently.
+
+### What breaks today
+
+- Users overpay because they choose a familiar provider instead of the optimal one.
+- Latency-sensitive applications cannot dynamically trade off cost vs speed.
+- Privacy-sensitive workloads need more nuanced routing than a single API endpoint can provide.
+- Bittensor subnets become harder to navigate as the ecosystem expands.
+
+## Our thesis
+
+The winning coordination layer in decentralized AI will not be the provider that computes everything itself. It will be the marketplace that decides where computation should go.
+
+Balancor is building that marketplace.
+
+## Product
+
+### What Balancor does
+
+Balancor accepts an inference request together with constraints such as:
+
+- budget ceiling
+- minimum quality target
+- preferred latency band
+- privacy sensitivity
+- provider exclusions or routing preferences
+
+Miners compete to output the best routing policy for that request.
+
+Validators score those policies by comparing the chosen route against actual execution results and reference benchmarks across candidate providers.
+
+### Core product promise
+
+For every request, Balancor aims to answer:
+
+**What is the cheapest route that still satisfies the user’s quality, speed, and privacy requirements?**
+
+## Why this matters for Bittensor
+
+- It increases utilization across the broader subnet ecosystem.
+- It creates a demand-discovery layer above fragmented model and compute supply.
+- It turns routing intelligence into a measurable, rewardable on-chain behavior.
+- It strengthens Bittensor’s long-term value by making the network easier for applications to consume.
+
+Balancor is not just another application subnet. It is infrastructure that can make many other subnets more useful.
+
+## How the subnet works
+
+### Input layer
+
+A user or application sends:
+
+- prompt or task metadata
+- budget constraint
+- latency target
+- privacy preference
+- optional model or provider preferences
+
+### Routing layer
+
+Miners act as decision engines. Each miner predicts the best route for the task by evaluating expected:
+
+- output quality
+- total cost
+- response latency
+- route reliability
+- privacy fit
+
+### Execution and scoring layer
+
+Validators:
+
+- execute the selected route
+- compare outcomes against benchmark routes
+- estimate regret versus the best available alternative
+- score miners based on objective performance
+
+### Example scoring framework
+
+A simplified scoring function could be:
+
+Score = 0.50 × quality + 0.20 × reliability + 0.15 × privacy fit - 0.10 × cost deviation - 0.05 × latency deviation
+
+The exact weights can evolve over time by workload type.
+
+## What makes this defensible
+
+### 1. Evaluation moat
+
+The hardest part is not proposing a route. It is **proving that the route was optimal enough** under real-world conditions. A strong benchmark and scoring layer becomes a durable moat.
+
+### 2. Data flywheel
+
+Each request improves the network’s understanding of:
+
+- which providers perform best on which task types
+- how prices and latency shift over time
+- what tradeoffs users actually care about
+
+Over time, Balancor accumulates a valuable routing-performance dataset that improves decision quality.
+
+### 3. Network effects
+
+More providers increase route diversity.
+
+More miners increase strategy diversity.
+
+More validators improve scoring credibility.
+
+More users create better signal.
+
+This makes the market harder to replicate as adoption grows.
+
+## Why now
+
+- The number of models, inference APIs, and decentralized compute options is increasing rapidly.
+- Enterprises and applications are under pressure to reduce inference spend without sacrificing product quality.
+- Bittensor is becoming increasingly specialized, which raises the value of a coordination layer.
+- Privacy-aware and latency-aware routing are becoming product requirements, not nice-to-haves.
+
+## Business model
+
+### 1. Savings-share software revenue
+
+Balancor can sell a routing layer to applications and keep a percentage of verified savings.
+
+Example:
+
+- customer spends $10,000 per month on inference
+- Balancor reduces effective spend by $4,000 while meeting product constraints
+- Balancor captures 10–15% of savings as software revenue
+
+This aligns pricing with customer value rather than raw API volume.
+
+### 2. Premium routing tiers
+
+Higher-margin features can include:
+
+- privacy-focused routing
+- low-latency routing
+- dedicated enterprise policy controls
+- reliability guarantees and fallback orchestration
+
+### 3. Treasury and owner economics
+
+A launched subnet can also accrue protocol-native economics through owner emissions and treasury strategy. This should be treated as upside and strategic alignment, not the sole business case.
+
+## Go-to-market
+
+### Initial wedge
+
+Start with AI-native teams and agents that already use multiple providers and feel routing pain daily.
+
+### Beachhead users
+
+- agent builders
+- inference-heavy startups
+- teams using model ensembles or fallbacks
+- developers building on Bittensor who need provider abstraction
+
+### Distribution strategy
+
+- launch a simple API and dashboard for routing recommendations
+- publish benchmark reports showing measurable savings and latency improvements
+- integrate with agent frameworks and developer tooling
+- use the subnet itself as proof of routing performance
+
+## Product roadmap
+
+### Phase 1: MVP
+
+- Route based on task metadata and structured preferences
+- Validators run benchmark execution across a small provider set
+- Focus on cost, latency, and basic quality scoring
+- No raw-prompt sharing required for the first version where avoidable
+
+### Phase 2: Production-grade router
+
+- Expand provider coverage across APIs and selected Bittensor services
+- Introduce dynamic policy controls and route fallback logic
+- Build developer-facing API, dashboard, and analytics
+- Add enterprise billing and savings reporting
+
+### Phase 3: Privacy and trust layer
+
+- Encrypted routing where possible
+- Trusted execution or privacy-preserving routing paths for sensitive workloads
+- Stronger auditability around why a route was chosen
+
+### Phase 4: Advanced market design
+
+- Workload-specific scoring models
+- Multi-hop routing across data, model, and post-processing layers
+- Open policy marketplace where routing strategies themselves become composable assets
+
+## Investor case
+
+### Why this can become valuable
+
+- Balancor sits at the control point where demand meets fragmented AI supply.
+- It benefits from ecosystem expansion rather than being disrupted by it.
+- It can monetize both as software and as network infrastructure.
+- It has a credible path to becoming a default routing layer for decentralized and hybrid AI workloads.
+
+### What investors are backing
+
+Investors are not only backing an application. They are backing:
+
+- the benchmark layer
+- the routing intelligence layer
+- the data flywheel
+- the coordination position inside a growing AI ecosystem
+
+## Capital deployment and recovery logic
+
+### Use of funds
+
+Capital raised would be used to:
+
+- build the validator benchmark infrastructure
+- launch and harden the subnet
+- bootstrap first-party routing quality during the cold-start phase
+- ship the developer API and observability tooling
+- fund early customer acquisition and ecosystem integrations
+
+### Recovery philosophy
+
+The capital recovery path should come from **multiple aligned sources**, not one speculative assumption:
+
+- owner emissions
+- first-party operational participation during bootstrap
+- validator and treasury strategy where appropriate
+- eventual software revenue from routing customers
+
+### Important framing
+
+For investor-facing discussions, emissions should be framed as one component of the economic stack, not the entire thesis. The stronger primary story is that Balancor can become a revenue-generating coordination product with protocol-native upside.
+
+## Risks and mitigations
+
+### Risk: route quality is hard to measure
+
+Mitigation: invest heavily in benchmark design, offline evaluation, and live regret measurement.
+
+### Risk: providers change pricing and performance quickly
+
+Mitigation: treat routing as a continuously updated market problem, not a static policy engine.
+
+### Risk: cold-start network quality
+
+Mitigation: bootstrap with first-party routing and validator infrastructure until external miner competition becomes meaningful.
+
+### Risk: enterprises may hesitate on decentralization
+
+Mitigation: offer hybrid paths, auditable policies, and enterprise-friendly controls before leading with ideology.
+
+## Why we win
+
+- We are targeting a real coordination gap, not inventing artificial demand.
+- The scoring problem is intellectually hard and defensible.
+- The business model aligns with measurable customer value.
+- The subnet becomes more useful as the broader ecosystem grows.
+- The product can serve both crypto-native and non-crypto-native users over time.
+
+## **AI is moving from isolated adoption to multi-workflow deployment.**
+
+More organizations are not just using AI, but using it across multiple functions and beginning to scale it across the enterprise. That makes model, provider, and privacy decisions a real infrastructure challenge.
+
+## Proposed pitch-deck structure
+
+For a formal investor deck, this page can be turned into the following slide sequence:
+
+1. Title / one-liner
+2. The problem
+3. Why now
+4. Product and workflow
+5. Why Bittensor / why decentralization
+6. Market wedge and initial customers
+7. Business model
+8. Defensibility and moat
+9. Roadmap
+10. Risks and mitigations
+11. Capital plan and ask
+12. Closing vision
+
+## Suggested closing line
+
+Balancor aims to become the market layer that decides where AI work should go. In a world with too many models, too many providers, and too many fragmented choices, the routing layer becomes one of the most valuable positions in the stack.
+
+## Next additions to strengthen further
+
+To make this fully investor-ready, the next version should add:
+
+- a sourced market-size slide
+- competitor landscape vs centralized AI routers and orchestration platforms
+- explicit milestone timeline with 6-, 12-, and 18-month targets
+- team slide and why this team is positioned to build it
+- financial model with scenario assumptions

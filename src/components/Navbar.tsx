@@ -26,10 +26,12 @@ export function Navbar() {
 
   return (
     <>
-      <div 
-        className="top-line transition-all duration-75 ease-out" 
-        style={{ width: `${scrollProgress}%` }} 
-      />
+      <div className="fixed left-0 right-0 top-0 z-50 h-[3px] bg-white">
+        <div 
+          className="h-full bg-sluice-navy transition-all duration-75 ease-out" 
+          style={{ width: `${scrollProgress}%` }} 
+        />
+      </div>
       <nav
         className={cn(
           "fixed left-0 right-0 top-[3px] z-40 border-b border-sluice-navy/10 bg-sluice-paper/60 backdrop-blur-xl transition-shadow duration-200",

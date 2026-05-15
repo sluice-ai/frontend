@@ -17,39 +17,8 @@ export function DocsIndex() {
         </p>
       </div>
 
-      <div className="docs-index__sections">
-        {docsSidebar.map((section) => (
-          <div key={section.title} className="docs-section-group">
-            <h2 className="docs-section-group__title">{section.title}</h2>
-            <div className="docs-section-group__grid">
-              {section.items.map((item) => {
-                const Icon = item.icon;
-                return (
-                  <Link
-                    key={item.href}
-                    to={item.href}
-                    className="docs-card"
-                  >
-                    <div className="docs-card__icon-wrap">
-                      <Icon size={22} className="docs-card__icon" />
-                    </div>
-                    <div className="docs-card__body">
-                      <h3 className="docs-card__title">{item.label}</h3>
-                      {item.description && (
-                        <p className="docs-card__desc">{item.description}</p>
-                      )}
-                    </div>
-                    <div className="docs-card__arrow">
-                      <svg width="16" height="16" viewBox="0 0 16 16" fill="none">
-                        <path d="M6 4l4 4-4 4" stroke="currentColor" strokeWidth="1.5" strokeLinecap="round" strokeLinejoin="round" />
-                      </svg>
-                    </div>
-                  </Link>
-                );
-              })}
-            </div>
-          </div>
-        ))}
+      <div className="docs-index__content mt-8 text-[15px] leading-relaxed text-slate-800">
+        {/* Write about Sluice here */}
       </div>
     </div>
   );

@@ -10,11 +10,11 @@ export function CallToAction() {
     >
       <div className="mx-auto max-w-3xl">
         <h2 className="font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-sluice-paper md:text-5xl lg:text-[3.5rem]">
-          Build the routing layer for decentralized AI.
+          Stop guessing. Start routing intelligently.
         </h2>
         <p className="mx-auto mt-7 max-w-2xl font-sans text-base leading-7 tracking-normal text-sluice-paper/70 md:text-lg">
-          The Sluice testnet is coming soon. The goal is a measurable,
-          policy-aware market for fragmented AI supply.
+          The Sluice testnet is coming soon. Join the first measurable,
+          policy-aware market that decides exactly where your AI work should go.
         </p>
         <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
           <ButtonLink href="#cta" variant="inverse" icon={<ArrowRight size={18} />}>

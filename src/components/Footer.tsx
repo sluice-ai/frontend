@@ -1,9 +1,8 @@
 import { Container } from "./ui/Container";
 
 const links = [
-  { label: "Docs", href: "#benchmark" },
-  { label: "GitHub", href: "#roadmap" },
-  { label: "Discord", href: "#cta" },
+  { label: "Docs", href: "/docs" },
+  { label: "GitHub", href: "https://github.com/sluice-ai" },
 ];
 
 export function Footer() {
@@ -17,6 +16,8 @@ export function Footer() {
               <a
                 key={link.label}
                 href={link.href}
+                target={link.href.startsWith("http") ? "_blank" : undefined}
+                rel={link.href.startsWith("http") ? "noopener noreferrer" : undefined}
                 className="font-sans text-sm font-medium tracking-normal text-sluice-muted transition-colors hover:text-sluice-navy"
               >
                 {link.label}

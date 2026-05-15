@@ -9,7 +9,7 @@ export function HowItWorks() {
       <Container>
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <SectionHeader
-            title="Four steps. One best route."
+            title="The routing process."
             copy="The network treats routing as a measurable competition rather than a static provider list."
           />
           <ProcessFlowChart />

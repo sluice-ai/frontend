@@ -22,7 +22,6 @@ import type {
 } from "../types";
 
 export const navItems: NavItem[] = [
-  { label: "Solution", href: "#solution" },
   { label: "How it works", href: "#how-it-works" },
   { label: "Benchmark", href: "#benchmark" },
   { label: "Roadmap", href: "#roadmap" },
@@ -41,14 +40,14 @@ export const metrics: Metric[] = [
     note: "Fragmented supply surface",
   },
   {
-    value: "5",
-    label: "Route constraints",
-    note: "Quality, cost, latency, reliability, privacy",
+    value: "50%",
+    label: "Use in 3+ functions",
+    note: "Cross-workflow infrastructure",
   },
   {
-    value: "1",
-    label: "Best path per request",
-    note: "Policy-aware selection",
+    value: "23%",
+    label: "Scaling AI agents",
+    note: "Multi-model orchestration needs",
   },
 ];
 
@@ -106,28 +105,23 @@ export const steps: Step[] = [
 export const scoringWeights: ScoreWeight[] = [
   {
     label: "Quality",
-    value: 0.42,
+    value: 0.50,
     detail: "Conversation, reasoning, and coding task performance",
   },
   {
     label: "Cost efficiency",
-    value: 0.22,
+    value: 0.25,
     detail: "Lowest cost route that still clears the quality gate",
   },
   {
     label: "Latency",
-    value: 0.16,
+    value: 0.15,
     detail: "Time to first token and completion time",
   },
   {
     label: "Reliability",
-    value: 0.12,
+    value: 0.10,
     detail: "Success rate, timeout rate, and fallback stability",
-  },
-  {
-    label: "Privacy fit",
-    value: 0.08,
-    detail: "Confidential compute and data-handling requirements",
   },
 ];
 
@@ -153,49 +147,25 @@ export const advantages: Advantage[] = [
   {
     title: "Bittensor-native supply awareness",
     description:
-      "Understands subnet-native supply, not only traditional APIs and centralized providers.",
+      "Understands fragmented subnet-native supply, not just traditional APIs and centralized providers.",
     icon: Network,
   },
   {
     title: "Competitive routing policies",
     description:
-      "Routing logic improves as miners compete to discover better route policies.",
+      "Routing logic improves continuously as miners compete to discover better routes and validators reward measurable performance.",
     icon: GitBranch,
   },
   {
     title: "Benchmark telemetry moat",
     description:
-      "A live dataset across quality, cost, latency, reliability, and privacy fit.",
+      "Builds a live routing dataset across cost, latency, quality, reliability, and privacy fit that becomes harder to replicate over time.",
     icon: Activity,
   },
   {
-    title: "Policy-aware control",
+    title: "Network effects",
     description:
-      "Teams can encode budget, latency, privacy, and quality requirements per request.",
-    icon: SlidersHorizontal,
-  },
-  {
-    title: "Reliability-first fallback",
-    description:
-      "Fallback logic keeps workloads moving when a provider degrades or times out.",
-    icon: ShieldCheck,
-  },
-  {
-    title: "Latency and cost discipline",
-    description:
-      "Every decision is scored against live constraints, not static preference lists.",
-    icon: Gauge,
-  },
-  {
-    title: "Private workload routing",
-    description:
-      "Sensitive jobs can prefer confidential compute paths when policy requires it.",
-    icon: LockKeyhole,
-  },
-  {
-    title: "Visible route reasoning",
-    description:
-      "Route selection is explainable through scores, constraints, and provider telemetry.",
+      "More providers expand route diversity, more miners improve strategy, more validators strengthen scoring, and more users improve signal.",
     icon: Route,
   },
 ];
