@@ -26,6 +26,7 @@ export const navItems: NavItem[] = [
   { label: "How it works", href: "#how-it-works" },
   { label: "Benchmark", href: "#benchmark" },
   { label: "Roadmap", href: "#roadmap" },
+  { label: "Docs", href: "/docs" },
 ];
 
 export const metrics: Metric[] = [
