@@ -1,7 +1,7 @@
 /* ===================================================================
    Sluice Docs – Styles
    Follows the Sluice brand: paper-first, navy typography, editorial
-   Fonts: Instrument Serif (display) + Inter (body/UI)
+   Fonts: DM Serif Display (display) + Inter (body/UI)
    =================================================================== */
 
 /* ------------------------------------------------------------------
@@ -86,7 +86,7 @@
   border-radius: 7px;
   background: var(--color-navy);
   color: var(--color-paper);
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: 17px;
   font-weight: 400;
   line-height: 1;
@@ -129,6 +129,25 @@
   padding: 3px 9px;
   border-radius: 999px;
   letter-spacing: 0.02em;
+}
+
+@media (max-width: 639px) {
+  .docs-topbar__inner {
+    padding: 0 18px;
+  }
+
+  .docs-topbar__brand {
+    display: none;
+  }
+
+  .docs-topbar__left {
+    gap: 0;
+  }
+
+  .docs-topbar__right {
+    margin-left: auto;
+    gap: 10px;
+  }
 }
 
 @media (min-width: 1024px) {
@@ -342,7 +361,7 @@
 }
 
 .docs-index__title {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(2rem, 4vw, 3rem);
   font-weight: 400;
   line-height: 1.05;
@@ -549,7 +568,7 @@
 }
 
 .docs-placeholder__title {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(1.75rem, 3.5vw, 2.5rem);
   font-weight: 400;
   line-height: 1.08;

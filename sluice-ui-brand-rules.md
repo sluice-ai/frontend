@@ -63,7 +63,7 @@ Avoid visual decisions that feel:
 
 The brand uses two main fonts:
 
-1. **Instrument Serif** for display typography
+1. **DM Serif Display** for display typography
 2. **Inter** for body and UI typography
 
 Do not replace these fonts unless absolutely necessary. If the fonts are not available in development, use the fallback stacks defined below until the licensed font files are installed.
@@ -72,9 +72,9 @@ Do not replace these fonts unless absolutely necessary. If the fonts are not ava
 
 ## 4. Font Usage Rules
 
-### 4.1 Display Font: Instrument Serif
+### 4.1 Display Font: DM Serif Display
 
-Use **Instrument Serif** for:
+Use **DM Serif Display** for:
 
 - Hero headlines
 - Section titles
@@ -84,7 +84,7 @@ Use **Instrument Serif** for:
 - Short punchy brand statements
 - Major page headers
 
-Do not use Instrument Serif for:
+Do not use DM Serif Display for:
 
 - Paragraphs
 - Long descriptions
@@ -97,10 +97,10 @@ Do not use Instrument Serif for:
 Recommended CSS:
 
 ```css
-font-family: "Instrument Serif", Georgia, serif;
+font-family: "DM Serif Display", Georgia, serif;
 ```
 
-Instrument Serif should feel bold, editorial, and distinctive. Use it at large sizes with tight line-height.
+DM Serif Display should feel bold, editorial, and distinctive. Use it at large sizes with tight line-height.
 
 ---
 
@@ -137,7 +137,7 @@ Use for the main landing page statement.
 
 ```css
 .hero-title {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(46px, 7vw, 82px);
   line-height: 0.96;
   letter-spacing: 0;
@@ -161,7 +161,7 @@ Use for major sections.
 
 ```css
 .section-title {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(40px, 5vw, 72px);
   line-height: 1.02;
   letter-spacing: 0;
@@ -186,7 +186,7 @@ Use for feature cards, benchmark cards, and smaller editorial blocks.
 
 ```css
 .card-title {
-  font-family: "Instrument Serif", Georgia, serif;
+  font-family: "DM Serif Display", Georgia, serif;
   font-size: clamp(28px, 3vw, 42px);
   line-height: 1.05;
   letter-spacing: 0;
@@ -261,8 +261,8 @@ Use this structure when the licensed font files are available in the project.
 
 ```css
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/instrument-serif.woff2") format("woff2");
+  font-family: "DM Serif Display";
+  src: url("/fonts/dm-serif-display.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -978,7 +978,7 @@ Recommended structure:
 
 ```text
 Left side:
-- Huge Instrument Serif headline
+- Huge DM Serif Display headline
 - Short Inter subheadline
 - Primary CTA
 - Secondary CTA
@@ -1100,7 +1100,7 @@ Request enters
 Prompt metadata, budget, latency target, quality threshold, and privacy needs are submitted to the network.
 ```
 
-Use large Instrument Serif numbers.
+Use large DM Serif Display numbers.
 
 ---
 
@@ -1146,7 +1146,7 @@ Design rules:
 - Use navy borders
 - No heavy table styling
 - Keep rows spacious
-- Use Instrument Serif only for the main title, not every cell
+- Use DM Serif Display only for the main title, not every cell
 
 ---
 
@@ -1308,7 +1308,7 @@ Use these repeatedly:
 
 - Framed paper sections
 - Thin blue borders
-- Large Instrument Serif headlines
+- Large DM Serif Display headlines
 - Small Inter explanations
 - Simple line charts
 - Route maps
@@ -1446,7 +1446,7 @@ theme: {
       }
     },
     fontFamily: {
-      display: ["Instrument Serif", "Georgia", "serif"],
+      display: ["DM Serif Display", "Georgia", "serif"],
       sans: ["Inter", "system-ui", "sans-serif"]
     },
     borderRadius: {
@@ -1467,7 +1467,7 @@ theme: {
 
 ```css
 :root {
-  --font-display: "Instrument Serif", Georgia, serif;
+  --font-display: "DM Serif Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
 
   --color-navy: #1D3487;
@@ -1508,8 +1508,8 @@ theme: {
 
 ```css
 @font-face {
-  font-family: "Instrument Serif";
-  src: url("/fonts/instrument-serif.woff2") format("woff2");
+  font-family: "DM Serif Display";
+  src: url("/fonts/dm-serif-display.woff2") format("woff2");
   font-weight: 400;
   font-style: normal;
   font-display: swap;
@@ -1524,7 +1524,7 @@ theme: {
 }
 
 :root {
-  --font-display: "Instrument Serif", Georgia, serif;
+  --font-display: "DM Serif Display", Georgia, serif;
   --font-body: "Inter", system-ui, sans-serif;
 
   --color-navy: #1D3487;
@@ -1703,7 +1703,7 @@ p {
 
 When building the Sluice website, follow these rules strictly:
 
-1. Use **Instrument Serif** only for display headings and large numbers.
+1. Use **DM Serif Display** only for display headings and large numbers.
 2. Use **Inter** for body, UI, nav, labels, captions, and buttons.
 3. Use `#1D3487` as the main brand color.
 4. Use `#F2F3F5` as the main background color.
@@ -1725,7 +1725,7 @@ When building the Sluice website, follow these rules strictly:
 
 Before shipping any Sluice page, check:
 
-- Does it use Instrument Serif for main headings?
+- Does it use DM Serif Display for main headings?
 - Does it use Inter for body/UI text?
 - Is the main background paper/off-white?
 - Is navy the dominant brand color?

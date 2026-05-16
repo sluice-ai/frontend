@@ -80,6 +80,16 @@ svg [role="button"]:focus-visible .svg-focus-ring {
   opacity: 1;
 }
 
+@layer utilities {
+  .hide-scrollbar {
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+  }
+  .hide-scrollbar::-webkit-scrollbar {
+    display: none;
+  }
+}
+
 @layer components {
   .container-shell {
     width: 100%;
