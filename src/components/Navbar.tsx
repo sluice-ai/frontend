@@ -1,8 +1,11 @@
 import { Menu, X } from "lucide-react";
 import { useEffect, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { navItems } from "../data/siteContent";
 import { cn } from "../lib/cn";
+import { isInternalRouteHref } from "../lib/links";
+import { BrandLogo } from "./BrandLogo";
 import type { NavItem } from "../types";
 
 type NavbarProps = {
@@ -39,33 +42,25 @@ export function Navbar({ items = navItems }: NavbarProps) {
         aria-label="Primary navigation"
       >
         <div className="container-shell flex h-16 items-center justify-between">
-          <a
-            href="/"
+          <Link
+            to="/"
             className="flex items-center gap-2 font-sans text-2xl font-semibold tracking-tight text-sluice-navy"
             onClick={() => setIsOpen(false)}
           >
-            <img
-              src="/logo.svg"
-              alt=""
-              aria-hidden="true"
-              className="h-6 w-auto shrink-0"
-            />
-            <span>Sluice</span>
-          </a>
+            <BrandLogo />
+          </Link>
 
           <div className="hidden items-center gap-8 md:flex">
             {items.map((item) => (
-              <a
+              <NavItemLink
                 key={item.href}
-                href={item.href}
+                item={item}
                 className={cn(
                   "font-sans text-[15px] font-medium tracking-normal text-sluice-navy transition-opacity hover:opacity-70",
                   item.isPrimary &&
                     "rounded-pill bg-sluice-navy px-4 py-2 text-sm font-semibold text-sluice-paper hover:bg-sluice-deepNavy hover:opacity-100",
                 )}
-              >
-                {item.label}
-              </a>
+              />
             ))}
           </div>
 
@@ -90,21 +85,43 @@ export function Navbar({ items = navItems }: NavbarProps) {
         >
           <div className="flex flex-col gap-4">
             {items.map((item) => (
-              <a
+              <NavItemLink
                 key={item.href}
-                href={item.href}
+                item={item}
                 className={cn(
                   "rounded-pill px-4 py-3 font-sans text-base font-medium tracking-normal text-sluice-navy",
                   item.isPrimary && "bg-sluice-navy text-sluice-paper",
                 )}
                 onClick={() => setIsOpen(false)}
-              >
-                {item.label}
-              </a>
+              />
             ))}
           </div>
         </div>
       </nav>
     </>
+  );
+}
+
+function NavItemLink({
+  className,
+  item,
+  onClick,
+}: {
+  className?: string;
+  item: NavItem;
+  onClick?: () => void;
+}) {
+  if (isInternalRouteHref(item.href)) {
+    return (
+      <Link to={item.href} className={className} onClick={onClick}>
+        {item.label}
+      </Link>
+    );
+  }
+
+  return (
+    <a href={item.href} className={className} onClick={onClick}>
+      {item.label}
+    </a>
   );
 }

@@ -2,6 +2,7 @@ import { Menu, X } from "lucide-react";
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 
+import { BrandLogo } from "../components/BrandLogo";
 import { DocsSidebar } from "./DocsSidebar";
 import { docsSidebar } from "./docsData";
 
@@ -34,13 +35,10 @@ export function DocsLayout() {
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
             <Link to="/" className="docs-topbar__brand">
-              <img
-                src="/logo.svg"
-                alt=""
-                aria-hidden="true"
-                className="docs-topbar__brand-mark"
+              <BrandLogo
+                markClassName="docs-topbar__brand-mark"
+                textClassName="docs-topbar__brand-text"
               />
-              <span className="docs-topbar__brand-text">Sluice</span>
             </Link>
           </div>
           <div className="docs-topbar__right">

@@ -1,6 +1,8 @@
 import type { AnchorHTMLAttributes, ReactNode } from "react";
+import { Link } from "react-router-dom";
 
 import { cn } from "../../lib/cn";
+import { isInternalRouteHref } from "../../lib/links";
 
 type ButtonLinkVariant = "primary" | "secondary" | "inverse" | "darkSecondary";
 
@@ -24,21 +26,38 @@ const variantClasses: Record<ButtonLinkVariant, string> = {
 export function ButtonLink({
   children,
   className,
+  href,
   icon,
   variant = "primary",
   ...props
 }: ButtonLinkProps) {
-  return (
-    <a
-      className={cn(
-        "inline-flex min-h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-pill border px-5 py-3 font-sans text-base font-medium tracking-normal transition-colors duration-200 ease-sluice",
-        variantClasses[variant],
-        className,
-      )}
-      {...props}
-    >
+  const linkClassName = cn(
+    "inline-flex min-h-12 shrink-0 items-center justify-center gap-2 whitespace-nowrap rounded-pill border px-5 py-3 font-sans text-base font-medium tracking-normal transition-colors duration-200 ease-sluice",
+    variantClasses[variant],
+    className,
+  );
+  const content = (
+    <>
       <span>{children}</span>
       {icon}
+    </>
+  );
+
+  if (isInternalRouteHref(href) && !props.target && !props.download) {
+    return (
+      <Link to={href} className={linkClassName} {...props}>
+        {content}
+      </Link>
+    );
+  }
+
+  return (
+    <a
+      href={href}
+      className={linkClassName}
+      {...props}
+    >
+      {content}
     </a>
   );
 }
