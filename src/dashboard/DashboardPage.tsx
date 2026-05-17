@@ -10,7 +10,9 @@ import {
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
+
+import { Navbar } from "../components/Navbar";
+import { dashboardNavItems } from "../data/siteContent";
 
 type KpiCard = {
   label: string;
@@ -262,7 +264,7 @@ function RoutingEfficiencyChart() {
     <section>
       <div className="flex flex-col gap-4 lg:flex-row lg:items-center lg:justify-between">
         <div className="flex items-center gap-4">
-          <h2 className="font-display text-2xl font-normal leading-none text-sluice-navy">
+          <h2 className="font-sans text-xl font-semibold leading-tight tracking-normal text-sluice-navy">
             Routing efficiency
           </h2>
           <div className="flex flex-wrap gap-4 font-sans text-xs text-sluice-muted">
@@ -322,9 +324,6 @@ function RoutingEfficiencyChart() {
               <stop offset="0%" stopColor="#1D3487" stopOpacity="0.16" />
               <stop offset="100%" stopColor="#1D3487" stopOpacity="0" />
             </linearGradient>
-            <filter id="tooltip-shadow" x="-20%" y="-20%" width="140%" height="140%">
-              <feDropShadow dx="0" dy="2" stdDeviation="4" floodOpacity="0.12" />
-            </filter>
           </defs>
 
           {/* Invisible rect for edge-to-edge hover capture */}
@@ -466,7 +465,7 @@ function RoutingEfficiencyChart() {
                   Math.min(rawX, chartRight - tooltipW)
                 );
                 return (
-                  <g filter="url(#tooltip-shadow)">
+                  <g>
                     <rect
                       x={clampedX}
                       y={tooltipY}
@@ -508,39 +507,21 @@ function RoutingEfficiencyChart() {
 export function DashboardPage() {
   return (
     <main className="min-h-screen overflow-x-clip bg-sluice-paper text-sluice-ink">
+      <Navbar items={dashboardNavItems} />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(74,119,220,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(29,52,135,0.1),transparent_30%)]" />
 
-      <header className="sticky top-0 z-30 border-b border-sluice-navy/10 bg-sluice-paper/80 backdrop-blur-xl">
-        <div className="container-shell flex h-16 items-center justify-between gap-4">
-          <Link
-            to="/"
-            className="font-sans text-2xl font-semibold tracking-tight text-sluice-navy"
-          >
-            Sluice
-          </Link>
-          <div className="flex items-center gap-3">
-            <Link
-              to="/docs"
-              className="inline-flex rounded-pill border border-sluice-navy/15 px-4 py-2 font-sans text-sm font-semibold text-sluice-navy/60 transition-colors hover:border-sluice-navy/30 hover:text-sluice-navy"
-            >
-              Docs
-            </Link>
-          </div>
-        </div>
-      </header>
+      <section id="overview" className="container-shell pb-14 pt-24 md:pt-28">
 
-      <section id="overview" className="container-shell pt-6 md:pt-8 pb-14">
-
-        <h1 className="reveal-soft font-display text-4xl font-normal leading-none tracking-tight text-sluice-navy sm:text-5xl">
+        <h1 className="reveal-soft font-sans text-xl font-semibold leading-tight tracking-normal text-sluice-navy sm:text-2xl">
           Dashboard
         </h1>
-        <div className="mt-6 md:mt-8 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="mt-5 md:mt-6 grid gap-4 sm:grid-cols-2 xl:grid-cols-4">
           {kpiCards.map((card, index) => {
             const Icon = card.icon;
             return (
               <article
                 key={card.label}
-                className="reveal-soft rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5 shadow-soft backdrop-blur-[1px]"
+                className="reveal-soft rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5 backdrop-blur-[1px]"
                 style={{ animationDelay: `${index * 70}ms` }}
               >
                 <div className="flex items-start justify-between gap-4">
@@ -552,7 +533,7 @@ export function DashboardPage() {
                 <p className="mt-4 font-sans text-sm font-semibold text-sluice-navy/60">
                   {card.label}
                 </p>
-                <p className="mt-1.5 font-display text-4xl font-normal leading-none text-sluice-navy">
+                <p className="mt-1.5 font-sans text-3xl font-semibold leading-none tracking-normal text-sluice-navy tabular-nums sm:text-[2rem]">
                   {card.value}
                 </p>
               </article>
@@ -567,9 +548,9 @@ export function DashboardPage() {
 
           <section
             id="routes"
-            className="min-w-0 rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-4 shadow-soft sm:p-5 lg:col-span-5 lg:self-end"
+            className="min-w-0 rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-4 sm:p-5 lg:col-span-5 lg:self-end"
           >
-            <h2 className="font-display text-2xl font-normal leading-none text-sluice-navy">
+            <h2 className="font-sans text-xl font-semibold leading-tight tracking-normal text-sluice-navy">
               Recent routes
             </h2>
 

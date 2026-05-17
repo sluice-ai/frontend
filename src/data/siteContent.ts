@@ -28,6 +28,16 @@ export const navItems: NavItem[] = [
   { label: "Docs", href: "/docs" },
 ];
 
+export const dashboardNavItems: NavItem[] = [
+  { label: "Docs", href: "/docs" },
+  { label: "Launch app", href: "/app", isPrimary: true },
+];
+
+export const appNavItems: NavItem[] = [
+  { label: "Dashboard", href: "/dashboard" },
+  { label: "Docs", href: "/docs" },
+];
+
 export const metrics: Metric[] = [
   {
     value: "88%",

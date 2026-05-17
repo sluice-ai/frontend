@@ -14,7 +14,7 @@ export function Benchmark() {
 
         <div className="mt-12 grid gap-10 min-w-0 lg:grid-cols-[0.78fr_1.22fr] lg:gap-[72px] lg:items-end">
           <div className="min-w-0">
-            <div className="rounded-card border border-sluice-navy/15 bg-sluice-paper/55 p-6 shadow-soft">
+            <div className="rounded-card border border-sluice-navy/15 bg-sluice-paper/55 p-6">
               <div className="font-mono text-[15px] leading-relaxed">
                 <span className="text-sluice-navy/60">score =</span>{" "}
                 <span className="font-semibold text-sluice-routeBlue">gate</span>{" "}

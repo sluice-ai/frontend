@@ -26,9 +26,6 @@ const config: Config = {
         card: "18px",
         pill: "999px",
       },
-      boxShadow: {
-        soft: "0 8px 30px rgba(16, 20, 34, 0.06)",
-      },
       transitionTimingFunction: {
         sluice: "cubic-bezier(0.16, 1, 0.3, 1)",
       },

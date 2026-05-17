@@ -1,0 +1,13 @@
+<svg width="670" height="468" viewBox="190 278 670 468" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <title>Sluice routing logo icon</title>
+  <g stroke="#1D3487" stroke-width="52" stroke-linecap="round" stroke-linejoin="round">
+    <path d="M238 512H704" />
+    <path d="M238 512C360 512 408 348 548 348H704" />
+    <path d="M238 512C360 512 408 676 548 676H704" />
+  </g>
+  <g fill="#1D3487">
+    <circle cx="790" cy="348" r="46" />
+    <circle cx="790" cy="512" r="46" />
+    <circle cx="790" cy="676" r="46" />
+  </g>
+</svg>

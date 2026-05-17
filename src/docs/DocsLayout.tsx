@@ -22,6 +22,7 @@ export function DocsLayout() {
     <div className="docs-layout">
       {/* Top bar for docs */}
       <header className="docs-topbar">
+        <div className="docs-topbar__progress" />
         <div className="docs-topbar__inner">
           <div className="docs-topbar__left">
             <button
@@ -32,15 +33,17 @@ export function DocsLayout() {
             >
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
-            <Link to="/docs/introduction" className="docs-topbar__brand">
-              <span className="docs-topbar__brand-icon">S</span>
-              <span className="docs-topbar__brand-text">Sluice Docs</span>
+            <Link to="/" className="docs-topbar__brand">
+              <img
+                src="/logo.svg"
+                alt=""
+                aria-hidden="true"
+                className="docs-topbar__brand-mark"
+              />
+              <span className="docs-topbar__brand-text">Sluice</span>
             </Link>
           </div>
           <div className="docs-topbar__right">
-            <Link to="/" className="docs-topbar__home-link">
-              Sluice Home
-            </Link>
             <span className="docs-topbar__version">v0.1.0</span>
           </div>
         </div>

@@ -3,16 +3,18 @@ import { useEffect, useState } from "react";
 
 import { navItems } from "../data/siteContent";
 import { cn } from "../lib/cn";
+import type { NavItem } from "../types";
 
-export function Navbar() {
+type NavbarProps = {
+  items?: NavItem[];
+};
+
+export function Navbar({ items = navItems }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [hasShadow, setHasShadow] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
     const handleScroll = () => {
-      setHasShadow(window.scrollY > 32);
-      
       const totalScroll = document.documentElement.scrollTop;
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
       const progress = windowHeight > 0 ? (totalScroll / windowHeight) * 100 : 0;
@@ -33,30 +35,33 @@ export function Navbar() {
         />
       </div>
       <nav
-        className={cn(
-          "fixed left-0 right-0 top-[3px] z-40 border-b border-sluice-navy/10 bg-sluice-paper/60 backdrop-blur-xl transition-shadow duration-200",
-          hasShadow && "shadow-soft",
-        )}
+        className="fixed left-0 right-0 top-[3px] z-40 border-b border-sluice-navy/10 bg-sluice-paper/80 backdrop-blur-xl"
         aria-label="Primary navigation"
       >
         <div className="container-shell flex h-16 items-center justify-between">
           <a
             href="/"
-            className="font-sans text-2xl font-semibold tracking-tight text-sluice-navy"
+            className="flex items-center gap-2 font-sans text-2xl font-semibold tracking-tight text-sluice-navy"
             onClick={() => setIsOpen(false)}
           >
-            Sluice
+            <img
+              src="/logo.svg"
+              alt=""
+              aria-hidden="true"
+              className="h-6 w-auto shrink-0"
+            />
+            <span>Sluice</span>
           </a>
 
           <div className="hidden items-center gap-8 md:flex">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <a
                 key={item.href}
                 href={item.href}
                 className={cn(
                   "font-sans text-[15px] font-medium tracking-normal text-sluice-navy transition-opacity hover:opacity-70",
                   item.isPrimary &&
-                    "rounded-pill bg-sluice-navy px-5 py-2.5 text-sluice-paper hover:bg-sluice-deepNavy hover:opacity-100",
+                    "rounded-pill bg-sluice-navy px-4 py-2 text-sm font-semibold text-sluice-paper hover:bg-sluice-deepNavy hover:opacity-100",
                 )}
               >
                 {item.label}
@@ -84,7 +89,7 @@ export function Navbar() {
           )}
         >
           <div className="flex flex-col gap-4">
-            {navItems.map((item) => (
+            {items.map((item) => (
               <a
                 key={item.href}
                 href={item.href}

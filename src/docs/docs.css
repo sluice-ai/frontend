@@ -29,18 +29,23 @@
   position: sticky;
   top: 0;
   z-index: 40;
-  height: 56px;
-  border-bottom: 1px solid rgba(29, 52, 135, 0.1);
-  background: rgba(242, 243, 245, 0.78);
+  height: 67px;
+  background: rgba(242, 243, 245, 0.8);
   backdrop-filter: blur(16px);
   -webkit-backdrop-filter: blur(16px);
+}
+
+.docs-topbar__progress {
+  height: 3px;
+  background: #ffffff;
 }
 
 .docs-topbar__inner {
   display: flex;
   align-items: center;
   justify-content: space-between;
-  height: 100%;
+  height: 64px;
+  border-bottom: 1px solid rgba(29, 52, 135, 0.1);
   padding: 0 22px;
 }
 
@@ -54,10 +59,10 @@
   display: inline-flex;
   align-items: center;
   justify-content: center;
-  width: 36px;
-  height: 36px;
+  width: 44px;
+  height: 44px;
   border: 1px solid rgba(29, 52, 135, 0.15);
-  border-radius: 10px;
+  border-radius: 999px;
   background: transparent;
   color: var(--color-navy);
   cursor: pointer;
@@ -77,47 +82,24 @@
   text-decoration: none;
 }
 
-.docs-topbar__brand-icon {
-  display: flex;
-  align-items: center;
-  justify-content: center;
-  width: 28px;
-  height: 28px;
-  border-radius: 7px;
-  background: var(--color-navy);
-  color: var(--color-paper);
-  font-family: "DM Serif Display", Georgia, serif;
-  font-size: 17px;
-  font-weight: 400;
-  line-height: 1;
+.docs-topbar__brand-mark {
+  width: auto;
+  height: 24px;
+  flex: 0 0 auto;
 }
 
 .docs-topbar__brand-text {
   font-family: "Inter", system-ui, sans-serif;
-  font-size: 16px;
+  font-size: 24px;
   font-weight: 600;
   color: var(--color-navy);
-  letter-spacing: -0.02em;
+  letter-spacing: 0;
 }
 
 .docs-topbar__right {
   display: flex;
   align-items: center;
-  gap: 12px;
-}
-
-.docs-topbar__home-link {
-  font-family: "Inter", system-ui, sans-serif;
-  font-size: 13px;
-  font-weight: 500;
-  color: var(--color-navy);
-  text-decoration: none;
-  opacity: 0.55;
-  transition: opacity 160ms ease;
-}
-
-.docs-topbar__home-link:hover {
-  opacity: 1;
+  gap: 10px;
 }
 
 .docs-topbar__version {
@@ -133,11 +115,23 @@
 
 @media (max-width: 639px) {
   .docs-topbar__inner {
-    padding: 0 18px;
+    position: relative;
+    padding: 0 1.125rem;
   }
 
   .docs-topbar__brand {
-    display: none;
+    display: flex;
+    gap: 8px;
+    margin-left: 0.875rem;
+  }
+
+  .docs-topbar__brand-mark {
+    width: auto;
+    height: 22px;
+  }
+
+  .docs-topbar__brand-text {
+    font-size: 22px;
   }
 
   .docs-topbar__left {
@@ -180,7 +174,7 @@
 
 .docs-sidebar {
   position: fixed;
-  top: 56px;
+  top: 67px;
   left: 0;
   bottom: 0;
   z-index: 30;
@@ -319,9 +313,9 @@
 @media (min-width: 1024px) {
   .docs-sidebar {
     position: sticky;
-    top: 56px;
+    top: 67px;
     transform: none;
-    height: calc(100vh - 56px);
+    height: calc(100vh - 67px);
     flex-shrink: 0;
   }
 
@@ -337,7 +331,19 @@
 .docs-main {
   flex: 1;
   min-width: 0;
-  min-height: calc(100vh - 56px);
+  min-height: calc(100vh - 67px);
+}
+
+@media (min-width: 640px) {
+  .docs-topbar__inner {
+    padding-inline: 22px;
+  }
+}
+
+@media (min-width: 1024px) {
+  .docs-topbar__inner {
+    padding-inline: 22px;
+  }
 }
 
 .docs-content {
@@ -361,18 +367,18 @@
 }
 
 .docs-index__title {
-  font-family: "DM Serif Display", Georgia, serif;
-  font-size: clamp(2rem, 4vw, 3rem);
-  font-weight: 400;
-  line-height: 1.05;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: clamp(1.5rem, 2.4vw, 2rem);
+  font-weight: 650;
+  line-height: 1.14;
   color: var(--color-navy);
-  margin: 0 0 0.75rem;
+  margin: 0 0 0.625rem;
 }
 
 .docs-index__subtitle {
   font-family: "Inter", system-ui, sans-serif;
-  font-size: 17px;
-  line-height: 1.6;
+  font-size: 15px;
+  line-height: 1.65;
   color: var(--color-muted);
   margin: 0;
   max-width: 560px;
@@ -424,14 +430,12 @@
   color: inherit;
   transition:
     border-color 220ms ease,
-    background 220ms ease,
-    box-shadow 220ms ease;
+    background 220ms ease;
 }
 
 .docs-card:hover {
   border-color: rgba(29, 52, 135, 0.22);
   background: rgba(255, 255, 255, 0.55);
-  box-shadow: 0 2px 12px rgba(16, 20, 34, 0.05);
 }
 
 .docs-card__icon-wrap {
@@ -568,10 +572,10 @@
 }
 
 .docs-placeholder__title {
-  font-family: "DM Serif Display", Georgia, serif;
-  font-size: clamp(1.75rem, 3.5vw, 2.5rem);
-  font-weight: 400;
-  line-height: 1.08;
+  font-family: "Inter", system-ui, sans-serif;
+  font-size: clamp(1.375rem, 2.2vw, 1.75rem);
+  font-weight: 650;
+  line-height: 1.18;
   color: var(--color-navy);
   margin: 0 0 0.5rem;
 }

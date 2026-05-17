@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import App from "./App";
+import { AppWorkflowPage } from "./app/AppWorkflowPage";
 import { DashboardPage } from "./dashboard/DashboardPage";
 import { DocsLayout } from "./docs/DocsLayout";
 import { DocsIndex, DocsPlaceholder } from "./docs/DocsPages";
@@ -13,6 +14,9 @@ export default function AppRouter() {
 
       {/* Dashboard preview */}
       <Route path="/dashboard" element={<DashboardPage />} />
+
+      {/* App workflow preview */}
+      <Route path="/app" element={<AppWorkflowPage />} />
 
       {/* Docs section */}
       <Route path="/docs" element={<DocsLayout />}>
