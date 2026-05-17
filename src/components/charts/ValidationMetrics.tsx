@@ -42,11 +42,11 @@ export function ValidationMetrics() {
       <div className="mb-2 text-sm font-semibold uppercase tracking-widest text-sluice-navy/60">
         Four-Step Validation Loop
       </div>
-      <div className="-mx-2 mb-4 min-w-0 overflow-x-auto px-2 pb-2 hide-scrollbar">
-        <ol className="inline-flex min-w-max items-center text-xs font-medium text-sluice-navy md:text-sm">
+      <div className="-mx-2 mb-4 min-w-0 overflow-x-auto px-2 pb-2 hide-scrollbar md:mx-0 md:overflow-visible md:px-0 md:pb-0">
+        <ol className="inline-flex min-w-max items-center text-xs font-medium text-sluice-navy md:grid md:min-w-0 md:w-full md:grid-cols-[auto_1fr_auto_1fr_auto_1fr_auto] md:items-center md:text-sm">
           {validationLoopSteps.map((step, index) => (
-            <li key={step} className="flex items-center">
-              <span className="flex items-center gap-2 rounded-full border border-sluice-navy/10 bg-sluice-navy/5 px-3 py-1.5">
+            <li key={step} className="flex items-center md:contents">
+              <span className="flex items-center gap-2 whitespace-nowrap rounded-full border border-sluice-navy/10 bg-sluice-navy/5 px-3 py-1.5">
                 <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sluice-navy text-[10px] text-white">
                   {index + 1}
                 </span>
@@ -54,7 +54,7 @@ export function ValidationMetrics() {
               </span>
               {index < validationLoopSteps.length - 1 && (
                 <span
-                  className="mx-2 h-[1px] w-8 shrink-0 bg-sluice-navy/20"
+                  className="mx-2 h-[1px] w-8 shrink-0 bg-sluice-navy/20 md:mx-0 md:w-full"
                   aria-hidden="true"
                 />
               )}
