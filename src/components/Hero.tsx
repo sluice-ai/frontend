@@ -24,8 +24,8 @@ export function Hero() {
             </div>
 
             <div className="order-3 lg:col-start-1 lg:row-start-2 lg:self-start reveal-soft [animation-delay:280ms] flex flex-col sm:flex-row gap-3 mt-2 lg:mt-0">
-              <ButtonLink href="#cta" icon={<ArrowRight size={18} />} className="w-full sm:w-auto justify-center whitespace-nowrap">
-                Coming Soon
+              <ButtonLink href="/dashboard" icon={<ArrowRight size={18} />} className="w-full sm:w-auto justify-center whitespace-nowrap">
+                Dashboard
               </ButtonLink>
               <ButtonLink
                 href="#benchmark"
