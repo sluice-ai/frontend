@@ -146,6 +146,7 @@ function SidebarSection({
                 <Link
                   to={item.href}
                   className={`docs-sidebar__link ${isActive ? "docs-sidebar__link--active" : ""}`}
+                  aria-current={isActive ? "page" : undefined}
                   onClick={onNavigate}
                 >
                   <span className="docs-sidebar__link-icon">

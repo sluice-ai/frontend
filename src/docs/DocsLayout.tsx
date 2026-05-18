@@ -21,7 +21,6 @@ export function DocsLayout() {
 
   return (
     <div className="docs-layout">
-      {/* Top bar for docs */}
       <header className="docs-topbar">
         <div className="docs-topbar__progress" />
         <div className="docs-topbar__inner">
@@ -35,14 +34,14 @@ export function DocsLayout() {
               {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
             </button>
             <Link to="/" className="docs-topbar__brand">
-              <BrandLogo
-                markClassName="docs-topbar__brand-mark"
-                textClassName="docs-topbar__brand-text"
-              />
+              <BrandLogo />
             </Link>
           </div>
           <div className="docs-topbar__right">
             <span className="docs-topbar__version">v0.1.0</span>
+            <Link to="/dashboard" className="docs-topbar__build-link">
+              Dashboard
+            </Link>
           </div>
         </div>
       </header>
@@ -61,7 +60,10 @@ export function DocsLayout() {
             {(prevPage || nextPage) && (
               <div className="docs-bottom-nav">
                 {prevPage ? (
-                  <Link to={prevPage.href} className="docs-bottom-nav__link docs-bottom-nav__link--prev">
+                  <Link
+                    to={prevPage.href}
+                    className="docs-bottom-nav__link docs-bottom-nav__link--prev"
+                  >
                     <span className="docs-bottom-nav__direction">Previous</span>
                     <span className="docs-bottom-nav__label">{prevPage.label}</span>
                   </Link>
@@ -69,7 +71,10 @@ export function DocsLayout() {
                   <div />
                 )}
                 {nextPage ? (
-                  <Link to={nextPage.href} className="docs-bottom-nav__link docs-bottom-nav__link--next">
+                  <Link
+                    to={nextPage.href}
+                    className="docs-bottom-nav__link docs-bottom-nav__link--next"
+                  >
                     <span className="docs-bottom-nav__direction">Next</span>
                     <span className="docs-bottom-nav__label">{nextPage.label}</span>
                   </Link>
