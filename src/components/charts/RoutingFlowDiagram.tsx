@@ -195,7 +195,7 @@ export function RoutingFlowDiagram({
           role="button"
           tabIndex={0}
           aria-label={`Cycle route policy. Current policy is ${activePolicy.label}`}
-          className="cursor-pointer"
+          className="cursor-pointer rfd-req-group"
           onClick={cyclePolicy}
           onKeyDown={(event) => {
             if (event.key === "Enter" || event.key === " ") {
@@ -245,9 +245,12 @@ export function RoutingFlowDiagram({
           fill="none"
           stroke="#1D3487"
           strokeWidth="1.8"
+          pathLength={1}
+          className="rfd-connector"
+          style={{ animationDelay: "200ms" }}
         />
 
-        <g>
+        <g className="rfd-box-group">
           <rect
             x="180"
             y="104"
@@ -288,7 +291,7 @@ export function RoutingFlowDiagram({
           </text>
         </g>
 
-        {providers.map((provider) => {
+        {providers.map((provider, index) => {
           const score = getRouteScore(provider, activePolicy);
           const isSelected = provider.id === selectedProviderId;
 
@@ -298,7 +301,8 @@ export function RoutingFlowDiagram({
               role="button"
               tabIndex={0}
               aria-label={`Select ${provider.name} route`}
-              className="cursor-pointer"
+              className={cn("cursor-pointer rfd-node-group")}
+              style={{ animationDelay: `${320 + index * 60}ms` }}
               onClick={() => setFocusedProviderId(provider.id)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -316,11 +320,18 @@ export function RoutingFlowDiagram({
                 fill="none"
               />
               <path
+                id={`route-path-${provider.id}`}
                 d={getRoutePath(provider)}
                 fill="none"
                 stroke={isSelected ? "#4A77DC" : "rgba(29,52,135,0.26)"}
                 strokeLinecap="round"
                 strokeWidth={isSelected ? "3" : "1.35"}
+                pathLength={1}
+                className={cn("rfd-connector", isSelected && "rfd-selected-line")}
+                style={{
+                  animationDelay: `${260 + index * 60}ms`,
+                  transition: "stroke 300ms ease, stroke-width 300ms ease",
+                }}
               />
               <circle
                 cx="570"
@@ -351,6 +362,36 @@ export function RoutingFlowDiagram({
               </text>
             </g>
           );
+        })}
+
+        {providers.flatMap((provider) => {
+          if (provider.id !== selectedProviderId) return [];
+          return [0, 1, 2].map((dotIndex) => (
+            <circle
+              key={`${provider.id}-dot-${dotIndex}`}
+              r="3.5"
+              fill="#4A77DC"
+              fillOpacity="0"
+              pointerEvents="none"
+            >
+              <animate
+                attributeName="fill-opacity"
+                values="0;0.95;0.95;0"
+                keyTimes="0;0.1;0.85;1"
+                dur="1.8s"
+                begin={`${dotIndex * 0.6}s`}
+                repeatCount="indefinite"
+              />
+              <animateMotion
+                dur="1.8s"
+                begin={`${dotIndex * 0.6}s`}
+                repeatCount="indefinite"
+                calcMode="linear"
+              >
+                <mpath href={`#route-path-${provider.id}`} />
+              </animateMotion>
+            </circle>
+          ));
         })}
 
       </svg>

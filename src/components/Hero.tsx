@@ -18,7 +18,7 @@ export function Hero() {
             </div>
 
             <div className="order-2 lg:col-start-2 lg:row-start-1 lg:row-span-2 lg:self-center reveal-soft [animation-delay:140ms] w-full min-w-0">
-              <div className="w-full sm:w-[105%] sm:-ml-[2.5%] md:w-[110%] md:-ml-[5%] lg:w-[120%] lg:-ml-[8%]">
+              <div className="w-[120%] -ml-[10%] sm:w-[105%] sm:-ml-[2.5%] md:w-[110%] md:-ml-[5%] lg:w-[120%] lg:-ml-[8%]">
                 <RoutingFlowDiagram />
               </div>
             </div>

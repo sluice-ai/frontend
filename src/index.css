@@ -368,6 +368,49 @@ svg [role="button"]:focus-visible .svg-focus-ring {
   }
 }
 
+/* RoutingFlowDiagram entrance + interaction animations */
+@keyframes rfd-draw {
+  from { stroke-dashoffset: 1; }
+  to   { stroke-dashoffset: 0; }
+}
+
+@keyframes rfd-node-in {
+  from { opacity: 0; transform: scale(0.55); }
+  to   { opacity: 1; transform: scale(1); }
+}
+
+@keyframes rfd-pulse-line {
+  0%, 100% { stroke-opacity: 1; }
+  50%       { stroke-opacity: 0.5; }
+}
+
+.rfd-req-group {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rfd-node-in 560ms cubic-bezier(0.16, 1, 0.3, 1) 80ms both;
+}
+
+.rfd-box-group {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rfd-node-in 560ms cubic-bezier(0.16, 1, 0.3, 1) 190ms both;
+}
+
+.rfd-connector {
+  stroke-dasharray: 1;
+  animation: rfd-draw 480ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rfd-node-group {
+  transform-box: fill-box;
+  transform-origin: center;
+  animation: rfd-node-in 500ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+.rfd-selected-line {
+  animation: rfd-pulse-line 2.6s ease-in-out 600ms infinite;
+}
+
 @keyframes rise-in {
   from {
     opacity: 0;
