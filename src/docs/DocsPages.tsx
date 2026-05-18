@@ -4,9 +4,8 @@ import { ArrowRight } from "lucide-react";
 import { docsSidebar } from "./docsData";
 
 const overviewLinkLabels = new Set([
-  "Routing Layer",
-  "Policy Engine",
-  "Scoring System",
+  "Sluice",
+  "Scoring Engine",
 ]);
 
 const overviewLinks = docsSidebar
@@ -41,8 +40,8 @@ export function DocsIndex() {
           applications send work through the path that clears the task policy.
         </p>
         <p>
-          Start with the core concepts below, then move into architecture,
-          guides, and API reference as the testnet docs come online.
+          Start with the core concepts below, then move into guides and API
+          reference as the testnet docs come online.
         </p>
       </div>
 

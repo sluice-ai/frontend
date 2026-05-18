@@ -1,29 +1,18 @@
 import {
   BookOpen,
   Compass,
-  Layers,
-  Route,
-  ShieldCheck,
-  Network,
-  Cpu,
-  SlidersHorizontal,
-  GitBranch,
   Gauge,
-  Activity,
-  LockKeyhole,
   Zap,
   FileCode,
   Terminal,
   Webhook,
   Server,
-  Users,
-  Globe,
-  BarChart3,
   FileText,
   HelpCircle,
-  MessageSquare,
   type LucideIcon,
 } from "lucide-react";
+
+import { SluiceDocsLogoIcon } from "./SluiceDocsLogoIcon";
 
 export interface DocNavItem {
   label: string;
@@ -65,57 +54,16 @@ export const docsSidebar: DocNavSection[] = [
     title: "Core Concepts",
     items: [
       {
-        label: "Routing Layer",
-        href: "/docs/core/routing-layer",
-        icon: Route,
-        description: "How Sluice selects the best-fit provider",
+        label: "Sluice",
+        href: "/docs/core/sluice",
+        icon: SluiceDocsLogoIcon,
+        description: "The routing layer at the center of the network",
       },
       {
-        label: "Policy Engine",
-        href: "/docs/core/policy-engine",
-        icon: SlidersHorizontal,
-        description: "Encoding constraints per request",
-      },
-      {
-        label: "Scoring System",
+        label: "Scoring Engine",
         href: "/docs/core/scoring",
         icon: Gauge,
         description: "Quality, cost, latency, reliability, privacy",
-      },
-      {
-        label: "Supply Network",
-        href: "/docs/core/supply-network",
-        icon: Network,
-        description: "Providers, subnets, and model availability",
-      },
-    ],
-  },
-  {
-    title: "Architecture",
-    items: [
-      {
-        label: "System Overview",
-        href: "/docs/architecture/overview",
-        icon: Layers,
-        description: "High-level architecture diagram",
-      },
-      {
-        label: "Miners",
-        href: "/docs/architecture/miners",
-        icon: Cpu,
-        description: "Route proposal and competition",
-      },
-      {
-        label: "Validators",
-        href: "/docs/architecture/validators",
-        icon: ShieldCheck,
-        description: "Benchmark execution and scoring",
-      },
-      {
-        label: "Request Lifecycle",
-        href: "/docs/architecture/request-lifecycle",
-        icon: Activity,
-        description: "From prompt to routed response",
       },
     ],
   },
@@ -134,18 +82,6 @@ export const docsSidebar: DocNavSection[] = [
         icon: Server,
         description: "Validate and benchmark routes",
       },
-      {
-        label: "Integrate Routing",
-        href: "/docs/guides/integrate",
-        icon: GitBranch,
-        description: "Add Sluice routing to your application",
-      },
-      {
-        label: "Private Workloads",
-        href: "/docs/guides/private-workloads",
-        icon: LockKeyhole,
-        description: "Route sensitive tasks securely",
-      },
     ],
   },
   {
@@ -158,45 +94,10 @@ export const docsSidebar: DocNavSection[] = [
         description: "Submit routing requests",
       },
       {
-        label: "Benchmark API",
-        href: "/docs/api/benchmark",
-        icon: BarChart3,
-        description: "Query live benchmark telemetry",
-      },
-      {
-        label: "Provider API",
-        href: "/docs/api/providers",
-        icon: Globe,
-        description: "List and filter available providers",
-      },
-      {
         label: "SDK Reference",
         href: "/docs/api/sdk",
         icon: FileCode,
         description: "TypeScript and Python client libraries",
-      },
-    ],
-  },
-  {
-    title: "Network",
-    items: [
-      {
-        label: "Bittensor Integration",
-        href: "/docs/network/bittensor",
-        icon: Network,
-        description: "Subnet-native routing on Bittensor",
-      },
-      {
-        label: "Testnet",
-        href: "/docs/network/testnet",
-        icon: Zap,
-        description: "Connect to the Sluice testnet",
-      },
-      {
-        label: "Staking",
-        href: "/docs/network/staking",
-        icon: Users,
-        description: "Staking mechanics and incentives",
       },
     ],
   },
@@ -214,12 +115,6 @@ export const docsSidebar: DocNavSection[] = [
         href: "/docs/resources/faq",
         icon: HelpCircle,
         description: "Frequently asked questions",
-      },
-      {
-        label: "Community",
-        href: "/docs/resources/community",
-        icon: MessageSquare,
-        description: "Join the Sluice community",
       },
     ],
   },
