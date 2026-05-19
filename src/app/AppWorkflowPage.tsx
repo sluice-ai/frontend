@@ -1,76 +1,851 @@
-import { ArrowRight, GitBranch, Route, ShieldCheck } from "lucide-react";
+import {
+  AlertTriangle,
+  ArrowUp,
+  ChevronDown,
+  LockKeyhole,
+  RotateCcw,
+  Settings,
+  ShieldCheck,
+  SlidersHorizontal,
+  Sparkles,
+  X,
+} from "lucide-react";
+import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { Link } from "react-router-dom";
 
 import { Navbar } from "../components/Navbar";
 import { appNavItems } from "../data/siteContent";
+import {
+  defaultPrompt,
+  demoReceipt,
+  demoResponseText,
+  privacyTierOptions,
+  routingModeOptions,
+  type PrivacyTier,
+  type Provider,
+  type ProviderId,
+  type RoutingMode,
+  type RoutingReceipt,
+} from "./appData";
+import { useProviders, useRoutingPreferences } from "./useAppStore";
 
-const workflowSteps = [
-  {
-    title: "Request",
-    detail: "Prompt requirements, privacy needs, and budget enter the routing layer.",
-    icon: Route,
+type RunState = "idle" | "routing" | "selected" | "streaming" | "complete";
+
+type RunFailure =
+  | { kind: "no_providers" }
+  | { kind: "no_route"; reason: string };
+
+type RunResult = {
+  responseText: string;
+  receipt: RoutingReceipt;
+};
+
+const STREAM_DELAY_MS = 18;
+
+function formatCost(value: number) {
+  return `$${value.toFixed(4)}`;
+}
+
+function formatLatency(ms: number) {
+  return `${ms.toLocaleString()} ms`;
+}
+
+function ControlSection({
+  title,
+  children,
+  hint,
+}: {
+  title: string;
+  children: React.ReactNode;
+  hint?: string;
+}) {
+  return (
+    <div>
+      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+        {title}
+      </p>
+      <div className="mt-1.5">{children}</div>
+      {hint && (
+        <p className="mt-1 font-sans text-[11px] leading-5 text-sluice-muted">{hint}</p>
+      )}
+    </div>
+  );
+}
+
+function SegmentedSelect<T extends string | number>({
+  value,
+  onChange,
+  options,
+}: {
+  value: T;
+  onChange: (v: T) => void;
+  options: Array<{ value: T; label: string }>;
+}) {
+  return (
+    <div className="inline-flex w-full overflow-hidden rounded-pill border border-sluice-navy/15 bg-white p-1">
+      {options.map((o) => {
+        const active = o.value === value;
+        return (
+          <button
+            key={String(o.value)}
+            type="button"
+            onClick={() => onChange(o.value)}
+            className={[
+              "flex-1 rounded-pill px-3 py-1.5 font-sans text-xs font-semibold transition-colors",
+              active
+                ? "bg-sluice-navy text-sluice-paper"
+                : "text-sluice-navy/70 hover:bg-sluice-navy/5",
+            ].join(" ")}
+          >
+            {o.label}
+          </button>
+        );
+      })}
+    </div>
+  );
+}
+
+function pickRoute(
+  mode: RoutingMode,
+  prefs: {
+    maxCostPerRequest: number;
+    maxLatencyMs: number;
+    qualityFloor: number;
+    privacyTier: PrivacyTier;
+    allowedProviders: ProviderId[];
   },
-  {
-    title: "Policy",
-    detail: "Candidate routes are scored against live provider conditions.",
-    icon: GitBranch,
-  },
-  {
-    title: "Route",
-    detail: "The best valid route is selected for the workload.",
-    icon: ShieldCheck,
-  },
-];
+  providers: Provider[],
+): { ok: true; result: RunResult } | { ok: false; failure: RunFailure } {
+  const usable = providers.filter(
+    (p) =>
+      prefs.allowedProviders.includes(p.id) &&
+      p.enabled &&
+      p.status === "connected",
+  );
+
+  if (usable.length === 0) return { ok: false, failure: { kind: "no_providers" } };
+
+  const privacyRank: Record<PrivacyTier, number> = {
+    public: 0,
+    sensitive: 1,
+    confidential: 2,
+  };
+
+  const candidatesByProvider: Record<string, { model: string; cost: number; latencyMs: number; quality: number }> = {
+    anthropic: { model: "Claude Haiku 4.5", cost: 0.0061, latencyMs: 920, quality: 0.91 },
+    openai: { model: "GPT-5 mini", cost: 0.0048, latencyMs: 1100, quality: 0.88 },
+    chutes: { model: "Llama-3.3 70B", cost: 0.0034, latencyMs: 1247, quality: 0.87 },
+    targon: { model: "Targon Confidential 70B", cost: 0.0052, latencyMs: 1450, quality: 0.86 },
+    together: { model: "Qwen 2.5 72B", cost: 0.0029, latencyMs: 1680, quality: 0.82 },
+    fireworks: { model: "Mixtral 8x22B", cost: 0.0041, latencyMs: 1320, quality: 0.84 },
+    groq: { model: "Llama-3.1 70B (Groq)", cost: 0.0058, latencyMs: 320, quality: 0.85 },
+    deepinfra: { model: "Llama-3 70B", cost: 0.0033, latencyMs: 1510, quality: 0.83 },
+    openrouter: { model: "Auto (OpenRouter)", cost: 0.0046, latencyMs: 1380, quality: 0.86 },
+  };
+
+  const candidates = usable
+    .map((p) => {
+      const c = candidatesByProvider[p.id];
+      if (!c) return null;
+      return {
+        provider: p,
+        model: c.model,
+        cost: c.cost,
+        latencyMs: c.latencyMs,
+        quality: c.quality,
+        privacyMax: p.privacyMax,
+      };
+    })
+    .filter(<T,>(x: T | null): x is T => x !== null);
+
+  const valid = candidates.filter(
+    (c) =>
+      c.cost <= prefs.maxCostPerRequest &&
+      c.latencyMs <= prefs.maxLatencyMs &&
+      c.quality >= prefs.qualityFloor &&
+      privacyRank[c.privacyMax] >= privacyRank[prefs.privacyTier],
+  );
+
+  if (valid.length === 0) {
+    const reasons: string[] = [];
+    if (!candidates.some((c) => c.cost <= prefs.maxCostPerRequest))
+      reasons.push("max cost too low");
+    if (!candidates.some((c) => c.latencyMs <= prefs.maxLatencyMs))
+      reasons.push("max latency too low");
+    if (!candidates.some((c) => c.quality >= prefs.qualityFloor))
+      reasons.push("quality floor too high");
+    if (
+      !candidates.some(
+        (c) => privacyRank[c.privacyMax] >= privacyRank[prefs.privacyTier],
+      )
+    )
+      reasons.push("no provider meets privacy tier");
+    return {
+      ok: false,
+      failure: {
+        kind: "no_route",
+        reason:
+          reasons.length > 0
+            ? `Constraints too strict: ${reasons.join(", ")}.`
+            : "No candidate route satisfied all constraints.",
+      },
+    };
+  }
+
+  const sorted = [...valid].sort((a, b) => {
+    if (mode === "best_quality") return b.quality - a.quality || a.cost - b.cost;
+    if (mode === "lowest_latency") return a.latencyMs - b.latencyMs || a.cost - b.cost;
+    if (mode === "privacy_first")
+      return (
+        privacyRank[b.privacyMax] - privacyRank[a.privacyMax] || a.cost - b.cost
+      );
+    return a.cost - b.cost;
+  });
+  const chosen = sorted[0];
+  const alts = sorted.slice(1, 4).map((c) => ({
+    model: c.model,
+    provider: c.provider.name,
+    cost: c.cost,
+    latencyMs: c.latencyMs,
+    quality: c.quality,
+    reason:
+      c.cost > chosen.cost
+        ? "Higher cost than chosen route"
+        : c.latencyMs > chosen.latencyMs
+          ? "Higher latency than chosen route"
+          : "Edge-case tradeoff",
+  }));
+
+  const baseline = Math.max(...candidates.map((c) => c.cost));
+  const savedPercent = baseline > 0
+    ? Math.round(((baseline - chosen.cost) / baseline) * 100)
+    : 0;
+
+  const receipt: RoutingReceipt = {
+    requestId: `req_${Math.random().toString(36).slice(2, 10)}`,
+    timestamp: new Date().toISOString(),
+    mode,
+    route: {
+      model: chosen.model,
+      provider: chosen.provider.name,
+      providerType:
+        chosen.provider.type === "bittensor"
+          ? "Bittensor subnet"
+          : chosen.provider.type === "aggregator"
+            ? "Aggregator"
+            : "API provider",
+    },
+    cost: {
+      actual: chosen.cost,
+      baseline,
+      baselineLabel: "Highest-cost candidate baseline",
+      savedPercent,
+    },
+    latency: { totalMs: chosen.latencyMs, ttftMs: Math.max(120, Math.round(chosen.latencyMs * 0.15)), tokensOut: 384 },
+    quality: { estimatedScore: chosen.quality, floor: prefs.qualityFloor, passedFloor: true },
+    privacy: { requestedTier: prefs.privacyTier, routeTier: chosen.privacyMax, passed: true },
+    rationale: `Your request required quality ≥ ${prefs.qualityFloor.toFixed(2)}, cost ≤ $${prefs.maxCostPerRequest.toFixed(2)}, and latency ≤ ${prefs.maxLatencyMs.toLocaleString()} ms. ${chosen.provider.name} / ${chosen.model} satisfied those constraints under "${routingModeOptions.find((m) => m.value === mode)?.label}" routing.`,
+    alternatives: alts.length > 0 ? alts : demoReceipt.alternatives,
+  };
+
+  return { ok: true, result: { responseText: demoResponseText, receipt } };
+}
+
+function ResponseBlock({
+  prompt,
+  runState,
+  result,
+  failure,
+  streamedText,
+}: {
+  prompt: string;
+  runState: RunState;
+  result: RunResult | null;
+  failure: RunFailure | null;
+  streamedText: string;
+}) {
+  return (
+    <div className="space-y-6">
+      <div className="flex justify-end">
+        <div className="max-w-[80%] rounded-card rounded-tr-md bg-sluice-navy px-4 py-3 font-sans text-[15px] leading-7 text-sluice-paper">
+          {prompt}
+        </div>
+      </div>
+
+      {failure ? (
+        <section className="rounded-card border border-amber-300 bg-amber-50/70 p-5">
+          <div className="flex items-start gap-3">
+            <AlertTriangle size={18} className="mt-0.5 text-amber-700" strokeWidth={1.8} />
+            <div className="min-w-0">
+              <p className="font-sans text-sm font-semibold text-amber-900">
+                {failure.kind === "no_providers"
+                  ? "No providers available"
+                  : "No route satisfies your constraints"}
+              </p>
+              <p className="mt-1 font-sans text-sm leading-6 text-amber-900/85">
+                {failure.kind === "no_providers" ? (
+                  <>
+                    None of your allowed providers have a connected key and an
+                    enabled toggle.{" "}
+                    <Link
+                      to="/app/settings"
+                      className="font-semibold underline underline-offset-2"
+                    >
+                      Configure providers
+                    </Link>
+                    .
+                  </>
+                ) : (
+                  failure.reason
+                )}
+              </p>
+            </div>
+          </div>
+        </section>
+      ) : (
+        <section>
+          <div className="flex flex-wrap items-center gap-2">
+            {runState === "routing" && (
+              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-2.5 py-1 font-sans text-[11px] font-semibold text-sluice-navy">
+                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sluice-routeBlue" />
+                Routing…
+              </span>
+            )}
+            {(runState === "selected" || runState === "streaming" || runState === "complete") && result && (
+              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-2.5 py-1 font-sans text-[11px] font-semibold text-sluice-navy">
+                <Sparkles size={11} strokeWidth={2} />
+                {result.receipt.route.model} · {result.receipt.route.provider}
+              </span>
+            )}
+            {runState === "complete" && result && (
+              <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-2.5 py-1 font-sans text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
+                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
+                {formatLatency(result.receipt.latency.totalMs)} · {result.receipt.latency.tokensOut} tok
+              </span>
+            )}
+          </div>
+          <div className="mt-3 whitespace-pre-wrap font-sans text-[15px] leading-7 text-sluice-ink">
+            {streamedText}
+            {(runState === "routing" || runState === "selected" || runState === "streaming") && (
+              <span className="ml-0.5 inline-block h-4 w-[2px] translate-y-[3px] animate-pulse bg-sluice-navy/60" />
+            )}
+          </div>
+        </section>
+      )}
+
+      {runState === "complete" && result && <ReceiptCard receipt={result.receipt} />}
+    </div>
+  );
+}
+
+function ReceiptCard({ receipt }: { receipt: RoutingReceipt }) {
+  const modeLabel = routingModeOptions.find((m) => m.value === receipt.mode)?.label ?? receipt.mode;
+  return (
+    <section className="rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div>
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+            Routing receipt
+          </p>
+          <h3 className="mt-1 font-sans text-lg font-semibold leading-tight text-sluice-navy">
+            {receipt.route.model} via {receipt.route.provider}
+          </h3>
+        </div>
+        <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-3 py-1 font-sans text-[12px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
+          Saved {receipt.cost.savedPercent}%
+        </span>
+      </div>
+
+      <dl className="mt-5 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <ReceiptStat label="Cost" value={formatCost(receipt.cost.actual)} sub={`vs ${formatCost(receipt.cost.baseline)} baseline`} />
+        <ReceiptStat label="Latency" value={formatLatency(receipt.latency.totalMs)} sub={`TTFT ${receipt.latency.ttftMs} ms`} />
+        <ReceiptStat label="Quality" value={receipt.quality.estimatedScore.toFixed(2)} sub={`floor ${receipt.quality.floor.toFixed(2)} · ${receipt.quality.passedFloor ? "pass" : "fail"}`} />
+        <ReceiptStat label="Privacy" value={receipt.privacy.routeTier} sub={`requested ${receipt.privacy.requestedTier} · ${receipt.privacy.passed ? "pass" : "fail"}`} />
+      </dl>
+
+      <div className="mt-5 grid gap-3 sm:grid-cols-2">
+        <InfoLine label="Provider type" value={receipt.route.providerType} />
+        <InfoLine label="Policy" value={modeLabel} />
+        <InfoLine label="Request" value={receipt.requestId} mono />
+        <InfoLine label="Timestamp" value={new Date(receipt.timestamp).toLocaleString()} />
+      </div>
+
+      <div className="mt-5">
+        <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+          Why this route?
+        </p>
+        <p className="mt-1.5 font-sans text-sm leading-6 text-sluice-ink">
+          {receipt.rationale}
+        </p>
+      </div>
+
+      <div className="mt-5">
+        <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+          Alternatives considered
+        </p>
+        <ol className="mt-2 space-y-2">
+          {receipt.alternatives.map((alt, i) => (
+            <li
+              key={`${alt.model}-${i}`}
+              className="rounded-card border border-sluice-navy/10 bg-white/60 p-3"
+            >
+              <div className="flex flex-wrap items-center justify-between gap-2">
+                <p className="font-sans text-sm font-semibold text-sluice-navy">
+                  {i + 1}. {alt.model}{" "}
+                  <span className="font-normal text-sluice-muted">via {alt.provider}</span>
+                </p>
+                <div className="flex flex-wrap gap-3 font-mono text-[12px] text-sluice-muted">
+                  <span>{formatCost(alt.cost)}</span>
+                  <span>{formatLatency(alt.latencyMs)}</span>
+                  <span>q {alt.quality.toFixed(2)}</span>
+                </div>
+              </div>
+              <p className="mt-1 font-sans text-[13px] leading-5 text-sluice-muted">
+                {alt.reason}
+              </p>
+            </li>
+          ))}
+        </ol>
+      </div>
+    </section>
+  );
+}
+
+function ReceiptStat({ label, value, sub }: { label: string; value: string; sub: string }) {
+  return (
+    <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3">
+      <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+        {label}
+      </p>
+      <p className="mt-1 font-sans text-xl font-semibold leading-none text-sluice-navy tabular-nums">
+        {value}
+      </p>
+      <p className="mt-1 font-sans text-[11px] leading-4 text-sluice-muted">{sub}</p>
+    </div>
+  );
+}
+
+function InfoLine({ label, value, mono = false }: { label: string; value: string; mono?: boolean }) {
+  return (
+    <div className="flex items-center justify-between gap-3 rounded-card border border-sluice-navy/10 bg-white/40 px-3 py-2">
+      <span className="font-sans text-[12px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+        {label}
+      </span>
+      <span className={`text-sluice-ink ${mono ? "font-mono text-[12px]" : "font-sans text-[13px]"}`}>
+        {value}
+      </span>
+    </div>
+  );
+}
+
+function RoutingDrawer({
+  open,
+  onClose,
+}: {
+  open: boolean;
+  onClose: () => void;
+}) {
+  const { prefs, setPrefs } = useRoutingPreferences();
+  const { providers: providerList } = useProviders();
+
+  const allowedSet = useMemo(
+    () => new Set(prefs.allowedProviders),
+    [prefs.allowedProviders],
+  );
+
+  useEffect(() => {
+    if (!open) return;
+    const onKey = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", onKey);
+    return () => window.removeEventListener("keydown", onKey);
+  }, [open, onClose]);
+
+  return (
+    <>
+      <div
+        aria-hidden={!open}
+        onClick={onClose}
+        className={[
+          "fixed inset-x-0 bottom-0 top-[67px] z-30 bg-sluice-deepNavy/30 backdrop-blur-[2px] transition-opacity duration-300 ease-sluice",
+          open ? "opacity-100" : "pointer-events-none opacity-0",
+        ].join(" ")}
+      />
+      <aside
+        aria-hidden={!open}
+        aria-label="Routing controls"
+        className={[
+          "fixed bottom-0 right-0 top-[67px] z-40 flex h-[calc(100vh-67px)] w-full max-w-md flex-col border-l border-sluice-navy/15 bg-sluice-paper shadow-2xl transition-transform duration-300 ease-sluice",
+          open ? "translate-x-0" : "translate-x-full",
+        ].join(" ")}
+      >
+        <header className="flex items-center justify-between border-b border-sluice-navy/10 px-5 py-4">
+          <div>
+            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+              Routing controls
+            </p>
+            <h2 className="mt-0.5 font-sans text-lg font-semibold leading-tight text-sluice-navy">
+              Policy &amp; constraints
+            </h2>
+          </div>
+          <button
+            type="button"
+            onClick={onClose}
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-sluice-navy/15 text-sluice-navy hover:bg-sluice-navy/5"
+            aria-label="Close routing controls"
+          >
+            <X size={16} strokeWidth={1.8} />
+          </button>
+        </header>
+
+        <div className="flex-1 overflow-y-auto px-5 py-5">
+          <div className="space-y-5">
+            <ControlSection title="Mode / preset">
+              <div className="relative">
+                <select
+                  value={prefs.mode}
+                  onChange={(e) => setPrefs({ mode: e.target.value as RoutingMode })}
+                  className="w-full appearance-none rounded-pill border border-sluice-navy/20 bg-white px-3.5 py-2 pr-9 font-sans text-sm font-semibold text-sluice-navy outline-none focus:border-sluice-routeBlue"
+                >
+                  {routingModeOptions.map((o) => (
+                    <option key={o.value} value={o.value}>
+                      {o.label}
+                    </option>
+                  ))}
+                </select>
+                <ChevronDown
+                  size={14}
+                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sluice-navy/60"
+                />
+              </div>
+              <p className="mt-1 font-sans text-[11px] leading-5 text-sluice-muted">
+                {routingModeOptions.find((m) => m.value === prefs.mode)?.hint}
+              </p>
+            </ControlSection>
+
+            <div className="grid gap-4 sm:grid-cols-2">
+              <ControlSection title="Max cost / request">
+                <SegmentedSelect<number>
+                  value={prefs.maxCostPerRequest}
+                  onChange={(v) => setPrefs({ maxCostPerRequest: v })}
+                  options={[
+                    { value: 0.01, label: "$0.01" },
+                    { value: 0.05, label: "$0.05" },
+                    { value: 0.1, label: "$0.10" },
+                  ]}
+                />
+              </ControlSection>
+              <ControlSection title="Max latency">
+                <SegmentedSelect<number>
+                  value={prefs.maxLatencyMs}
+                  onChange={(v) => setPrefs({ maxLatencyMs: v })}
+                  options={[
+                    { value: 1000, label: "1s" },
+                    { value: 2000, label: "2s" },
+                    { value: 5000, label: "5s" },
+                  ]}
+                />
+              </ControlSection>
+            </div>
+
+            <ControlSection title="Quality floor">
+              <div className="flex items-center gap-3">
+                <input
+                  type="range"
+                  min={0.5}
+                  max={0.99}
+                  step={0.01}
+                  value={prefs.qualityFloor}
+                  onChange={(e) => setPrefs({ qualityFloor: Number(e.target.value) })}
+                  className="flex-1 accent-sluice-navy"
+                />
+                <span className="w-12 text-right font-mono text-sm text-sluice-navy">
+                  {prefs.qualityFloor.toFixed(2)}
+                </span>
+              </div>
+            </ControlSection>
+
+            <ControlSection title="Privacy tier">
+              <SegmentedSelect<PrivacyTier>
+                value={prefs.privacyTier}
+                onChange={(v) => setPrefs({ privacyTier: v })}
+                options={privacyTierOptions.map((o) => ({ value: o.value, label: o.label }))}
+              />
+            </ControlSection>
+
+            <ControlSection
+              title="Allowed providers"
+              hint="Greyed providers are missing a key or disabled in settings."
+            >
+              <div className="flex flex-wrap gap-2">
+                {providerList.map((p) => {
+                  const usable = p.enabled && p.status === "connected";
+                  const active = allowedSet.has(p.id);
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => {
+                        const next = active
+                          ? prefs.allowedProviders.filter((id) => id !== p.id)
+                          : [...prefs.allowedProviders, p.id];
+                        setPrefs({ allowedProviders: next });
+                      }}
+                      className={[
+                        "inline-flex items-center gap-1.5 rounded-pill border px-3 py-1.5 font-sans text-xs font-semibold transition-colors",
+                        active
+                          ? "border-sluice-navy bg-sluice-navy text-sluice-paper"
+                          : "border-sluice-navy/20 bg-white text-sluice-navy hover:bg-sluice-navy/5",
+                        !usable ? "opacity-60" : "",
+                      ].join(" ")}
+                      title={usable ? p.name : `${p.name} — missing key or disabled`}
+                    >
+                      {p.privacyMax === "confidential" && (
+                        <LockKeyhole size={11} strokeWidth={2} />
+                      )}
+                      {p.name}
+                      {!usable && (
+                        <span className="ml-1 rounded-pill bg-amber-100 px-1.5 py-[1px] text-[9px] font-semibold uppercase tracking-wider text-amber-700">
+                          key
+                        </span>
+                      )}
+                    </button>
+                  );
+                })}
+              </div>
+              <div className="mt-3 rounded-card border border-sluice-navy/10 bg-white/60 p-3 font-sans text-[12px] leading-5 text-sluice-muted">
+                <div className="flex items-center gap-1.5 font-semibold text-sluice-navy">
+                  <ShieldCheck size={12} strokeWidth={1.8} /> Provider availability
+                </div>
+                <ul className="mt-1.5 grid gap-1">
+                  {providerList.slice(0, 6).map((p) => (
+                    <li key={p.id} className="flex items-center justify-between gap-2">
+                      <span className="text-sluice-ink">{p.name}</span>
+                      <span
+                        className={
+                          p.status === "connected"
+                            ? "text-emerald-700"
+                            : "text-amber-700"
+                        }
+                      >
+                        {p.status === "connected" ? "Connected" : "Missing key"}
+                      </span>
+                    </li>
+                  ))}
+                </ul>
+              </div>
+            </ControlSection>
+          </div>
+        </div>
+      </aside>
+    </>
+  );
+}
 
 export function AppWorkflowPage() {
+  const { prefs } = useRoutingPreferences();
+  const { providers: providerList } = useProviders();
+
+  const [prompt, setPrompt] = useState("");
+  const [submittedPrompt, setSubmittedPrompt] = useState("");
+  const [runState, setRunState] = useState<RunState>("idle");
+  const [result, setResult] = useState<RunResult | null>(null);
+  const [failure, setFailure] = useState<RunFailure | null>(null);
+  const [streamedText, setStreamedText] = useState("");
+  const [drawerOpen, setDrawerOpen] = useState(false);
+  const timers = useRef<number[]>([]);
+  const scrollRef = useRef<HTMLDivElement>(null);
+  const promptInputRef = useRef<HTMLTextAreaElement>(null);
+
+  const clearTimers = useCallback(() => {
+    timers.current.forEach((t) => window.clearTimeout(t));
+    timers.current = [];
+  }, []);
+
+  useEffect(() => clearTimers, [clearTimers]);
+
+  useEffect(() => {
+    if (scrollRef.current) {
+      scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
+    }
+  }, [streamedText, runState, failure]);
+
+  useEffect(() => {
+    const input = promptInputRef.current;
+    if (!input) return;
+    input.style.height = "0px";
+    input.style.height = `${Math.min(input.scrollHeight, 176)}px`;
+  }, [prompt]);
+
+  const handleSend = useCallback(() => {
+    const text = prompt.trim();
+    if (!text || runState === "routing" || runState === "streaming") return;
+    clearTimers();
+    setSubmittedPrompt(text);
+    setPrompt("");
+    setResult(null);
+    setFailure(null);
+    setStreamedText("");
+    setRunState("routing");
+
+    timers.current.push(
+      window.setTimeout(() => {
+        const outcome = pickRoute(prefs.mode, prefs, providerList);
+        if (!outcome.ok) {
+          setFailure(outcome.failure);
+          setRunState("idle");
+          return;
+        }
+        setResult(outcome.result);
+        setRunState("selected");
+
+        timers.current.push(
+          window.setTimeout(() => {
+            setRunState("streaming");
+            const fullText = outcome.result.responseText;
+            let i = 0;
+            const stream = window.setInterval(() => {
+              i += Math.max(2, Math.round(fullText.length / 90));
+              if (i >= fullText.length) {
+                setStreamedText(fullText);
+                window.clearInterval(stream);
+                setRunState("complete");
+                return;
+              }
+              setStreamedText(fullText.slice(0, i));
+            }, STREAM_DELAY_MS);
+            timers.current.push(stream as unknown as number);
+          }, 350) as unknown as number,
+        );
+      }, 650) as unknown as number,
+    );
+  }, [prompt, runState, prefs, providerList, clearTimers]);
+
+  const handleReset = useCallback(() => {
+    clearTimers();
+    setRunState("idle");
+    setResult(null);
+    setFailure(null);
+    setStreamedText("");
+    setSubmittedPrompt("");
+    setPrompt("");
+  }, [clearTimers]);
+
+  const hasConversation = Boolean(submittedPrompt) || Boolean(failure);
+  const busy = runState === "routing" || runState === "streaming" || runState === "selected";
+  const promptComposer = (
+    <div className="mx-auto w-full max-w-3xl px-1">
+      {hasConversation && (
+        <div className="mb-2 flex justify-end">
+          <button
+            type="button"
+            onClick={handleReset}
+            className="inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 font-sans text-[12px] font-semibold text-sluice-navy/70 hover:bg-sluice-navy/5 hover:text-sluice-navy"
+          >
+            <RotateCcw size={12} strokeWidth={2} /> New conversation
+          </button>
+        </div>
+      )}
+      <form
+        onSubmit={(e) => {
+          e.preventDefault();
+          handleSend();
+        }}
+        className="relative flex items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)]"
+      >
+        <textarea
+          data-prompt-input
+          ref={promptInputRef}
+          rows={1}
+          value={prompt}
+          onChange={(e) => setPrompt(e.target.value)}
+          onKeyDown={(e) => {
+            if (e.key === "Enter" && !e.shiftKey) {
+              e.preventDefault();
+              handleSend();
+            }
+          }}
+          placeholder={hasConversation ? "Ask a follow-up…" : defaultPrompt}
+          disabled={busy}
+          className="max-h-44 min-h-11 flex-1 resize-none overflow-y-auto bg-transparent px-1 py-2.5 font-sans text-[15px] leading-6 text-sluice-ink outline-none placeholder:text-sluice-muted/70 disabled:opacity-60"
+        />
+        <button
+          type="submit"
+          disabled={!prompt.trim() || busy}
+          aria-label="Send prompt"
+          className="ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-colors hover:bg-sluice-deepNavy disabled:cursor-not-allowed disabled:opacity-40"
+        >
+          <ArrowUp size={16} strokeWidth={2.4} />
+        </button>
+      </form>
+      <p className="mt-2 text-center font-sans text-[11px] text-sluice-muted">
+        Sluice routes through your enabled providers · adjust policy in routing controls
+      </p>
+    </div>
+  );
+
   return (
     <main className="min-h-screen overflow-x-clip bg-sluice-paper text-sluice-ink">
       <Navbar items={appNavItems} />
+      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(74,119,220,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(29,52,135,0.1),transparent_30%)]" />
 
-      <section className="container-shell pb-14 pt-24 md:pt-28">
-        <div className="max-w-3xl">
-          <p className="font-sans text-xs font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
-            App preview
-          </p>
-          <h1 className="mt-3 font-sans text-2xl font-semibold leading-tight tracking-normal text-sluice-navy sm:text-3xl">
-            Workflow mock space
-          </h1>
-          <p className="mt-3 max-w-xl font-sans text-sm leading-6 text-sluice-muted sm:text-[15px]">
-            A lightweight placeholder for the Sluice app workflow. The layout can
-            evolve once the product flow is clearer.
-          </p>
+      <section className="container-shell flex min-h-screen flex-col pb-3 pt-20 md:pt-24">
+        <div className="flex flex-wrap items-center justify-end gap-2 pb-3">
+          <Link
+            to="/app/settings"
+            aria-label="Settings"
+            title="Settings"
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sluice-navy/15 bg-sluice-paper/70 text-sluice-navy transition-colors hover:bg-sluice-navy/5"
+          >
+            <Settings size={16} strokeWidth={1.8} />
+          </Link>
+          <button
+            type="button"
+            onClick={() => setDrawerOpen(true)}
+            aria-label="Open routing controls"
+            title="Routing controls"
+            aria-expanded={drawerOpen}
+            className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sluice-navy/15 bg-sluice-paper/70 text-sluice-navy transition-colors hover:bg-sluice-navy/5"
+          >
+            <SlidersHorizontal size={16} strokeWidth={1.8} />
+          </button>
         </div>
 
-        <div className="mt-8 grid gap-4 md:grid-cols-3">
-          {workflowSteps.map((step, index) => {
-            const Icon = step.icon;
-            return (
-              <article
-                key={step.title}
-                className="rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5"
-              >
-                <div className="flex items-center justify-between gap-4">
-                  <span className="inline-flex h-10 w-10 items-center justify-center rounded-full bg-sluice-navy/10 text-sluice-navy">
-                    <Icon size={18} strokeWidth={1.8} />
-                  </span>
-                  {index < workflowSteps.length - 1 && (
-                    <ArrowRight
-                      className="hidden text-sluice-navy/35 md:block"
-                      size={18}
-                      strokeWidth={1.8}
-                    />
-                  )}
-                </div>
-                <h2 className="mt-5 font-sans text-lg font-semibold leading-tight text-sluice-navy">
-                  {step.title}
-                </h2>
-                <p className="mt-2 font-sans text-sm leading-6 text-sluice-muted">
-                  {step.detail}
-                </p>
-              </article>
-            );
-          })}
-        </div>
+        {hasConversation ? (
+          <>
+            <div
+              ref={scrollRef}
+              className="flex flex-1 flex-col overflow-y-auto"
+            >
+              <div className="mx-auto w-full max-w-3xl flex-1 px-1 py-6">
+                <ResponseBlock
+                  prompt={submittedPrompt}
+                  runState={runState}
+                  result={result}
+                  failure={failure}
+                  streamedText={streamedText}
+                />
+              </div>
+            </div>
+            {promptComposer}
+          </>
+        ) : (
+          <div className="flex flex-1 items-center justify-center pb-28 pt-2 md:pb-40 md:pt-0">
+            <div className="flex w-full flex-col items-center">
+              <h1 className="text-center font-sans text-4xl font-semibold leading-tight tracking-normal text-sluice-navy sm:text-5xl md:text-[4rem]">
+                How can I help you?
+              </h1>
+              <div className="mt-8 w-full sm:mt-9 md:mt-10">
+                {promptComposer}
+              </div>
+            </div>
+          </div>
+        )}
+
       </section>
+
+      <RoutingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
     </main>
   );
 }

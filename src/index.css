@@ -66,6 +66,13 @@ a {
   outline-offset: 3px;
 }
 
+textarea[data-prompt-input],
+textarea[data-prompt-input]:focus,
+textarea[data-prompt-input]:focus-visible {
+  outline: 0 !important;
+  box-shadow: none;
+}
+
 svg [role="button"]:focus,
 svg [role="button"]:focus-visible {
   outline: none;

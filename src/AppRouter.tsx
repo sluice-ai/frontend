@@ -1,6 +1,7 @@
 import { Routes, Route, Navigate } from "react-router-dom";
 
 import App from "./App";
+import { AppSettingsPage } from "./app/AppSettingsPage";
 import { AppWorkflowPage } from "./app/AppWorkflowPage";
 import { DashboardPage } from "./dashboard/DashboardPage";
 import { DocsLayout } from "./docs/DocsLayout";
@@ -17,6 +18,7 @@ export default function AppRouter() {
 
       {/* App workflow preview */}
       <Route path="/app" element={<AppWorkflowPage />} />
+      <Route path="/app/settings" element={<AppSettingsPage />} />
 
       {/* Docs section */}
       <Route path="/docs" element={<DocsLayout />}>

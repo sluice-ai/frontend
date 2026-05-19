@@ -34,7 +34,6 @@ export const dashboardNavItems: NavItem[] = [
 ];
 
 export const appNavItems: NavItem[] = [
-  { label: "Dashboard", href: "/dashboard" },
   { label: "Docs", href: "/docs" },
 ];
 
