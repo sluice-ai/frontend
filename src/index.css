@@ -24,8 +24,13 @@
 html {
   scroll-behavior: smooth;
   scroll-padding-top: 88px;
-  scrollbar-gutter: stable;
   overflow-x: clip;
+}
+
+@media (min-width: 768px) {
+  html {
+    scrollbar-gutter: stable;
+  }
 }
 
 body {
@@ -71,6 +76,14 @@ textarea[data-prompt-input]:focus,
 textarea[data-prompt-input]:focus-visible {
   outline: 0 !important;
   box-shadow: none;
+  /* Lock horizontal dimensions so focus / resize only grows vertically */
+  box-sizing: border-box;
+  width: 100%;
+}
+
+/* Prevent the form wrapper from recalculating inline size during textarea resize */
+form:has(textarea[data-prompt-input]) {
+  contain: inline-size;
 }
 
 svg [role="button"]:focus,

@@ -1,19 +1,22 @@
 import {
   ArrowLeft,
   CheckCircle2,
+  ChevronDown,
   Gauge,
   KeyRound,
   ShieldAlert,
   ShieldCheck,
   SlidersHorizontal,
   Trash2,
+  X,
 } from "lucide-react";
 import type { LucideIcon } from "lucide-react";
-import { useState } from "react";
+import { useState, useRef, useEffect } from "react";
 import { Link } from "react-router-dom";
 
 import { Navbar } from "../components/Navbar";
 import { appNavItems } from "../data/siteContent";
+import { CustomSelect } from "../components/CustomSelect";
 import {
   privacyTierOptions,
   routingModeOptions,
@@ -252,6 +255,35 @@ function ProviderRow({ provider }: { provider: Provider }) {
   );
 }
 
+function DisallowedProviderSelect({
+  allProviders,
+  disallowedProviders,
+  onDisallow,
+}: {
+  allProviders: Provider[];
+  disallowedProviders: ProviderId[];
+  onDisallow: (id: ProviderId) => void;
+}) {
+  const candidates = allProviders.filter((p) => !disallowedProviders.includes(p.id));
+  const options = candidates.map((p) => {
+    const usable = p.enabled && p.status === "connected";
+    return {
+      value: p.id,
+      label: p.name,
+      rightLabel: !usable ? "key missing or disabled" : undefined,
+    };
+  });
+
+  return (
+    <CustomSelect<ProviderId>
+      value=""
+      onChange={onDisallow}
+      options={options}
+      placeholder="+ Add provider to disallow..."
+    />
+  );
+}
+
 function PrefsCard() {
   const { prefs, setPrefs } = useRoutingPreferences();
   const { providers: allProviders } = useProviders();
@@ -270,34 +302,30 @@ function PrefsCard() {
           <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
             Default mode
           </span>
-          <select
+          <CustomSelect<RoutingMode>
+            className="mt-1.5"
             value={prefs.mode}
-            onChange={(e) => setPrefs({ mode: e.target.value as RoutingMode })}
-            className="mt-1.5 w-full rounded-pill border border-sluice-navy/20 bg-white px-3 py-2 font-sans text-sm text-sluice-ink outline-none focus:border-sluice-routeBlue"
-          >
-            {routingModeOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+            onChange={(mode) => setPrefs({ mode })}
+            options={routingModeOptions.map((o) => ({
+              value: o.value,
+              label: o.label,
+            }))}
+          />
         </label>
 
         <label className="block">
           <span className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
             Privacy tier
           </span>
-          <select
+          <CustomSelect<PrivacyTier>
+            className="mt-1.5"
             value={prefs.privacyTier}
-            onChange={(e) => setPrefs({ privacyTier: e.target.value as PrivacyTier })}
-            className="mt-1.5 w-full rounded-pill border border-sluice-navy/20 bg-white px-3 py-2 font-sans text-sm text-sluice-ink outline-none focus:border-sluice-routeBlue"
-          >
-            {privacyTierOptions.map((o) => (
-              <option key={o.value} value={o.value}>
-                {o.label}
-              </option>
-            ))}
-          </select>
+            onChange={(privacyTier) => setPrefs({ privacyTier })}
+            options={privacyTierOptions.map((o) => ({
+              value: o.value,
+              label: o.label,
+            }))}
+          />
         </label>
 
         <label className="block">
@@ -347,36 +375,45 @@ function PrefsCard() {
 
       <div className="mt-6">
         <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
-          Default allowed providers
+          Default disallowed providers
         </p>
-        <div className="mt-2 flex flex-wrap gap-2">
-          {allProviders.map((p) => {
-            const active = prefs.allowedProviders.includes(p.id);
-            const usable = p.enabled && p.status === "connected";
-            return (
-              <button
-                key={p.id}
-                type="button"
-                onClick={() => {
-                  const next = active
-                    ? prefs.allowedProviders.filter((id) => id !== p.id)
-                    : [...prefs.allowedProviders, p.id];
-                  setPrefs({ allowedProviders: next });
-                }}
-                className={[
-                  "rounded-pill border px-3 py-1.5 font-sans text-xs font-semibold transition-colors",
-                  active
-                    ? "border-sluice-navy bg-sluice-navy text-sluice-paper"
-                    : "border-sluice-navy/20 bg-white text-sluice-navy hover:bg-sluice-navy/5",
-                  !usable && !active ? "opacity-60" : "",
-                ].join(" ")}
-                title={usable ? p.name : `${p.name} — key missing or disabled`}
-              >
-                {p.name}
-              </button>
-            );
-          })}
+        <div className="mt-2">
+          <DisallowedProviderSelect
+            allProviders={allProviders}
+            disallowedProviders={prefs.disallowedProviders}
+            onDisallow={(id) => {
+              setPrefs({ disallowedProviders: [...prefs.disallowedProviders, id] });
+            }}
+          />
         </div>
+
+        {prefs.disallowedProviders.length > 0 && (
+          <div className="mt-3 flex flex-wrap gap-2">
+            {prefs.disallowedProviders.map((id) => {
+              const p = allProviders.find((prov) => prov.id === id);
+              if (!p) return null;
+              return (
+                <span
+                  key={id}
+                  className="inline-flex items-center gap-1.5 rounded-pill border border-rose-200 bg-rose-50 px-3 py-1.5 font-sans text-xs font-semibold text-rose-700"
+                >
+                  {p.name}
+                  <button
+                    type="button"
+                    onClick={() => {
+                      const next = prefs.disallowedProviders.filter((x) => x !== id);
+                      setPrefs({ disallowedProviders: next });
+                    }}
+                    className="hover:text-rose-900 transition-colors focus:outline-none"
+                    aria-label={`Allow ${p.name}`}
+                  >
+                    <X size={12} strokeWidth={2.5} />
+                  </button>
+                </span>
+              );
+            })}
+          </div>
+        )}
       </div>
     </section>
   );

@@ -89,7 +89,12 @@ export function useProviders() {
 
 export function useRoutingPreferences() {
   useSubscribed();
-  const prefs = readJson<RoutingPreferences>(PREFS_KEY, defaultRoutingPreferences);
+  const rawPrefs = readJson<RoutingPreferences>(PREFS_KEY, defaultRoutingPreferences);
+  const prefs = {
+    ...defaultRoutingPreferences,
+    ...rawPrefs,
+    disallowedProviders: rawPrefs.disallowedProviders || [],
+  };
 
   const setPrefs = useCallback((patch: Partial<RoutingPreferences>) => {
     const current = readJson<RoutingPreferences>(PREFS_KEY, defaultRoutingPreferences);

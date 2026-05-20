@@ -5,7 +5,6 @@ import {
   LockKeyhole,
   RotateCcw,
   Settings,
-  ShieldCheck,
   SlidersHorizontal,
   Sparkles,
   X,
@@ -15,6 +14,8 @@ import { Link } from "react-router-dom";
 
 import { Navbar } from "../components/Navbar";
 import { appNavItems } from "../data/siteContent";
+import { CustomSelect } from "../components/CustomSelect";
+import { SegmentedSelect } from "../components/SegmentedSelect";
 import {
   defaultPrompt,
   demoReceipt,
@@ -72,36 +73,15 @@ function ControlSection({
   );
 }
 
-function SegmentedSelect<T extends string | number>({
-  value,
-  onChange,
-  options,
-}: {
-  value: T;
-  onChange: (v: T) => void;
-  options: Array<{ value: T; label: string }>;
-}) {
+function ColumnDivider() {
   return (
-    <div className="inline-flex w-full overflow-hidden rounded-pill border border-sluice-navy/15 bg-white p-1">
-      {options.map((o) => {
-        const active = o.value === value;
-        return (
-          <button
-            key={String(o.value)}
-            type="button"
-            onClick={() => onChange(o.value)}
-            className={[
-              "flex-1 rounded-pill px-3 py-1.5 font-sans text-xs font-semibold transition-colors",
-              active
-                ? "bg-sluice-navy text-sluice-paper"
-                : "text-sluice-navy/70 hover:bg-sluice-navy/5",
-            ].join(" ")}
-          >
-            {o.label}
-          </button>
-        );
-      })}
-    </div>
+    <span
+      aria-hidden
+      className="pointer-events-none absolute left-0 top-1/2 hidden h-[78%] w-px -translate-y-1/2 md:block"
+    >
+      <span className="absolute inset-0 bg-gradient-to-b from-transparent via-sluice-navy/25 to-transparent" />
+      <span className="absolute left-1/2 top-1/2 h-1.5 w-1.5 -translate-x-1/2 -translate-y-1/2 rotate-45 bg-sluice-paper ring-1 ring-sluice-navy/25" />
+    </span>
   );
 }
 
@@ -112,13 +92,13 @@ function pickRoute(
     maxLatencyMs: number;
     qualityFloor: number;
     privacyTier: PrivacyTier;
-    allowedProviders: ProviderId[];
+    disallowedProviders: ProviderId[];
   },
   providers: Provider[],
 ): { ok: true; result: RunResult } | { ok: false; failure: RunFailure } {
   const usable = providers.filter(
     (p) =>
-      prefs.allowedProviders.includes(p.id) &&
+      !prefs.disallowedProviders.includes(p.id) &&
       p.enabled &&
       p.status === "connected",
   );
@@ -438,6 +418,35 @@ function InfoLine({ label, value, mono = false }: { label: string; value: string
   );
 }
 
+function DisallowedProviderSelect({
+  allProviders,
+  disallowedProviders,
+  onDisallow,
+}: {
+  allProviders: Provider[];
+  disallowedProviders: ProviderId[];
+  onDisallow: (id: ProviderId) => void;
+}) {
+  const candidates = allProviders.filter((p) => !disallowedProviders.includes(p.id));
+  const options = candidates.map((p) => {
+    const usable = p.enabled && p.status === "connected";
+    return {
+      value: p.id,
+      label: p.name,
+      rightLabel: !usable ? "key missing or disabled" : undefined,
+    };
+  });
+
+  return (
+    <CustomSelect<ProviderId>
+      value=""
+      onChange={onDisallow}
+      options={options}
+      placeholder="+ Add provider to disallow..."
+    />
+  );
+}
+
 function RoutingDrawer({
   open,
   onClose,
@@ -447,11 +456,6 @@ function RoutingDrawer({
 }) {
   const { prefs, setPrefs } = useRoutingPreferences();
   const { providers: providerList } = useProviders();
-
-  const allowedSet = useMemo(
-    () => new Set(prefs.allowedProviders),
-    [prefs.allowedProviders],
-  );
 
   useEffect(() => {
     if (!open) return;
@@ -464,67 +468,100 @@ function RoutingDrawer({
 
   return (
     <>
+      {/* Backdrop scrim */}
       <div
         aria-hidden={!open}
         onClick={onClose}
         className={[
-          "fixed inset-x-0 bottom-0 top-[67px] z-30 bg-sluice-deepNavy/30 backdrop-blur-[2px] transition-opacity duration-300 ease-sluice",
+          "fixed inset-0 z-30 bg-sluice-deepNavy/35 backdrop-blur-[3px] transition-opacity duration-300 ease-sluice",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         ].join(" ")}
       />
+      {/* Bottom sheet */}
       <aside
         aria-hidden={!open}
         aria-label="Routing controls"
         className={[
-          "fixed bottom-0 right-0 top-[67px] z-40 flex h-[calc(100vh-67px)] w-full max-w-md flex-col border-l border-sluice-navy/15 bg-sluice-paper shadow-2xl transition-transform duration-300 ease-sluice",
-          open ? "translate-x-0" : "translate-x-full",
+          "fixed inset-x-0 bottom-0 z-40 flex max-h-[calc(100dvh-12rem)] min-h-0 flex-col rounded-t-[24px] border-t border-sluice-navy/15 bg-white shadow-[0_-12px_48px_-15px_rgba(29,52,135,0.25)] transition-transform duration-300 ease-sluice md:mx-auto md:max-h-[90vh] md:max-w-6xl md:border-x",
+          open ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
       >
-        <header className="flex items-center justify-between border-b border-sluice-navy/10 px-5 py-4">
+        <header className="relative flex shrink-0 items-center justify-between border-b border-sluice-navy/10 px-6 py-5 md:px-8">
           <div>
-            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
-              Routing controls
-            </p>
-            <h2 className="mt-0.5 font-sans text-lg font-semibold leading-tight text-sluice-navy">
-              Policy &amp; constraints
+            <h2 className="font-sans text-xl font-medium leading-tight text-sluice-navy">
+              Routing Control
             </h2>
           </div>
           <button
             type="button"
             onClick={onClose}
-            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-sluice-navy/15 text-sluice-navy hover:bg-sluice-navy/5"
+            className="inline-flex h-9 w-9 items-center justify-center rounded-full border border-sluice-navy/10 text-sluice-navy transition-colors hover:bg-sluice-navy/5"
             aria-label="Close routing controls"
           >
-            <X size={16} strokeWidth={1.8} />
+            <X size={18} strokeWidth={2} />
           </button>
         </header>
 
-        <div className="flex-1 overflow-y-auto px-5 py-5">
-          <div className="space-y-5">
-            <ControlSection title="Mode / preset">
-              <div className="relative">
-                <select
+        <div className="min-h-0 flex-1 overflow-y-auto px-6 py-8 pb-[max(2rem,env(safe-area-inset-bottom))] md:px-8">
+          <div className="grid gap-8 md:grid-cols-3 md:gap-0">
+            {/* Column 1 — Selectors (dropdowns) */}
+            <div className="space-y-6 md:pr-8">
+              <ControlSection title="Active Routing Preset">
+                <CustomSelect<RoutingMode>
                   value={prefs.mode}
-                  onChange={(e) => setPrefs({ mode: e.target.value as RoutingMode })}
-                  className="w-full appearance-none rounded-pill border border-sluice-navy/20 bg-white px-3.5 py-2 pr-9 font-sans text-sm font-semibold text-sluice-navy outline-none focus:border-sluice-routeBlue"
-                >
-                  {routingModeOptions.map((o) => (
-                    <option key={o.value} value={o.value}>
-                      {o.label}
-                    </option>
-                  ))}
-                </select>
-                <ChevronDown
-                  size={14}
-                  className="pointer-events-none absolute right-3 top-1/2 -translate-y-1/2 text-sluice-navy/60"
+                  onChange={(mode) => setPrefs({ mode })}
+                  options={routingModeOptions.map((o) => ({
+                    value: o.value,
+                    label: o.label,
+                  }))}
                 />
-              </div>
-              <p className="mt-1 font-sans text-[11px] leading-5 text-sluice-muted">
-                {routingModeOptions.find((m) => m.value === prefs.mode)?.hint}
-              </p>
-            </ControlSection>
+              </ControlSection>
 
-            <div className="grid gap-4 sm:grid-cols-2">
+              <ControlSection title="Disallow Specific Providers">
+                <DisallowedProviderSelect
+                  allProviders={providerList}
+                  disallowedProviders={prefs.disallowedProviders}
+                  onDisallow={(id) => {
+                    setPrefs({ disallowedProviders: [...prefs.disallowedProviders, id] });
+                  }}
+                />
+              </ControlSection>
+
+              {prefs.disallowedProviders.length > 0 && (
+                <div className="flex flex-wrap gap-2">
+                  {prefs.disallowedProviders.map((id) => {
+                    const p = providerList.find((prov) => prov.id === id);
+                    if (!p) return null;
+                    return (
+                      <span
+                        key={id}
+                        className="inline-flex items-center gap-1.5 rounded-pill border border-rose-200 bg-rose-50/70 px-3 py-1.5 font-sans text-xs font-semibold text-rose-700"
+                      >
+                        {p.privacyMax === "confidential" && (
+                          <LockKeyhole size={11} strokeWidth={2} />
+                        )}
+                        {p.name}
+                        <button
+                          type="button"
+                          onClick={() => {
+                            const next = prefs.disallowedProviders.filter((x) => x !== id);
+                            setPrefs({ disallowedProviders: next });
+                          }}
+                          className="transition-colors hover:text-rose-950 focus:outline-none"
+                          aria-label={`Allow ${p.name}`}
+                        >
+                          <X size={12} strokeWidth={2.5} />
+                        </button>
+                      </span>
+                    );
+                  })}
+                </div>
+              )}
+            </div>
+
+            {/* Column 2 — Numeric values (cost + quality) */}
+            <div className="relative space-y-6 md:px-8">
+              <ColumnDivider />
               <ControlSection title="Max cost / request">
                 <SegmentedSelect<number>
                   value={prefs.maxCostPerRequest}
@@ -536,6 +573,28 @@ function RoutingDrawer({
                   ]}
                 />
               </ControlSection>
+
+              <ControlSection title="Quality floor">
+                <div className="mt-1 flex items-center gap-3">
+                  <input
+                    type="range"
+                    min={0.5}
+                    max={0.99}
+                    step={0.01}
+                    value={prefs.qualityFloor}
+                    onChange={(e) => setPrefs({ qualityFloor: Number(e.target.value) })}
+                    className="flex-1 cursor-pointer accent-sluice-navy"
+                  />
+                  <span className="w-12 text-right font-mono text-sm font-semibold text-sluice-navy">
+                    {prefs.qualityFloor.toFixed(2)}
+                  </span>
+                </div>
+              </ControlSection>
+            </div>
+
+            {/* Column 3 — Pill toggles (latency + privacy) */}
+            <div className="relative space-y-6 md:pl-8">
+              <ColumnDivider />
               <ControlSection title="Max latency">
                 <SegmentedSelect<number>
                   value={prefs.maxLatencyMs}
@@ -547,95 +606,15 @@ function RoutingDrawer({
                   ]}
                 />
               </ControlSection>
-            </div>
 
-            <ControlSection title="Quality floor">
-              <div className="flex items-center gap-3">
-                <input
-                  type="range"
-                  min={0.5}
-                  max={0.99}
-                  step={0.01}
-                  value={prefs.qualityFloor}
-                  onChange={(e) => setPrefs({ qualityFloor: Number(e.target.value) })}
-                  className="flex-1 accent-sluice-navy"
+              <ControlSection title="Privacy tier">
+                <SegmentedSelect<PrivacyTier>
+                  value={prefs.privacyTier}
+                  onChange={(v) => setPrefs({ privacyTier: v })}
+                  options={privacyTierOptions.map((o) => ({ value: o.value, label: o.label }))}
                 />
-                <span className="w-12 text-right font-mono text-sm text-sluice-navy">
-                  {prefs.qualityFloor.toFixed(2)}
-                </span>
-              </div>
-            </ControlSection>
-
-            <ControlSection title="Privacy tier">
-              <SegmentedSelect<PrivacyTier>
-                value={prefs.privacyTier}
-                onChange={(v) => setPrefs({ privacyTier: v })}
-                options={privacyTierOptions.map((o) => ({ value: o.value, label: o.label }))}
-              />
-            </ControlSection>
-
-            <ControlSection
-              title="Allowed providers"
-              hint="Greyed providers are missing a key or disabled in settings."
-            >
-              <div className="flex flex-wrap gap-2">
-                {providerList.map((p) => {
-                  const usable = p.enabled && p.status === "connected";
-                  const active = allowedSet.has(p.id);
-                  return (
-                    <button
-                      key={p.id}
-                      type="button"
-                      onClick={() => {
-                        const next = active
-                          ? prefs.allowedProviders.filter((id) => id !== p.id)
-                          : [...prefs.allowedProviders, p.id];
-                        setPrefs({ allowedProviders: next });
-                      }}
-                      className={[
-                        "inline-flex items-center gap-1.5 rounded-pill border px-3 py-1.5 font-sans text-xs font-semibold transition-colors",
-                        active
-                          ? "border-sluice-navy bg-sluice-navy text-sluice-paper"
-                          : "border-sluice-navy/20 bg-white text-sluice-navy hover:bg-sluice-navy/5",
-                        !usable ? "opacity-60" : "",
-                      ].join(" ")}
-                      title={usable ? p.name : `${p.name} — missing key or disabled`}
-                    >
-                      {p.privacyMax === "confidential" && (
-                        <LockKeyhole size={11} strokeWidth={2} />
-                      )}
-                      {p.name}
-                      {!usable && (
-                        <span className="ml-1 rounded-pill bg-amber-100 px-1.5 py-[1px] text-[9px] font-semibold uppercase tracking-wider text-amber-700">
-                          key
-                        </span>
-                      )}
-                    </button>
-                  );
-                })}
-              </div>
-              <div className="mt-3 rounded-card border border-sluice-navy/10 bg-white/60 p-3 font-sans text-[12px] leading-5 text-sluice-muted">
-                <div className="flex items-center gap-1.5 font-semibold text-sluice-navy">
-                  <ShieldCheck size={12} strokeWidth={1.8} /> Provider availability
-                </div>
-                <ul className="mt-1.5 grid gap-1">
-                  {providerList.slice(0, 6).map((p) => (
-                    <li key={p.id} className="flex items-center justify-between gap-2">
-                      <span className="text-sluice-ink">{p.name}</span>
-                      <span
-                        className={
-                          p.status === "connected"
-                            ? "text-emerald-700"
-                            : "text-amber-700"
-                        }
-                      >
-                        {p.status === "connected" ? "Connected" : "Missing key"}
-                      </span>
-                    </li>
-                  ))}
-                </ul>
-              </div>
-            </ControlSection>
+              </ControlSection>
+            </div>
           </div>
         </div>
       </aside>
@@ -674,8 +653,9 @@ export function AppWorkflowPage() {
   useEffect(() => {
     const input = promptInputRef.current;
     if (!input) return;
-    input.style.height = "0px";
-    input.style.height = `${Math.min(input.scrollHeight, 176)}px`;
+    input.style.height = "44px";
+    const next = Math.max(44, Math.min(input.scrollHeight, 176));
+    input.style.height = `${next}px`;
   }, [prompt]);
 
   const handleSend = useCallback(() => {
@@ -735,53 +715,55 @@ export function AppWorkflowPage() {
   const hasConversation = Boolean(submittedPrompt) || Boolean(failure);
   const busy = runState === "routing" || runState === "streaming" || runState === "selected";
   const promptComposer = (
-    <div className="mx-auto w-full max-w-3xl px-1">
-      {hasConversation && (
-        <div className="mb-2 flex justify-end">
-          <button
-            type="button"
-            onClick={handleReset}
-            className="inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 font-sans text-[12px] font-semibold text-sluice-navy/70 hover:bg-sluice-navy/5 hover:text-sluice-navy"
-          >
-            <RotateCcw size={12} strokeWidth={2} /> New conversation
-          </button>
-        </div>
-      )}
-      <form
-        onSubmit={(e) => {
-          e.preventDefault();
-          handleSend();
-        }}
-        className="relative flex items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)]"
-      >
-        <textarea
-          data-prompt-input
-          ref={promptInputRef}
-          rows={1}
-          value={prompt}
-          onChange={(e) => setPrompt(e.target.value)}
-          onKeyDown={(e) => {
-            if (e.key === "Enter" && !e.shiftKey) {
-              e.preventDefault();
-              handleSend();
-            }
+    <div className="fixed inset-x-0 bottom-3 z-20 bg-sluice-paper/85 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] md:static md:inset-auto md:z-auto md:bg-transparent md:backdrop-blur-none md:pb-0">
+      <div className="mx-auto w-full max-w-3xl px-4 pt-2 pb-2 md:px-1 md:pt-0 md:pb-0">
+        {hasConversation && (
+          <div className="mb-2 flex justify-end">
+            <button
+              type="button"
+              onClick={handleReset}
+              className="inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 font-sans text-[12px] font-semibold text-sluice-navy/70 hover:bg-sluice-navy/5 hover:text-sluice-navy"
+            >
+              <RotateCcw size={12} strokeWidth={2} /> New conversation
+            </button>
+          </div>
+        )}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleSend();
           }}
-          placeholder={hasConversation ? "Ask a follow-up…" : defaultPrompt}
-          disabled={busy}
-          className="max-h-44 min-h-11 flex-1 resize-none overflow-y-auto bg-transparent px-1 py-2.5 font-sans text-[15px] leading-6 text-sluice-ink outline-none placeholder:text-sluice-muted/70 disabled:opacity-60"
-        />
-        <button
-          type="submit"
-          disabled={!prompt.trim() || busy}
-          aria-label="Send prompt"
-          className="ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-colors hover:bg-sluice-deepNavy disabled:cursor-not-allowed disabled:opacity-40"
+          className="relative flex w-full items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)]"
         >
-          <ArrowUp size={16} strokeWidth={2.4} />
-        </button>
-      </form>
-      <p className="mt-2 text-center font-sans text-[11px] text-sluice-muted">
-        Sluice routes through your enabled providers · adjust policy in routing controls
-      </p>
+          <textarea
+            data-prompt-input
+            ref={promptInputRef}
+            rows={1}
+            value={prompt}
+            onChange={(e) => setPrompt(e.target.value)}
+            onKeyDown={(e) => {
+              if (e.key === "Enter" && !e.shiftKey) {
+                e.preventDefault();
+                handleSend();
+              }
+            }}
+            placeholder={hasConversation ? "Ask a follow-up…" : defaultPrompt}
+            disabled={busy}
+            className="max-h-44 min-h-[44px] w-0 min-w-0 flex-1 resize-none overflow-y-auto bg-transparent px-1 py-2.5 font-sans text-base leading-6 text-sluice-ink outline-none placeholder:text-sluice-muted/70 disabled:opacity-60 md:text-[15px]"
+          />
+          <button
+            type="submit"
+            disabled={!prompt.trim() || busy}
+            aria-label="Send prompt"
+            className="ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-colors hover:bg-sluice-deepNavy disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <ArrowUp size={16} strokeWidth={2.4} />
+          </button>
+        </form>
+        <p className="mt-2 hidden text-center font-sans text-[11px] text-sluice-muted md:block">
+          Sluice routes through your enabled providers · adjust policy in routing controls
+        </p>
+      </div>
     </div>
   );
 
@@ -816,7 +798,7 @@ export function AppWorkflowPage() {
           <>
             <div
               ref={scrollRef}
-              className="flex flex-1 flex-col overflow-y-auto"
+              className="flex flex-1 flex-col overflow-y-auto pb-28 md:pb-0"
             >
               <div className="mx-auto w-full max-w-3xl flex-1 px-1 py-6">
                 <ResponseBlock
@@ -831,7 +813,7 @@ export function AppWorkflowPage() {
             {promptComposer}
           </>
         ) : (
-          <div className="flex flex-1 items-center justify-center pb-28 pt-2 md:pb-40 md:pt-0">
+          <div className="flex flex-1 items-center justify-center pb-36 pt-2 md:pb-40 md:pt-0">
             <div className="flex w-full flex-col items-center">
               <h1 className="text-center font-sans text-4xl font-semibold leading-tight tracking-normal text-sluice-navy sm:text-5xl md:text-[4rem]">
                 How can I help you?

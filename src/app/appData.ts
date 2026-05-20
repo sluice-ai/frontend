@@ -35,7 +35,7 @@ export type RoutingPreferences = {
   maxLatencyMs: number;
   qualityFloor: number;
   privacyTier: PrivacyTier;
-  allowedProviders: ProviderId[];
+  disallowedProviders: ProviderId[];
 };
 
 export const routingModeOptions: Array<{ value: RoutingMode; label: string; hint: string }> = [
@@ -69,7 +69,7 @@ export const defaultRoutingPreferences: RoutingPreferences = {
   maxLatencyMs: 2000,
   qualityFloor: 0.85,
   privacyTier: "public",
-  allowedProviders: ["anthropic", "chutes", "targon"],
+  disallowedProviders: [],
 };
 
 export type RouteAlternative = {
@@ -115,5 +115,4 @@ export const demoReceipt: RoutingReceipt = {
 export const demoResponseText =
   "The customer feedback reveals three dominant themes: onboarding friction, pricing opacity, and integration gaps.\n\nOnboarding friction appears most frequently, especially around API key setup and first-run configuration. Pricing opacity is the second major issue, with users asking for clearer cost estimates before usage. Integration gaps are third, with Linear, Notion, and Slack requested most often.\n\nSuggested next steps: simplify onboarding, add a cost estimator, and prioritize Linear and Slack integrations.";
 
-export const defaultPrompt =
-  "Summarize the attached customer feedback and identify the top 3 issues.";
+export const defaultPrompt = "Ask anything…";

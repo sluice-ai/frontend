@@ -12,6 +12,7 @@ import type { LucideIcon } from "lucide-react";
 import { useCallback, useMemo, useRef, useState } from "react";
 
 import { Navbar } from "../components/Navbar";
+import { SegmentedSelect } from "../components/SegmentedSelect";
 import { dashboardNavItems } from "../data/siteContent";
 
 type KpiCard = {
@@ -279,33 +280,16 @@ function RoutingEfficiencyChart() {
           </div>
         </div>
 
-        <div
-          className="inline-flex w-fit rounded-pill border border-sluice-navy/15 bg-sluice-paper p-1"
-          aria-label="Select chart timeframe"
-        >
-          {timeframeOptions.map((option) => {
-            const isActive = option.value === timeframe;
-            return (
-              <button
-                key={option.value}
-                type="button"
-                aria-pressed={isActive}
-                className={[
-                  "rounded-pill px-3 py-1.5 font-sans text-xs font-semibold transition-colors",
-                  isActive
-                    ? "bg-sluice-navy text-sluice-paper"
-                    : "text-sluice-navy/62 hover:bg-sluice-navy/5 hover:text-sluice-navy",
-                ].join(" ")}
-                onClick={() => {
-                  setTimeframe(option.value);
-                  setHoveredIndex(null);
-                }}
-              >
-                {option.label}
-              </button>
-            );
-          })}
-        </div>
+        <SegmentedSelect<Timeframe>
+          value={timeframe}
+          onChange={(v) => {
+            setTimeframe(v);
+            setHoveredIndex(null);
+          }}
+          options={timeframeOptions}
+          className="w-fit bg-sluice-paper"
+          buttonClassName=""
+        />
       </div>
 
       <div className="mt-4 overflow-hidden rounded-[18px] border border-sluice-navy/10 bg-sluice-paper/60">
