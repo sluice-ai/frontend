@@ -57,6 +57,20 @@ body {
   text-rendering: optimizeLegibility;
 }
 
+html.routing-drawer-open,
+body.routing-drawer-open,
+html.sluice-modal-open,
+body.sluice-modal-open {
+  overflow: hidden;
+}
+
+@media (min-width: 768px) {
+  html.routing-drawer-open,
+  html.sluice-modal-open {
+    scrollbar-gutter: auto;
+  }
+}
+
 button,
 a {
   -webkit-tap-highlight-color: transparent;

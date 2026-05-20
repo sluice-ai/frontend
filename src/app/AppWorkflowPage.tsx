@@ -4,18 +4,16 @@ import {
   ChevronDown,
   LockKeyhole,
   RotateCcw,
-  Settings,
-  SlidersHorizontal,
   Sparkles,
   X,
 } from "lucide-react";
 import { useCallback, useEffect, useMemo, useRef, useState } from "react";
-import { Link } from "react-router-dom";
 
 import { Navbar } from "../components/Navbar";
 import { appNavItems } from "../data/siteContent";
 import { CustomSelect } from "../components/CustomSelect";
 import { SegmentedSelect } from "../components/SegmentedSelect";
+import { SettingsModal } from "./AppSettingsPage";
 import {
   defaultPrompt,
   demoReceipt,
@@ -237,12 +235,14 @@ function ResponseBlock({
   result,
   failure,
   streamedText,
+  onOpenSettings,
 }: {
   prompt: string;
   runState: RunState;
   result: RunResult | null;
   failure: RunFailure | null;
   streamedText: string;
+  onOpenSettings: () => void;
 }) {
   return (
     <div className="space-y-6">
@@ -267,12 +267,13 @@ function ResponseBlock({
                   <>
                     None of your allowed providers have a connected key and an
                     enabled toggle.{" "}
-                    <Link
-                      to="/app/settings"
+                    <button
+                      type="button"
+                      onClick={onOpenSettings}
                       className="font-semibold underline underline-offset-2"
                     >
                       Configure providers
-                    </Link>
+                    </button>
                     .
                   </>
                 ) : (
@@ -466,6 +467,20 @@ function RoutingDrawer({
     return () => window.removeEventListener("keydown", onKey);
   }, [open, onClose]);
 
+  useEffect(() => {
+    if (!open) return;
+    const root = document.documentElement;
+    const body = document.body;
+
+    root.classList.add("routing-drawer-open");
+    body.classList.add("routing-drawer-open");
+
+    return () => {
+      root.classList.remove("routing-drawer-open");
+      body.classList.remove("routing-drawer-open");
+    };
+  }, [open]);
+
   return (
     <>
       {/* Backdrop scrim */}
@@ -473,7 +488,7 @@ function RoutingDrawer({
         aria-hidden={!open}
         onClick={onClose}
         className={[
-          "fixed inset-0 z-30 bg-sluice-deepNavy/35 backdrop-blur-[3px] transition-opacity duration-300 ease-sluice",
+          "fixed inset-y-0 left-0 z-[55] w-screen bg-sluice-deepNavy/35 backdrop-blur-[3px] transition-opacity duration-300 ease-sluice",
           open ? "opacity-100" : "pointer-events-none opacity-0",
         ].join(" ")}
       />
@@ -482,7 +497,7 @@ function RoutingDrawer({
         aria-hidden={!open}
         aria-label="Routing controls"
         className={[
-          "fixed inset-x-0 bottom-0 z-40 flex max-h-[calc(100dvh-12rem)] min-h-0 flex-col rounded-t-[24px] border-t border-sluice-navy/15 bg-white shadow-[0_-12px_48px_-15px_rgba(29,52,135,0.25)] transition-transform duration-300 ease-sluice md:mx-auto md:max-h-[90vh] md:max-w-6xl md:border-x",
+          "fixed inset-x-0 bottom-0 z-[60] flex max-h-[calc(100dvh-12rem)] min-h-0 flex-col rounded-t-[24px] border-t border-sluice-navy/15 bg-white shadow-[0_-12px_48px_-15px_rgba(29,52,135,0.25)] transition-transform duration-300 ease-sluice md:mx-auto md:max-h-[90vh] md:max-w-6xl md:border-x",
           open ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
       >
@@ -633,6 +648,7 @@ export function AppWorkflowPage() {
   const [failure, setFailure] = useState<RunFailure | null>(null);
   const [streamedText, setStreamedText] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
+  const [settingsOpen, setSettingsOpen] = useState(false);
   const timers = useRef<number[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const promptInputRef = useRef<HTMLTextAreaElement>(null);
@@ -774,14 +790,32 @@ export function AppWorkflowPage() {
 
       <section className="container-shell flex min-h-screen flex-col pb-3 pt-20 md:pt-24">
         <div className="flex flex-wrap items-center justify-end gap-2 pb-3">
-          <Link
-            to="/app/settings"
+          <button
+            type="button"
+            onClick={() => {
+              setDrawerOpen(false);
+              setSettingsOpen(true);
+            }}
             aria-label="Settings"
             title="Settings"
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sluice-navy/15 bg-sluice-paper/70 text-sluice-navy transition-colors hover:bg-sluice-navy/5"
           >
-            <Settings size={16} strokeWidth={1.8} />
-          </Link>
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M21 16V8a2 2 0 0 0-1-1.73l-7-4a2 2 0 0 0-2 0l-7 4A2 2 0 0 0 3 8v8a2 2 0 0 0 1 1.73l7 4a2 2 0 0 0 2 0l7-4A2 2 0 0 0 21 16z" />
+              <circle cx="12" cy="12" r="4" />
+            </svg>
+          </button>
           <button
             type="button"
             onClick={() => setDrawerOpen(true)}
@@ -790,7 +824,23 @@ export function AppWorkflowPage() {
             aria-expanded={drawerOpen}
             className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sluice-navy/15 bg-sluice-paper/70 text-sluice-navy transition-colors hover:bg-sluice-navy/5"
           >
-            <SlidersHorizontal size={16} strokeWidth={1.8} />
+            <svg
+              xmlns="http://www.w3.org/2000/svg"
+              width="20"
+              height="20"
+              viewBox="0 0 24 24"
+              fill="none"
+              stroke="currentColor"
+              strokeWidth="2"
+              strokeLinecap="round"
+              strokeLinejoin="round"
+              aria-hidden="true"
+            >
+              <path d="M14 17H5" />
+              <path d="M19 7h-9" />
+              <circle cx="17" cy="17" r="3" />
+              <circle cx="7" cy="7" r="3" />
+            </svg>
           </button>
         </div>
 
@@ -807,6 +857,7 @@ export function AppWorkflowPage() {
                   result={result}
                   failure={failure}
                   streamedText={streamedText}
+                  onOpenSettings={() => setSettingsOpen(true)}
                 />
               </div>
             </div>
@@ -828,6 +879,7 @@ export function AppWorkflowPage() {
       </section>
 
       <RoutingDrawer open={drawerOpen} onClose={() => setDrawerOpen(false)} />
+      <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </main>
   );
 }
