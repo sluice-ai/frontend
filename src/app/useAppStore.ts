@@ -106,31 +106,3 @@ export function useRoutingPreferences() {
   return { prefs, setPrefs };
 }
 
-/* ── Gemini API key config ──────────────────────────────────────── */
-
-const GEMINI_KEY = "sluice.mvp.geminiApiKey";
-
-export function useGeminiConfig() {
-  useSubscribed();
-  const apiKey = readJson<string>(GEMINI_KEY, "");
-
-  const setApiKey = useCallback((key: string) => {
-    writeJson(GEMINI_KEY, key.trim());
-    emit();
-  }, []);
-
-  const removeApiKey = useCallback(() => {
-    if (typeof window !== "undefined") {
-      window.localStorage.removeItem(GEMINI_KEY);
-    }
-    emit();
-  }, []);
-
-  return {
-    apiKey,
-    isConfigured: apiKey.length > 0,
-    setApiKey,
-    removeApiKey,
-  };
-}
-
