@@ -23,6 +23,8 @@ dist-ssr
 *.sln
 *.sw?
 
+.env
+
 # Project specific
 sluice.pdf
 .codex

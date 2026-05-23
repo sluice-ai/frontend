@@ -1,8 +1,14 @@
 import {
   Bell,
+  Bot,
+  Check,
   ChevronDown,
   CreditCard,
+  Eye,
+  EyeOff,
+  ExternalLink,
   Gauge,
+  Loader2,
   Plug,
   Plus,
   Route,
@@ -251,6 +257,8 @@ function ProvidersSection() {
     </div>
   );
 }
+
+/* GeminiSection removed as the key is now injected dynamically via environment variables */
 
 function EmptySection({ label }: { label: string }) {
   return (

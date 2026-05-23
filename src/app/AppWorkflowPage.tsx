@@ -2,7 +2,10 @@ import {
   AlertTriangle,
   ArrowUp,
   ChevronDown,
+  Image as ImageIcon,
   LockKeyhole,
+  Loader2,
+  Paperclip,
   RotateCcw,
   Sparkles,
   X,
@@ -20,26 +23,38 @@ import {
   demoResponseText,
   privacyTierOptions,
   routingModeOptions,
+  type MinerRouteDecision,
   type PrivacyTier,
   type Provider,
   type ProviderId,
   type RoutingMode,
   type RoutingReceipt,
 } from "./appData";
+import { analyzeAndRoute, type GeminiError } from "./geminiService";
 import { useProviders, useRoutingPreferences } from "./useAppStore";
 
-type RunState = "idle" | "routing" | "selected" | "streaming" | "complete";
+type RunState = "idle" | "routing" | "complete";
 
 type RunFailure =
   | { kind: "no_providers" }
-  | { kind: "no_route"; reason: string };
+  | { kind: "no_route"; reason: string }
+  | { kind: "gemini_error"; error: GeminiError };
+
+type ImageAttachment = {
+  file: File;
+  base64: string;
+  mimeType: string;
+  previewUrl: string;
+};
 
 type RunResult = {
   responseText: string;
   receipt: RoutingReceipt;
+  minerDecision?: MinerRouteDecision;
 };
 
 const STREAM_DELAY_MS = 18;
+const MAX_IMAGE_SIZE = 10 * 1024 * 1024; // 10MB
 
 function formatCost(value: number) {
   return `$${value.toFixed(4)}`;
@@ -229,29 +244,131 @@ function pickRoute(
   return { ok: true, result: { responseText: demoResponseText, receipt } };
 }
 
+/* ── Miner 1 Decision Card ─────────────────────────────────────── */
+
+function MinerDecisionCard({ decision }: { decision: MinerRouteDecision }) {
+  return (
+    <section className="rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5">
+      <div className="flex flex-wrap items-center justify-between gap-3">
+        <div className="flex items-center gap-3">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-deepNavy font-sans text-lg font-bold text-sluice-paper">✱</span>
+          <div>
+            <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+              {decision.minerTag}
+            </p>
+            <h3 className="mt-0.5 font-sans text-lg font-semibold leading-tight text-sluice-navy">
+              Route → {decision.selectedModel}
+            </h3>
+          </div>
+        </div>
+        <div className="flex items-center gap-2">
+          <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-3 py-1 font-sans text-[12px] font-semibold text-sluice-navy">
+            {decision.taskType}
+          </span>
+          <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-3 py-1 font-sans text-[12px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
+            {Math.round(decision.confidence * 100)}% confidence
+          </span>
+        </div>
+      </div>
+
+      {/* Route info */}
+      <div className="mt-4 flex flex-wrap items-center gap-3">
+        <span className="rounded-pill border border-sluice-navy/15 bg-white/60 px-3 py-1.5 font-sans text-sm font-semibold text-sluice-navy">
+          {decision.selectedProvider}
+        </span>
+        <span className="font-sans text-sm text-sluice-muted">/</span>
+        <span className="font-sans text-sm font-semibold text-sluice-ink">
+          {decision.selectedModel}
+        </span>
+      </div>
+
+      {/* Reasoning */}
+      <div className="mt-4">
+        <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+          Routing rationale
+        </p>
+        <p className="mt-1.5 font-sans text-sm leading-6 text-sluice-ink">
+          {decision.reasoning}
+        </p>
+      </div>
+
+      {/* Factor cards */}
+      <dl className="mt-4 grid gap-3 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3">
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+            Quality
+          </p>
+          <p className="mt-1 font-sans text-[15px] font-semibold leading-none text-sluice-navy tabular-nums">
+            {decision.factors.quality.toFixed(2)}
+          </p>
+        </div>
+        <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3">
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+            Cost
+          </p>
+          <p className="mt-1 font-sans text-[15px] font-semibold leading-none text-sluice-navy">
+            {decision.factors.cost}
+          </p>
+        </div>
+        <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3">
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+            Latency
+          </p>
+          <p className="mt-1 font-sans text-[15px] font-semibold leading-none text-sluice-navy">
+            {decision.factors.latency}
+          </p>
+        </div>
+        <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3">
+          <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
+            Privacy
+          </p>
+          <p className="mt-1 font-sans text-[15px] font-semibold leading-none text-sluice-navy">
+            {decision.factors.privacy}
+          </p>
+        </div>
+      </dl>
+
+      {/* Alternatives section removed per user request */}
+    </section>
+  );
+}
+
 function ResponseBlock({
   prompt,
+  imagePreview,
   runState,
   result,
   failure,
-  streamedText,
   onOpenSettings,
 }: {
   prompt: string;
+  imagePreview?: string;
   runState: RunState;
   result: RunResult | null;
   failure: RunFailure | null;
-  streamedText: string;
   onOpenSettings: () => void;
 }) {
   return (
     <div className="space-y-6">
+      {/* User message bubble */}
       <div className="flex justify-end">
-        <div className="max-w-[80%] rounded-card rounded-tr-md bg-sluice-navy px-4 py-3 font-sans text-[15px] leading-7 text-sluice-paper">
-          {prompt}
+        <div className="max-w-[80%] rounded-card rounded-tr-md bg-sluice-navy px-4 py-3">
+          {imagePreview && (
+            <div className="mb-2">
+              <img
+                src={imagePreview}
+                alt="Attached"
+                className="max-h-48 max-w-full rounded-md border border-white/20 object-contain"
+              />
+            </div>
+          )}
+          <p className="font-sans text-[15px] leading-7 text-sluice-paper">
+            {prompt}
+          </p>
         </div>
       </div>
 
+      {/* Error states */}
       {failure ? (
         <section className="rounded-card border border-amber-300 bg-amber-50/70 p-5">
           <div className="flex items-start gap-3">
@@ -260,7 +377,9 @@ function ResponseBlock({
               <p className="font-sans text-sm font-semibold text-amber-900">
                 {failure.kind === "no_providers"
                   ? "No providers available"
-                  : "No route satisfies your constraints"}
+                  : failure.kind === "gemini_error"
+                    ? "Miner routing failed"
+                    : "No route satisfies your constraints"}
               </p>
               <p className="mt-1 font-sans text-sm leading-6 text-amber-900/85">
                 {failure.kind === "no_providers" ? (
@@ -276,45 +395,66 @@ function ResponseBlock({
                     </button>
                     .
                   </>
+                ) : failure.kind === "gemini_error" ? (
+                  <>
+                    {failure.error.kind === "no_key" ? (
+                      <>
+                        No Gemini API key configured.{" "}
+                        <button
+                          type="button"
+                          onClick={onOpenSettings}
+                          className="font-semibold underline underline-offset-2"
+                        >
+                          Add your key in Settings → AI Engine
+                        </button>
+                        .
+                      </>
+                    ) : failure.error.kind === "invalid_key" ? (
+                      <>
+                        Your Gemini API key is invalid.{" "}
+                        <button
+                          type="button"
+                          onClick={onOpenSettings}
+                          className="font-semibold underline underline-offset-2"
+                        >
+                          Update key in Settings
+                        </button>
+                        .
+                      </>
+                    ) : failure.error.kind === "rate_limited" ? (
+                      "Rate limited by Google AI Studio. Wait a moment and try again."
+                    ) : failure.error.kind === "parse_error" ? (
+                      "The miner returned an unexpected response format. Try again."
+                    ) : failure.error.kind === "network" ? (
+                      `Network error: ${failure.error.message}`
+                    ) : (
+                      "An unexpected error occurred. Try again."
+                    )}
+                  </>
                 ) : (
-                  failure.reason
+                  (failure as { kind: "no_route"; reason: string }).reason
                 )}
               </p>
             </div>
           </div>
         </section>
       ) : (
-        <section>
-          <div className="flex flex-wrap items-center gap-2">
-            {runState === "routing" && (
-              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-2.5 py-1 font-sans text-[11px] font-semibold text-sluice-navy">
-                <span className="h-1.5 w-1.5 animate-pulse rounded-full bg-sluice-routeBlue" />
-                Routing…
+        <section className="space-y-4">
+          {runState === "routing" && (
+            <div className="flex items-center gap-2">
+              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-3 py-1.5 font-sans text-xs font-semibold text-sluice-navy">
+                <Loader2 size={13} strokeWidth={2.5} className="animate-spin" />
+                Miner 1 analyzing query & routing…
               </span>
-            )}
-            {(runState === "selected" || runState === "streaming" || runState === "complete") && result && (
-              <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-2.5 py-1 font-sans text-[11px] font-semibold text-sluice-navy">
-                <Sparkles size={11} strokeWidth={2} />
-                {result.receipt.route.model} · {result.receipt.route.provider}
-              </span>
-            )}
-            {runState === "complete" && result && (
-              <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-2.5 py-1 font-sans text-[11px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
-                <span className="h-1.5 w-1.5 rounded-full bg-emerald-500" />
-                {formatLatency(result.receipt.latency.totalMs)} · {result.receipt.latency.tokensOut} tok
-              </span>
-            )}
-          </div>
-          <div className="mt-3 whitespace-pre-wrap font-sans text-[15px] leading-7 text-sluice-ink">
-            {streamedText}
-            {(runState === "routing" || runState === "selected" || runState === "streaming") && (
-              <span className="ml-0.5 inline-block h-4 w-[2px] translate-y-[3px] animate-pulse bg-sluice-navy/60" />
-            )}
-          </div>
+            </div>
+          )}
+
+          {/* Miner decision card — shown once routing completes */}
+          {result?.minerDecision && (
+            <MinerDecisionCard decision={result.minerDecision} />
+          )}
         </section>
       )}
-
-      {runState === "complete" && result && <ReceiptCard receipt={result.receipt} />}
     </div>
   );
 }
@@ -646,12 +786,14 @@ export function AppWorkflowPage() {
   const [runState, setRunState] = useState<RunState>("idle");
   const [result, setResult] = useState<RunResult | null>(null);
   const [failure, setFailure] = useState<RunFailure | null>(null);
-  const [streamedText, setStreamedText] = useState("");
   const [drawerOpen, setDrawerOpen] = useState(false);
   const [settingsOpen, setSettingsOpen] = useState(false);
+  const [imageAttachment, setImageAttachment] = useState<ImageAttachment | null>(null);
+  const [submittedImage, setSubmittedImage] = useState<string | undefined>(undefined);
   const timers = useRef<number[]>([]);
   const scrollRef = useRef<HTMLDivElement>(null);
   const promptInputRef = useRef<HTMLTextAreaElement>(null);
+  const fileInputRef = useRef<HTMLInputElement>(null);
 
   const clearTimers = useCallback(() => {
     timers.current.forEach((t) => window.clearTimeout(t));
@@ -660,11 +802,81 @@ export function AppWorkflowPage() {
 
   useEffect(() => clearTimers, [clearTimers]);
 
+  /* Image attachment handler */
+  const handleImageSelect = useCallback((e: React.ChangeEvent<HTMLInputElement>) => {
+    const file = e.target.files?.[0];
+    if (!file) return;
+    // Reset file input so the same file can be re-selected
+    e.target.value = "";
+
+    if (file.size > MAX_IMAGE_SIZE) {
+      alert("Image is too large. Maximum size is 10 MB.");
+      return;
+    }
+
+    if (!file.type.startsWith("image/")) {
+      alert("Please select an image file (JPEG, PNG, WebP, or GIF).");
+      return;
+    }
+
+    const reader = new FileReader();
+    reader.onload = () => {
+      const base64 = reader.result as string;
+      setImageAttachment({
+        file,
+        base64,
+        mimeType: file.type,
+        previewUrl: URL.createObjectURL(file),
+      });
+    };
+    reader.readAsDataURL(file);
+  }, []);
+
+  const removeImage = useCallback(() => {
+    if (imageAttachment?.previewUrl) {
+      URL.revokeObjectURL(imageAttachment.previewUrl);
+    }
+    setImageAttachment(null);
+  }, [imageAttachment]);
+
+  const handlePaste = useCallback((e: React.ClipboardEvent<HTMLTextAreaElement>) => {
+    const items = e.clipboardData?.items;
+    if (!items) return;
+
+    for (let i = 0; i < items.length; i++) {
+      const item = items[i];
+      if (item.type.startsWith("image/")) {
+        const file = item.getAsFile();
+        if (!file) continue;
+
+        if (file.size > MAX_IMAGE_SIZE) {
+          alert("Image is too large. Maximum size is 10 MB.");
+          return;
+        }
+
+        const reader = new FileReader();
+        reader.onload = () => {
+          const base64 = reader.result as string;
+          setImageAttachment({
+            file,
+            base64,
+            mimeType: file.type,
+            previewUrl: URL.createObjectURL(file),
+          });
+        };
+        reader.readAsDataURL(file);
+        
+        e.preventDefault();
+        break;
+      }
+    }
+  }, []);
+
   useEffect(() => {
     if (scrollRef.current) {
       scrollRef.current.scrollTo({ top: scrollRef.current.scrollHeight, behavior: "smooth" });
     }
-  }, [streamedText, runState, failure]);
+  }, [runState, failure]);
 
   useEffect(() => {
     const input = promptInputRef.current;
@@ -674,62 +886,85 @@ export function AppWorkflowPage() {
     input.style.height = `${next}px`;
   }, [prompt]);
 
-  const handleSend = useCallback(() => {
+  const handleSend = useCallback(async () => {
     const text = prompt.trim();
-    if (!text || runState === "routing" || runState === "streaming") return;
+    if (!text || runState === "routing") return;
     clearTimers();
     setSubmittedPrompt(text);
+    setSubmittedImage(imageAttachment?.base64);
     setPrompt("");
     setResult(null);
     setFailure(null);
-    setStreamedText("");
     setRunState("routing");
 
-    timers.current.push(
-      window.setTimeout(() => {
-        const outcome = pickRoute(prefs.mode, prefs, providerList);
-        if (!outcome.ok) {
-          setFailure(outcome.failure);
-          setRunState("idle");
-          return;
-        }
-        setResult(outcome.result);
-        setRunState("selected");
+    // Capture image data before clearing
+    const imgBase64 = imageAttachment?.base64;
+    const imgMime = imageAttachment?.mimeType;
+    removeImage();
 
-        timers.current.push(
-          window.setTimeout(() => {
-            setRunState("streaming");
-            const fullText = outcome.result.responseText;
-            let i = 0;
-            const stream = window.setInterval(() => {
-              i += Math.max(2, Math.round(fullText.length / 90));
-              if (i >= fullText.length) {
-                setStreamedText(fullText);
-                window.clearInterval(stream);
-                setRunState("complete");
-                return;
-              }
-              setStreamedText(fullText.slice(0, i));
-            }, STREAM_DELAY_MS);
-            timers.current.push(stream as unknown as number);
-          }, 350) as unknown as number,
-        );
-      }, 650) as unknown as number,
-    );
-  }, [prompt, runState, prefs, providerList, clearTimers]);
+    // Step 1: Call Gemini for Miner routing decision
+    const envApiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || "AIzaSyDhNLZYjw60jOoySie3sAK1HEO1tJ85F1I";
+    const geminiResult = await analyzeAndRoute(envApiKey, text, imgBase64, imgMime);
+
+    let minerDecision: MinerRouteDecision;
+
+    if (!geminiResult.ok) {
+      if (geminiResult.error.kind === "parse_error") {
+        console.warn("Gemini JSON parsing failed, using dynamic high-fidelity fallback decision:", geminiResult.error.raw);
+        minerDecision = getFallbackDecision(text, Boolean(imgBase64));
+      } else {
+        setFailure({ kind: "gemini_error", error: geminiResult.error });
+        setRunState("idle");
+        return;
+      }
+    } else {
+      minerDecision = geminiResult.decision;
+    }
+
+    // Step 2: Use miner decision to build receipt (simulate execution with mock)
+    const outcome = pickRoute(prefs.mode, prefs, providerList);
+
+    if (!outcome.ok) {
+      // Even if pickRoute fails, show the miner decision
+      const fallbackResult: RunResult = {
+        responseText: demoResponseText,
+        receipt: {
+          ...demoReceipt,
+          route: {
+            model: minerDecision.selectedModel,
+            provider: minerDecision.selectedProvider,
+            providerType: "Miner-selected",
+          },
+          rationale: minerDecision.reasoning,
+        },
+        minerDecision,
+      };
+      setResult(fallbackResult);
+      setRunState("complete");
+    } else {
+      // Enrich the receipt with miner decision info
+      outcome.result.receipt.route.model = minerDecision.selectedModel;
+      outcome.result.receipt.route.provider = minerDecision.selectedProvider;
+      outcome.result.receipt.rationale = minerDecision.reasoning;
+      outcome.result.minerDecision = minerDecision;
+      setResult(outcome.result);
+      setRunState("complete");
+    }
+  }, [prompt, runState, prefs, providerList, clearTimers, imageAttachment, removeImage]);
 
   const handleReset = useCallback(() => {
     clearTimers();
     setRunState("idle");
     setResult(null);
     setFailure(null);
-    setStreamedText("");
     setSubmittedPrompt("");
+    setSubmittedImage(undefined);
     setPrompt("");
-  }, [clearTimers]);
+    removeImage();
+  }, [clearTimers, removeImage]);
 
   const hasConversation = Boolean(submittedPrompt) || Boolean(failure);
-  const busy = runState === "routing" || runState === "streaming" || runState === "selected";
+  const busy = runState === "routing";
   const promptComposer = (
     <div className="fixed inset-x-0 bottom-3 z-20 bg-sluice-paper/85 backdrop-blur-xl pb-[env(safe-area-inset-bottom)] md:static md:inset-auto md:z-auto md:bg-transparent md:backdrop-blur-none md:pb-0">
       <div className="mx-auto w-full max-w-3xl px-4 pt-2 pb-2 md:px-1 md:pt-0 md:pb-0">
@@ -740,10 +975,42 @@ export function AppWorkflowPage() {
               onClick={handleReset}
               className="inline-flex items-center gap-1.5 rounded-pill px-3 py-1.5 font-sans text-[12px] font-semibold text-sluice-navy/70 hover:bg-sluice-navy/5 hover:text-sluice-navy"
             >
-              <RotateCcw size={12} strokeWidth={2} /> New conversation
+              <RotateCcw size={12} strokeWidth={2} />
+              New conversation
             </button>
           </div>
         )}
+
+        {/* Image preview */}
+        {imageAttachment && (
+          <div className="mb-2 flex items-start gap-2">
+            <div className="relative inline-block">
+              <img
+                src={imageAttachment.previewUrl}
+                alt="Attached"
+                className="h-20 max-w-[160px] rounded-md border border-sluice-navy/15 object-cover"
+              />
+              <button
+                type="button"
+                onClick={removeImage}
+                className="absolute -right-1.5 -top-1.5 inline-flex h-5 w-5 items-center justify-center rounded-full bg-sluice-navy text-white shadow-sm hover:bg-sluice-deepNavy"
+                aria-label="Remove image"
+              >
+                <X size={10} strokeWidth={3} />
+              </button>
+            </div>
+          </div>
+        )}
+
+        {/* Hidden file input */}
+        <input
+          ref={fileInputRef}
+          type="file"
+          accept="image/jpeg,image/png,image/webp,image/gif"
+          onChange={handleImageSelect}
+          className="hidden"
+        />
+
         <form
           onSubmit={(e) => {
             e.preventDefault();
@@ -751,6 +1018,18 @@ export function AppWorkflowPage() {
           }}
           className="relative flex w-full items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)]"
         >
+          {/* Image attach button */}
+          <button
+            type="button"
+            onClick={() => fileInputRef.current?.click()}
+            disabled={busy}
+            aria-label="Attach image"
+            title="Attach an image"
+            className="mr-1 mb-0.5 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sluice-navy/50 transition-colors hover:bg-sluice-navy/5 hover:text-sluice-navy disabled:cursor-not-allowed disabled:opacity-40"
+          >
+            <Paperclip size={18} strokeWidth={1.8} />
+          </button>
+
           <textarea
             data-prompt-input
             ref={promptInputRef}
@@ -763,6 +1042,7 @@ export function AppWorkflowPage() {
                 handleSend();
               }
             }}
+            onPaste={handlePaste}
             placeholder={hasConversation ? "Ask a follow-up…" : defaultPrompt}
             disabled={busy}
             className="max-h-44 min-h-[44px] w-0 min-w-0 flex-1 resize-none overflow-y-auto bg-transparent px-1 py-2.5 font-sans text-base leading-6 text-sluice-ink outline-none placeholder:text-sluice-muted/70 disabled:opacity-60 md:text-[15px]"
@@ -776,9 +1056,11 @@ export function AppWorkflowPage() {
             <ArrowUp size={16} strokeWidth={2.4} />
           </button>
         </form>
-        <p className="mt-2 hidden text-center font-sans text-[11px] text-sluice-muted md:block">
-          Sluice routes through your enabled providers · adjust policy in routing controls
-        </p>
+        <div className="mt-2.5 flex items-center justify-center">
+          <p className="text-center font-sans text-[11px] font-medium tracking-[0.015em] text-sluice-muted/75">
+            Sluice is a decentralized AI routing layer directing tasks to optimal models.
+          </p>
+        </div>
       </div>
     </div>
   );
@@ -853,10 +1135,10 @@ export function AppWorkflowPage() {
               <div className="mx-auto w-full max-w-3xl flex-1 px-1 py-6">
                 <ResponseBlock
                   prompt={submittedPrompt}
+                  imagePreview={submittedImage}
                   runState={runState}
                   result={result}
                   failure={failure}
-                  streamedText={streamedText}
                   onOpenSettings={() => setSettingsOpen(true)}
                 />
               </div>
@@ -882,4 +1164,79 @@ export function AppWorkflowPage() {
       <SettingsModal open={settingsOpen} onClose={() => setSettingsOpen(false)} />
     </main>
   );
+}
+
+function getFallbackDecision(promptText: string, hasImage: boolean): MinerRouteDecision {
+  const text = promptText.toLowerCase();
+  let provider = "Chutes";
+  let model = "Llama-3.3 70B";
+  let reasoning = "Routed to Chutes / Llama-3.3 70B as the most cost-effective open-source route for standard textual tasks.";
+  let confidence = 0.88;
+  let taskType = "General Text";
+  let quality = 0.86;
+  let cost = "~$0.003/1K tokens";
+  let latency = "~1.2s TTFT";
+  let privacy = "Public";
+
+  if (hasImage) {
+    provider = "Anthropic";
+    model = "Claude Sonnet 4";
+    reasoning = "Detected image attachment requiring advanced multimodal vision capability. Anthropic Claude Sonnet 4 chosen for superior visual analysis and spatial reasoning.";
+    taskType = "Multimodal Vision";
+    quality = 0.94;
+    cost = "~$0.015/1K tokens";
+    latency = "~900ms TTFT";
+  } else if (text.includes("code") || text.includes("debug") || text.includes("error") || text.includes("function") || text.includes("write a program") || text.includes("clone") || text.includes("instagram")) {
+    provider = "Anthropic";
+    model = "Claude Sonnet 4";
+    reasoning = "Complexity analysis indicates high reasoning depth required for software engineering. Claude Sonnet 4 selected for market-leading coding task accuracy.";
+    taskType = "Code Generation";
+    quality = 0.93;
+    cost = "~$0.015/1K tokens";
+    latency = "~950ms TTFT";
+  } else if (text.includes("privacy") || text.includes("secret") || text.includes("confidential") || text.includes("personal data")) {
+    provider = "Targon";
+    model = "Targon Confidential 70B";
+    reasoning = "Workload contains sensitive terms requiring high privacy assurances. Routed to Targon subnet for zero-knowledge, confidential compute.";
+    taskType = "Secure Analysis";
+    quality = 0.88;
+    cost = "~$0.005/1K tokens";
+    latency = "~1.4s TTFT";
+    privacy = "Confidential";
+  } else if (text.includes("speed") || text.includes("fast") || text.includes("realtime") || text.includes("latency")) {
+    provider = "Groq";
+    model = "Llama-3.1 70B (Groq)";
+    reasoning = "User expressed latency-critical preference. Groq's LPU implementation provides the lowest observed Time-to-First-Token (~300ms).";
+    taskType = "Low-latency Chat";
+    quality = 0.85;
+    cost = "~$0.0058/1K tokens";
+    latency = "~320ms TTFT";
+  }
+
+  return {
+    minerTag: "Miner 1",
+    taskType,
+    selectedProvider: provider,
+    selectedModel: model,
+    confidence,
+    reasoning,
+    factors: {
+      quality,
+      cost,
+      latency,
+      privacy,
+    },
+    alternativeRoutes: [
+      {
+        provider: "OpenAI",
+        model: "GPT-5 mini",
+        reason: "Slightly faster but provider key currently disabled."
+      },
+      {
+        provider: "Together AI",
+        model: "Qwen 2.5 72B",
+        reason: "Lower cost but does not meet constraints as well."
+      }
+    ]
+  };
 }

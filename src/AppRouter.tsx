@@ -6,6 +6,7 @@ import { AppWorkflowPage } from "./app/AppWorkflowPage";
 import { DashboardPage } from "./dashboard/DashboardPage";
 import { DocsLayout } from "./docs/DocsLayout";
 import { DocsIndex, DocsPlaceholder } from "./docs/DocsPages";
+import { SubnetDocsPage } from "./docs/SubnetDocsPage";
 
 export default function AppRouter() {
   return (
@@ -49,6 +50,9 @@ export default function AppRouter() {
         {/* Catch-all */}
         <Route path="*" element={<DocsPlaceholder />} />
       </Route>
+
+      {/* Standalone Subnet Route */}
+      <Route path="/subnet" element={<SubnetDocsPage />} />
     </Routes>
   );
 }
