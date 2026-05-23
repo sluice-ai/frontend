@@ -399,27 +399,19 @@ function ResponseBlock({
                   <>
                     {failure.error.kind === "no_key" ? (
                       <>
-                        No Gemini API key configured.{" "}
-                        <button
-                          type="button"
-                          onClick={onOpenSettings}
-                          className="font-semibold underline underline-offset-2"
-                        >
-                          Add your key in Settings → AI Engine
-                        </button>
-                        .
+                        No Gemini API key configured. Please set the{" "}
+                        <code className="rounded bg-amber-100 px-1 py-0.5 text-amber-900 font-semibold font-mono text-[13px]">
+                          VITE_GEMINI_API_KEY
+                        </code>{" "}
+                        environment variable and redeploy.
                       </>
                     ) : failure.error.kind === "invalid_key" ? (
                       <>
-                        Your Gemini API key is invalid.{" "}
-                        <button
-                          type="button"
-                          onClick={onOpenSettings}
-                          className="font-semibold underline underline-offset-2"
-                        >
-                          Update key in Settings
-                        </button>
-                        .
+                        Your Gemini API key is invalid. Please check your{" "}
+                        <code className="rounded bg-amber-100 px-1 py-0.5 text-amber-900 font-semibold font-mono text-[13px]">
+                          VITE_GEMINI_API_KEY
+                        </code>{" "}
+                        environment variable and trigger a new deployment.
                       </>
                     ) : failure.error.kind === "rate_limited" ? (
                       "Rate limited by Google AI Studio. Wait a moment and try again."
@@ -865,7 +857,7 @@ export function AppWorkflowPage() {
           });
         };
         reader.readAsDataURL(file);
-        
+
         e.preventDefault();
         break;
       }
@@ -903,7 +895,7 @@ export function AppWorkflowPage() {
     removeImage();
 
     // Step 1: Call Gemini for Miner routing decision
-    const envApiKey = (import.meta as any).env.VITE_GEMINI_API_KEY || "AIzaSyDhNLZYjw60jOoySie3sAK1HEO1tJ85F1I";
+    const envApiKey = (import.meta as any).env.VITE_GEMINI_API_KEY;
     const geminiResult = await analyzeAndRoute(envApiKey, text, imgBase64, imgMime);
 
     let minerDecision: MinerRouteDecision;
