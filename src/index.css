@@ -64,13 +64,6 @@ body.sluice-modal-open {
   overflow: hidden;
 }
 
-@media (min-width: 768px) {
-  html.routing-drawer-open,
-  html.sluice-modal-open {
-    scrollbar-gutter: auto;
-  }
-}
-
 button,
 a {
   -webkit-tap-highlight-color: transparent;
@@ -134,8 +127,8 @@ svg [role="button"]:focus-visible .svg-focus-ring {
   }
 
   .section-shell {
-    scroll-margin-top: 6rem;
-    padding-block: 4rem;
+    scroll-margin-top: 4.5rem;
+    padding-block: 3rem;
   }
 
   .surface-panel,
@@ -298,7 +291,7 @@ svg [role="button"]:focus-visible .svg-focus-ring {
 
 @media (min-width: 768px) {
   .section-shell {
-    padding-block: 6rem;
+    padding-block: 4rem;
   }
 
   .surface-panel,
@@ -459,6 +452,26 @@ svg [role="button"]:focus-visible .svg-focus-ring {
 
 .reveal-soft {
   animation: rise-in 640ms cubic-bezier(0.16, 1, 0.3, 1) both;
+}
+
+/* Spotlight Cascade & Dynamic Card Hover effects */
+:root {
+  --cascade-blur: blur(2.5px);
+  --cascade-opacity: 0.45;
+  --cascade-scale-active: scale(1) translateY(0);
+  --cascade-scale-near: scale(1) translateY(0);
+  --cascade-scale-far: scale(1) translateY(0);
+}
+
+.cascade-card {
+  transition: all 450ms cubic-bezier(0.16, 1, 0.3, 1) !important;
+  will-change: transform, filter, opacity, box-shadow;
+}
+
+.spotlight-active-card {
+  background-color: #ebf0ff !important;
+  border-color: rgba(74, 119, 220, 0.45) !important;
+  box-shadow: none !important;
 }
 
 @media (prefers-reduced-motion: reduce) {

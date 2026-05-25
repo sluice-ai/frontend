@@ -6,7 +6,7 @@ import { BrandLogo } from "../components/BrandLogo";
 import { DocsSidebar } from "./DocsSidebar";
 import { docsSidebar } from "./docsData";
 
-export function DocsLayout() {
+export function DocsLayout(): JSX.Element {
   const [sidebarOpen, setSidebarOpen] = useState(false);
   const location = useLocation();
 
@@ -22,7 +22,6 @@ export function DocsLayout() {
   return (
     <div className="docs-layout">
       <header className="docs-topbar">
-        <div className="docs-topbar__progress" />
         <div className="docs-topbar__inner">
           <div className="docs-topbar__left">
             <button
@@ -59,7 +58,7 @@ export function DocsLayout() {
             {/* Bottom nav */}
             {(prevPage || nextPage) && (
               <div className="docs-bottom-nav">
-                {prevPage ? (
+                {prevPage && (
                   <Link
                     to={prevPage.href}
                     className="docs-bottom-nav__link docs-bottom-nav__link--prev"
@@ -67,10 +66,8 @@ export function DocsLayout() {
                     <span className="docs-bottom-nav__direction">Previous</span>
                     <span className="docs-bottom-nav__label">{prevPage.label}</span>
                   </Link>
-                ) : (
-                  <div />
                 )}
-                {nextPage ? (
+                {nextPage && (
                   <Link
                     to={nextPage.href}
                     className="docs-bottom-nav__link docs-bottom-nav__link--next"
@@ -78,8 +75,6 @@ export function DocsLayout() {
                     <span className="docs-bottom-nav__direction">Next</span>
                     <span className="docs-bottom-nav__label">{nextPage.label}</span>
                   </Link>
-                ) : (
-                  <div />
                 )}
               </div>
             )}

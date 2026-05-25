@@ -491,7 +491,7 @@ function RoutingEfficiencyChart() {
 export function DashboardPage() {
   return (
     <main className="min-h-screen overflow-x-clip bg-sluice-paper text-sluice-ink">
-      <Navbar items={dashboardNavItems} />
+      <Navbar items={dashboardNavItems} showProgress={false} />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(74,119,220,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(29,52,135,0.1),transparent_30%)]" />
 
       <section id="overview" className="container-shell pb-14 pt-24 md:pt-28">

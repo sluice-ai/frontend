@@ -13,12 +13,12 @@ export function CallToAction() {
           Stop guessing. Start routing intelligently.
         </h2>
         <p className="mx-auto mt-7 max-w-2xl font-sans text-base leading-7 tracking-normal text-sluice-paper/70 md:text-lg">
-          The Sluice testnet is coming soon. Join the first measurable,
-          policy-aware market that decides exactly where your AI work should go.
+          Join the first measurable, policy-aware market that decides exactly
+          where your AI work should go.
         </p>
         <div className="mt-9 flex flex-col justify-center gap-3 sm:flex-row">
-          <ButtonLink href="#cta" variant="inverse" icon={<ArrowRight size={18} />}>
-            Coming Soon
+          <ButtonLink href="/dashboard" variant="inverse" icon={<ArrowRight size={18} />}>
+            View Dashboard
           </ButtonLink>
           <ButtonLink
             href="#benchmark"

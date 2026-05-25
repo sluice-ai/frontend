@@ -10,13 +10,16 @@ import type { NavItem } from "../types";
 
 type NavbarProps = {
   items?: NavItem[];
+  showProgress?: boolean;
 };
 
-export function Navbar({ items = navItems }: NavbarProps) {
+export function Navbar({ items = navItems, showProgress = true }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
   const [scrollProgress, setScrollProgress] = useState(0);
 
   useEffect(() => {
+    if (!showProgress) return;
+
     const handleScroll = () => {
       const totalScroll = document.documentElement.scrollTop;
       const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
@@ -27,18 +30,23 @@ export function Navbar({ items = navItems }: NavbarProps) {
     handleScroll();
     window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
-  }, []);
+  }, [showProgress]);
 
   return (
     <>
-      <div className="fixed left-0 right-0 top-0 z-50 h-[3px] bg-white">
-        <div 
-          className="h-full bg-sluice-navy transition-all duration-75 ease-out" 
-          style={{ width: `${scrollProgress}%` }} 
-        />
-      </div>
+      {showProgress && (
+        <div className="fixed left-0 right-0 top-0 z-50 h-[3px] bg-white">
+          <div
+            className="h-full bg-sluice-navy transition-all duration-75 ease-out"
+            style={{ width: `${scrollProgress}%` }}
+          />
+        </div>
+      )}
       <nav
-        className="fixed left-0 right-0 top-[3px] z-40 border-b border-sluice-navy/10 bg-sluice-paper/80 backdrop-blur-xl"
+        className={cn(
+          "fixed left-0 right-0 z-40 border-b border-sluice-navy/10 bg-sluice-paper/80 backdrop-blur-xl",
+          showProgress ? "top-[3px]" : "top-0",
+        )}
         aria-label="Primary navigation"
       >
         <div className="container-shell flex h-16 items-center justify-between">

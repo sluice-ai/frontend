@@ -16,7 +16,7 @@ import type {
   Layer,
   Metric,
   NavItem,
-  RoadmapColumn,
+  RoadmapTrack,
   ScoreWeight,
   Step,
 } from "../types";
@@ -30,14 +30,12 @@ export const navItems: NavItem[] = [
 ];
 
 export const dashboardNavItems: NavItem[] = [
-  { label: "Roadmap", href: "/#roadmap" },
   { label: "Subnet", href: "/subnet" },
   { label: "Docs", href: "/docs" },
   { label: "Launch app", href: "/app", isPrimary: true },
 ];
 
 export const appNavItems: NavItem[] = [
-  { label: "Roadmap", href: "/#roadmap" },
   { label: "Subnet", href: "/subnet" },
   { label: "Docs", href: "/docs" },
 ];
@@ -77,15 +75,20 @@ export const layers: Layer[] = [
     description: "Decentralized inference supply that changes in real time.",
   },
   {
+    name: "Sluice",
+    title: "Decision layer",
+    description: "Routes by cost, latency, quality, reliability, and privacy.",
+    isSluice: true,
+  },
+  {
     name: "Targon",
     title: "Privacy layer",
     description: "Confidential AI execution for sensitive workloads.",
   },
   {
-    name: "Sluice",
-    title: "Decision layer",
-    description: "Routes by cost, latency, quality, reliability, and privacy.",
-    isSluice: true,
+    name: "Validators",
+    title: "Validation layer",
+    description: "Continuous scoring and telemetry to prove routing optimality.",
   },
 ];
 
@@ -112,7 +115,7 @@ export const steps: Step[] = [
     number: "04",
     title: "Best route wins",
     description:
-      "The cheapest valid route that satisfies task requirements is selected and rewarded.",
+      "The best valid route that satisfies task requirements is selected and rewarded.",
   },
 ];
 
@@ -211,37 +214,49 @@ export const customerSegments: CustomerSegment[] = [
   },
 ];
 
-export const roadmap: RoadmapColumn[] = [
+export const roadmap: RoadmapTrack[] = [
   {
     title: "Technical",
     window: "Weeks 1-4",
+    windowStart: 1,
+    windowEnd: 4,
+    lanes: 3,
+    color: "navy",
     items: [
-      "Define request schema",
-      "Integrate first providers",
-      "Build baseline miner router",
-      "Build validator benchmark runner",
+      { label: "Define request schema", startWeek: 1, endWeek: 2, lane: 0 },
+      { label: "Build baseline miner router", startWeek: 3, endWeek: 4, lane: 0 },
+      { label: "Integrate first providers", startWeek: 2, endWeek: 3, lane: 1 },
+      { label: "Build validator benchmark runner", startWeek: 3, endWeek: 4, lane: 2 },
     ],
   },
   {
     title: "Network",
     window: "Weeks 3-8",
+    windowStart: 3,
+    windowEnd: 8,
+    lanes: 2,
+    color: "blue",
     items: [
-      "Launch private testnet",
-      "Add health and fallback logic",
-      "Run closed beta with real workloads",
-      "Publish miner docs and validator rules",
-      "Launch on mainnet",
+      { label: "Launch private testnet", startWeek: 3, endWeek: 4, lane: 0 },
+      { label: "Add health and fallback logic", startWeek: 4, endWeek: 5, lane: 1 },
+      { label: "Run closed beta with real workloads", startWeek: 5, endWeek: 6, lane: 0 },
+      { label: "Publish miner docs and validator rules", startWeek: 6, endWeek: 7, lane: 1 },
+      { label: "Launch on mainnet", startWeek: 7, endWeek: 8, lane: 0 },
     ],
   },
   {
     title: "Commercial",
     window: "Weeks 6-8+",
+    windowStart: 6,
+    windowEnd: 9,
+    lanes: 3,
+    color: "violet",
     items: [
-      "Add API and dashboard",
-      "Publish benchmark report",
-      "Onboard first design partners",
-      "Expand provider coverage",
-      "Start premium routing",
+      { label: "Add API and dashboard", startWeek: 6, endWeek: 7, lane: 0 },
+      { label: "Expand provider coverage", startWeek: 8, endWeek: 9, lane: 0 },
+      { label: "Publish benchmark report", startWeek: 6, endWeek: 7, lane: 1 },
+      { label: "Start premium routing", startWeek: 8, endWeek: 9, lane: 1 },
+      { label: "Onboard first design partners", startWeek: 7, endWeek: 8, lane: 2 },
     ],
   },
 ];

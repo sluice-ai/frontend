@@ -43,10 +43,21 @@ export type CustomerSegment = {
   description: string;
 };
 
-export type RoadmapColumn = {
+export type RoadmapItem = {
+  label: string;
+  startWeek: number;
+  endWeek: number;
+  lane: number;
+};
+
+export type RoadmapTrack = {
   title: string;
   window: string;
-  items: string[];
+  windowStart: number;
+  windowEnd: number;
+  lanes: number;
+  color: "navy" | "blue" | "violet";
+  items: RoadmapItem[];
 };
 
 export type BenchmarkSeries = {
