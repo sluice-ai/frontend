@@ -1,18 +1,16 @@
-import {
-  BookOpen,
-  Compass,
-  Gauge,
-  Zap,
-  FileCode,
-  Terminal,
-  Webhook,
-  Server,
-  FileText,
-  HelpCircle,
-  type LucideIcon,
-} from "lucide-react";
+import { type LucideIcon } from "lucide-react";
 
 import { SluiceDocsLogoIcon } from "./SluiceDocsLogoIcon";
+import { OverviewIcon } from "./OverviewIcon";
+import { VisionIcon } from "./VisionIcon";
+import { QuickStartIcon } from "./QuickStartIcon";
+import { ScoringEngineIcon } from "./ScoringEngineIcon";
+import { MinerIcon } from "./MinerIcon";
+import { ValidatorIcon } from "./ValidatorIcon";
+import { RouteApiIcon } from "./RouteApiIcon";
+import { SdkReferenceIcon } from "./SdkReferenceIcon";
+import { ChangelogIcon } from "./ChangelogIcon";
+import { FaqIcon } from "./FaqIcon";
 
 export interface DocNavItem {
   label: string;
@@ -33,19 +31,19 @@ export const docsSidebar: DocNavSection[] = [
       {
         label: "Overview",
         href: "/docs/introduction",
-        icon: BookOpen,
+        icon: OverviewIcon,
         description: "What is Sluice and why it exists",
       },
       {
         label: "Vision",
         href: "/docs/vision",
-        icon: Compass,
+        icon: VisionIcon,
         description: "The future of decentralized AI routing",
       },
       {
         label: "Quick Start",
         href: "/docs/quick-start",
-        icon: Zap,
+        icon: QuickStartIcon,
         description: "Get started in under 5 minutes",
       },
     ],
@@ -62,7 +60,7 @@ export const docsSidebar: DocNavSection[] = [
       {
         label: "Scoring Engine",
         href: "/docs/core/scoring",
-        icon: Gauge,
+        icon: ScoringEngineIcon,
         description: "Quality, cost, latency, reliability, privacy",
       },
     ],
@@ -73,13 +71,13 @@ export const docsSidebar: DocNavSection[] = [
       {
         label: "Run a Miner",
         href: "/docs/guides/run-miner",
-        icon: Terminal,
+        icon: MinerIcon,
         description: "Set up and operate a Sluice miner",
       },
       {
         label: "Run a Validator",
         href: "/docs/guides/run-validator",
-        icon: Server,
+        icon: ValidatorIcon,
         description: "Validate and benchmark routes",
       },
     ],
@@ -90,13 +88,13 @@ export const docsSidebar: DocNavSection[] = [
       {
         label: "Route API",
         href: "/docs/api/route",
-        icon: Webhook,
+        icon: RouteApiIcon,
         description: "Submit routing requests",
       },
       {
         label: "SDK Reference",
         href: "/docs/api/sdk",
-        icon: FileCode,
+        icon: SdkReferenceIcon,
         description: "TypeScript and Python client libraries",
       },
     ],
@@ -107,13 +105,13 @@ export const docsSidebar: DocNavSection[] = [
       {
         label: "Changelog",
         href: "/docs/resources/changelog",
-        icon: FileText,
+        icon: ChangelogIcon,
         description: "Latest updates and releases",
       },
       {
         label: "FAQ",
         href: "/docs/resources/faq",
-        icon: HelpCircle,
+        icon: FaqIcon,
         description: "Frequently asked questions",
       },
     ],

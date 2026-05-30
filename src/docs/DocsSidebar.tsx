@@ -150,7 +150,7 @@ function SidebarSection({
                   onClick={onNavigate}
                 >
                   <span className="docs-sidebar__link-icon">
-                    <Icon size={15} strokeWidth={1.8} />
+                    <Icon size={18} strokeWidth={1.8} />
                   </span>
                   <span className="docs-sidebar__link-label">{item.label}</span>
                 </Link>

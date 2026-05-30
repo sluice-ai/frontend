@@ -2,33 +2,28 @@ import { forwardRef } from "react";
 import type { LucideProps } from "lucide-react";
 
 export const SluiceDocsLogoIcon = forwardRef<SVGSVGElement, LucideProps>(
-  ({ size = 15, className, ...props }, ref) => (
+  ({ size = 15, strokeWidth = 2, className, ...props }, ref) => (
     <svg
       ref={ref}
-      viewBox="190 278 670 468"
+      viewBox="0 0 24 24"
       width={size}
       height={size}
       fill="none"
+      stroke="currentColor"
+      strokeWidth={strokeWidth}
+      strokeLinecap="round"
+      strokeLinejoin="round"
       aria-hidden="true"
       focusable="false"
       className={className}
       {...props}
     >
-      <g
-        stroke="currentColor"
-        strokeWidth="52"
-        strokeLinecap="round"
-        strokeLinejoin="round"
-      >
-        <path d="M238 512H704" />
-        <path d="M238 512C360 512 408 348 548 348H704" />
-        <path d="M238 512C360 512 408 676 548 676H704" />
-      </g>
-      <g fill="currentColor">
-        <circle cx="790" cy="348" r="46" />
-        <circle cx="790" cy="512" r="46" />
-        <circle cx="790" cy="676" r="46" />
-      </g>
+      <path d="M1.72 12H18.41" />
+      <path d="M1.72 12C6.09 12 7.81 3.59 12.82 3.59H18.41" />
+      <path d="M1.72 12C6.09 12 7.81 20.41 12.82 20.41H18.41" />
+      <circle cx="21.49" cy="3.59" r="1.65" fill="currentColor" stroke="none" />
+      <circle cx="21.49" cy="12" r="1.65" fill="currentColor" stroke="none" />
+      <circle cx="21.49" cy="20.41" r="1.65" fill="currentColor" stroke="none" />
     </svg>
   )
 );

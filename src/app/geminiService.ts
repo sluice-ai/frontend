@@ -256,7 +256,7 @@ export async function testConnection(
         return { ok: false, error: "Invalid API key" };
       }
       if (res.status === 429) {
-        return { ok: false, error: "Rate limited — try again in a moment" };
+        return { ok: false, error: "Rate limited; try again in a moment" };
       }
       return { ok: false, error: `API error (${res.status})` };
     }

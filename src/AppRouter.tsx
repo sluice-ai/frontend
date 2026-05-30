@@ -6,6 +6,9 @@ import { AppWorkflowPage } from "./app/AppWorkflowPage";
 import { DashboardPage } from "./dashboard/DashboardPage";
 import { DocsLayout } from "./docs/DocsLayout";
 import { DocsIndex, DocsPlaceholder } from "./docs/DocsPages";
+import { FaqPage } from "./docs/FaqPage";
+import { SluiceCorePage } from "./docs/SluiceCorePage";
+import { VisionPage } from "./docs/VisionPage";
 import { SubnetDocsPage } from "./docs/SubnetDocsPage";
 
 export default function AppRouter() {
@@ -28,11 +31,11 @@ export default function AppRouter() {
 
         {/* Introduction */}
         <Route path="introduction" element={<DocsIndex />} />
-        <Route path="vision" element={<DocsPlaceholder />} />
+        <Route path="vision" element={<VisionPage />} />
         <Route path="quick-start" element={<DocsPlaceholder />} />
 
         {/* Core Concepts */}
-        <Route path="core/sluice" element={<DocsPlaceholder />} />
+        <Route path="core/sluice" element={<SluiceCorePage />} />
         <Route path="core/scoring" element={<DocsPlaceholder />} />
 
         {/* Guides */}
@@ -45,7 +48,7 @@ export default function AppRouter() {
 
         {/* Resources */}
         <Route path="resources/changelog" element={<DocsPlaceholder />} />
-        <Route path="resources/faq" element={<DocsPlaceholder />} />
+        <Route path="resources/faq" element={<FaqPage />} />
 
         {/* Catch-all */}
         <Route path="*" element={<DocsPlaceholder />} />

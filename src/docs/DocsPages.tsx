@@ -20,28 +20,35 @@ export function DocsIndex() {
     <article className="docs-index docs-article">
       <div className="docs-index__hero">
         <h1 className="docs-index__title">Sluice Documentation</h1>
-        <p className="docs-index__subtitle">
-          Everything you need to understand, build on, and operate within
-          the Sluice decentralized AI routing network.
-        </p>
+        <p className="docs-index__subtitle">What is Sluice and why it exists</p>
       </div>
 
       <div className="docs-article__rule" />
 
       <div className="docs-article__body">
         <p>
-          Sluice is a decentralized routing layer for AI work. It selects the
-          best-fit provider for each request across cost, latency, quality,
-          reliability, and privacy requirements.
+          AI is fragmenting fast. Every month there are more providers, more
+          model APIs, more specialized subnets, and more tradeoffs to reason
+          about. Picking the right destination for each request is becoming its
+          own full-time problem.
         </p>
         <p>
-          The network turns provider fragmentation into a market for routing
-          policies: miners propose routes, validators benchmark outcomes, and
-          applications send work through the path that clears the task policy.
+          Sluice solves this at the network level. You send a request with a
+          policy (budget, latency, quality floor, privacy requirements) and
+          Sluice routes it to the best provider that satisfies those
+          constraints. Miners compete to propose the optimal route. Validators
+          benchmark the outcomes. The winning route gets executed and the miner
+          that found it earns the reward.
         </p>
         <p>
-          Start with the core concepts below, then move into guides and API
-          reference as the testnet docs come online.
+          The result is a routing layer that improves automatically as the
+          network grows. More miners bring more strategy diversity. More
+          validators bring better signal. More requests build a richer picture
+          of which providers actually perform.
+        </p>
+        <p>
+          Start with the core concepts below. Guides and API reference will
+          fill in as the testnet launches.
         </p>
       </div>
 
@@ -104,6 +111,9 @@ export function DocsPlaceholder() {
     <article className="docs-placeholder docs-article">
       <div className="docs-placeholder__hero">
         <h1 className="docs-placeholder__title">{currentItem.label}</h1>
+        {currentItem.description && (
+          <p className="docs-index__subtitle">{currentItem.description}</p>
+        )}
       </div>
 
       <div className="docs-article__rule" />
