@@ -5,7 +5,7 @@ import { SectionHeader } from "./ui/SectionHeader";
 
 export function HowItWorks() {
   return (
-    <section id="how-it-works" className="section-shell">
+    <section id="how-it-works" className="scroll-mt-[4.5rem] py-12 md:py-16">
       <Container>
         <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
           <SectionHeader
@@ -28,7 +28,9 @@ export function HowItWorks() {
               <h3 className="mt-4 font-display text-xl font-normal leading-[1.1] tracking-[-0.01em] text-sluice-navy">
                 {step.title}
               </h3>
-              <p className="caption mt-3">{step.description}</p>
+              <p className="mt-3 font-sans text-sm leading-6 tracking-normal text-sluice-muted">
+                {step.description}
+              </p>
             </div>
           ))}
         </div>

@@ -195,7 +195,7 @@ export function RoutingFlowDiagram({
           role="button"
           tabIndex={0}
           aria-label={`Cycle route policy. Current policy is ${activePolicy.label}`}
-          className="cursor-pointer rfd-req-group"
+          className="group cursor-pointer animate-rfd-node-in [animation-delay:80ms] [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none"
           onClick={cyclePolicy}
           onKeyDown={(event) => {
             if (event.key === "Enter" || event.key === " ") {
@@ -204,7 +204,7 @@ export function RoutingFlowDiagram({
           }}
         >
           <circle
-            className="svg-focus-ring"
+            className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
             cx="68"
             cy="160"
             r="45"
@@ -246,11 +246,11 @@ export function RoutingFlowDiagram({
           stroke="#1D3487"
           strokeWidth="1.8"
           pathLength={1}
-          className="rfd-connector"
+          className="animate-rfd-draw [stroke-dasharray:1] motion-reduce:animate-none"
           style={{ animationDelay: "200ms" }}
         />
 
-        <g className="rfd-box-group">
+        <g className="animate-rfd-node-in [animation-delay:190ms] [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none">
           <rect
             x="180"
             y="104"
@@ -301,7 +301,7 @@ export function RoutingFlowDiagram({
               role="button"
               tabIndex={0}
               aria-label={`Select ${provider.name} route`}
-              className={cn("cursor-pointer rfd-node-group")}
+              className="group cursor-pointer animate-rfd-node-in [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none"
               style={{ animationDelay: `${320 + index * 60}ms` }}
               onClick={() => setFocusedProviderId(provider.id)}
               onKeyDown={(event) => {
@@ -311,7 +311,7 @@ export function RoutingFlowDiagram({
               }}
             >
               <circle
-                className="svg-focus-ring"
+                className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
                 cx="570"
                 cy={provider.y}
                 r="35"
@@ -327,7 +327,10 @@ export function RoutingFlowDiagram({
                 strokeLinecap="round"
                 strokeWidth={isSelected ? "3" : "1.35"}
                 pathLength={1}
-                className={cn("rfd-connector", isSelected && "rfd-selected-line")}
+                className={cn(
+                  "animate-rfd-draw [stroke-dasharray:1] motion-reduce:animate-none",
+                  isSelected && "animate-rfd-pulse-line motion-reduce:animate-none",
+                )}
                 style={{
                   animationDelay: `${260 + index * 60}ms`,
                   transition: "stroke 300ms ease, stroke-width 300ms ease",

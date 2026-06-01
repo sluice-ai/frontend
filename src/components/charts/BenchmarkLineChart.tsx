@@ -56,7 +56,7 @@ export function BenchmarkLineChart({ series }: BenchmarkLineChartProps) {
           <h3 className="font-sans text-base font-semibold tracking-normal text-sluice-ink">
             Benchmark score by run
           </h3>
-          <p className="caption mt-1 max-w-[360px]">
+          <p className="mt-1 max-w-[360px] font-sans text-sm leading-6 tracking-normal text-sluice-muted">
             Normalized 0-100 validator score across repeated benchmark batches.
             Higher is better.
           </p>

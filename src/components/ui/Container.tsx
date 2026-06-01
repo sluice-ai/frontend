@@ -8,7 +8,13 @@ type ContainerProps = HTMLAttributes<HTMLDivElement> & {
 
 export function Container({ children, className, ...props }: ContainerProps) {
   return (
-    <div className={cn("container-shell", className)} {...props}>
+    <div
+      className={cn(
+        "mx-auto w-full max-w-[1280px] px-6 sm:px-8 lg:px-16",
+        className,
+      )}
+      {...props}
+    >
       {children}
     </div>
   );

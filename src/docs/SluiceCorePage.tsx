@@ -38,18 +38,12 @@ const pillars = [
 
 function SluiceNetworkDiagram() {
   return (
-    <figure className="sluice-core-figure">
+    <figure className="my-10 mb-6 overflow-visible rounded-card border border-sluice-navy/12 bg-sluice-paper/38 px-4 pb-4 pt-6">
       <svg
         viewBox="0 0 580 620"
         role="img"
         aria-label="Sluice network flow: user request routed through competing miners, scored by validator, forwarded to best provider with a network-improves feedback loop"
-        style={{
-          width: "100%",
-          height: "auto",
-          maxWidth: "540px",
-          display: "block",
-          margin: "0 auto",
-        }}
+        className="mx-auto block h-auto w-full max-w-[540px]"
       >
         <defs>
           <marker
@@ -385,7 +379,7 @@ function SluiceNetworkDiagram() {
           Best provider: Chutes / Targon / API
         </text>
       </svg>
-      <figcaption className="sluice-core-figcaption">
+      <figcaption className="mx-auto mt-4 max-w-[460px] text-center font-sans text-[13px] leading-[1.55] text-sluice-muted">
         Each request enters Sluice with a policy. Miners compete to propose the
         optimal route. The validator benchmarks outcomes and rewards the winning
         path. Scores feed back into the network over time.
@@ -396,20 +390,22 @@ function SluiceNetworkDiagram() {
 
 export function SluiceCorePage() {
   return (
-    <article className="docs-article">
+    <article className="animate-docs-fade-in motion-reduce:animate-none">
       {/* Hero */}
-      <div className="docs-placeholder__hero">
-        <h1 className="docs-placeholder__title">Sluice</h1>
-        <p className="docs-index__subtitle">
+      <div>
+        <h1 className="m-0 font-sans text-[clamp(1.375rem,2.2vw,1.75rem)] font-[650] leading-[1.18] tracking-normal text-sluice-navy">
+          Sluice
+        </h1>
+        <p className="mt-4 max-w-[620px] font-sans text-[1.05rem] font-normal leading-[1.65] tracking-normal text-sluice-muted">
           A decentralized market for routing policies, acting as the coordination layer
           that decides where each AI request should go.
         </p>
       </div>
 
-      <div className="docs-article__rule" />
+      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x" />
 
       {/* Intro */}
-      <div className="docs-article__body">
+      <div className="flex max-w-[720px] flex-col gap-[1.7rem] [&_p]:m-0 [&_p]:font-sans [&_p]:text-[1.05rem] [&_p]:font-normal [&_p]:leading-[1.72] [&_p]:tracking-normal [&_p]:text-sluice-ink [&_strong]:font-bold [&_strong]:text-sluice-navy">
         <p>
           AI demand is fragmenting across model APIs, specialized subnets, data
           pipelines, and private compute providers. The hard problem is no longer
@@ -434,24 +430,32 @@ export function SluiceCorePage() {
       <SluiceNetworkDiagram />
 
       {/* How it works */}
-      <div className="sluice-core-section">
-        <h2 className="sluice-core-section-title">How it works</h2>
-        <p className="sluice-core-section-body">
+      <div className="mt-11">
+        <h2 className="m-0 mb-2.5 font-sans text-lg font-[650] leading-normal tracking-[-0.01em] text-sluice-navy">
+          How it works
+        </h2>
+        <p className="m-0 font-sans text-[1.025rem] leading-[1.72] text-sluice-ink">
           Every request passes through four stages before a route is committed.
         </p>
-        <div className="vision-timeline" style={{ marginTop: "1.25rem" }}>
+        <div className="mt-5 flex flex-col">
           {steps.map((step, i) => (
-            <div key={step.num} className="vision-timeline__item">
-              <div className="vision-timeline__marker">
-                <span className="vision-timeline__num">{step.num}</span>
-                <span className="vision-timeline__dot" />
+            <div key={step.num} className="flex gap-5 pb-8 last:pb-0">
+              <div className="flex w-8 shrink-0 flex-col items-center">
+                <span className="mb-1 font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.04em] text-[#3b5bdb]">
+                  {step.num}
+                </span>
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full border-2 border-[#3b5bdb] bg-white" />
                 {i < steps.length - 1 && (
-                  <span className="vision-timeline__line" />
+                  <span className="mt-1 min-h-8 w-px flex-1 bg-sluice-navy/18" />
                 )}
               </div>
-              <div className="vision-timeline__content">
-                <span className="vision-timeline__title">{step.title}</span>
-                <p className="vision-timeline__desc">{step.desc}</p>
+              <div>
+                <span className="mb-2 block font-sans text-[15px] font-semibold text-sluice-navy">
+                  {step.title}
+                </span>
+                <p className="m-0 font-sans text-[13px] leading-[1.65] text-sluice-muted [&_strong]:font-bold [&_strong]:text-sluice-navy">
+                  {step.desc}
+                </p>
               </div>
             </div>
           ))}
@@ -459,13 +463,22 @@ export function SluiceCorePage() {
       </div>
 
       {/* What makes it defensible */}
-      <div className="sluice-core-section">
-        <h2 className="sluice-core-section-title">What makes it defensible</h2>
-        <div className="sluice-core-pillars">
+      <div className="mt-11">
+        <h2 className="m-0 mb-2.5 font-sans text-lg font-[650] leading-normal tracking-[-0.01em] text-sluice-navy">
+          What makes it defensible
+        </h2>
+        <div className="mt-5 grid grid-cols-1 gap-4 sm:grid-cols-3">
           {pillars.map((pillar) => (
-            <div key={pillar.title} className="sluice-core-pillar">
-              <span className="sluice-core-pillar__title">{pillar.title}</span>
-              <p className="sluice-core-pillar__desc">{pillar.desc}</p>
+            <div
+              key={pillar.title}
+              className="rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/38 p-5"
+            >
+              <span className="mb-2 block font-sans text-sm font-bold text-sluice-navy">
+                {pillar.title}
+              </span>
+              <p className="m-0 font-sans text-[13px] leading-normal text-sluice-muted">
+                {pillar.desc}
+              </p>
             </div>
           ))}
         </div>

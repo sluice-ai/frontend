@@ -42,7 +42,7 @@ export function ValidationMetrics() {
       <div className="mb-2 text-sm font-semibold uppercase tracking-widest text-sluice-navy/60">
         Four-Step Validation Loop
       </div>
-      <div className="-mx-2 mb-4 min-w-0 overflow-x-auto px-2 pb-2 hide-scrollbar md:mx-0 md:overflow-visible md:px-0 md:pb-0">
+      <div className="-mx-2 mb-4 min-w-0 overflow-x-auto px-2 pb-2 [-ms-overflow-style:none] [scrollbar-width:none] md:mx-0 md:overflow-visible md:px-0 md:pb-0 [&::-webkit-scrollbar]:hidden">
         <ol className="inline-flex min-w-max items-center text-xs font-medium text-sluice-navy md:grid md:min-w-0 md:w-full md:grid-cols-[auto_1fr_auto_1fr_auto_1fr_auto] md:items-center md:text-sm">
           {validationLoopSteps.map((step, index) => (
             <li key={step} className="flex items-center md:contents">

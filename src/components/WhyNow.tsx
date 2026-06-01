@@ -6,7 +6,7 @@ import { metrics } from "../data/siteContent";
 
 export function WhyNow() {
   return (
-    <section id="why-now" className="section-shell">
+    <section id="why-now" className="scroll-mt-[4.5rem] py-12 md:py-16">
       <Container>
         <div className="grid gap-12 lg:grid-cols-[0.78fr_1.22fr] lg:gap-12 xl:grid-cols-[0.72fr_1.28fr]">
           <div>
@@ -23,7 +23,9 @@ export function WhyNow() {
                   <div className="mt-3 font-sans text-base font-semibold tracking-normal text-sluice-ink">
                     {metric.label}
                   </div>
-                  <p className="caption mt-2">{metric.note}</p>
+                  <p className="mt-2 font-sans text-sm leading-6 tracking-normal text-sluice-muted">
+                    {metric.note}
+                  </p>
                 </Card>
               ))}
             </div>

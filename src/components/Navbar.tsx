@@ -49,7 +49,7 @@ export function Navbar({ items = navItems, showProgress = true }: NavbarProps) {
         )}
         aria-label="Primary navigation"
       >
-        <div className="container-shell flex h-16 items-center justify-between">
+        <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-16">
           <Link
             to="/"
             className="flex items-center gap-2 font-sans text-2xl font-semibold tracking-tight text-sluice-navy"
@@ -74,7 +74,7 @@ export function Navbar({ items = navItems, showProgress = true }: NavbarProps) {
 
           <button
             type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sluice-navy/20 text-sluice-navy md:hidden"
+            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sluice-navy/20 text-sluice-navy outline-none focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 md:hidden"
             aria-controls="mobile-navigation"
             aria-expanded={isOpen}
             aria-label="Toggle navigation"

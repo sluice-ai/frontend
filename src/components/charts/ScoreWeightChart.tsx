@@ -17,7 +17,9 @@ export function ScoreWeightChart({ weights }: ScoreWeightChartProps) {
               <h3 className="font-sans text-base font-semibold tracking-normal text-sluice-ink">
                 {weight.label}
               </h3>
-              <p className="caption mt-1">{weight.detail}</p>
+              <p className="mt-1 font-sans text-sm leading-6 tracking-normal text-sluice-muted">
+                {weight.detail}
+              </p>
             </div>
             <span className="font-display text-3xl font-normal leading-none tracking-normal text-sluice-navy">
               {weight.value.toFixed(2)}

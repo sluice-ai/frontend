@@ -66,7 +66,7 @@ export function ProcessFlowChart() {
             role="button"
             tabIndex={0}
             aria-label={`${node.label}: ${node.detail}`}
-            className="cursor-pointer"
+            className="group cursor-pointer"
             onClick={() => setActiveIndex(index)}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
@@ -75,7 +75,7 @@ export function ProcessFlowChart() {
           }}
         >
             <circle
-              className="svg-focus-ring"
+              className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
               cx={node.x}
               cy="100"
               r="48"

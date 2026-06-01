@@ -203,11 +203,7 @@ export function Solution() {
             registerInteraction();
             updateDynamicStyles();
           }}
-          className="flex flex-row justify-start md:justify-center items-stretch gap-5 md:gap-5 py-10 px-[calc(50vw-145px)] md:px-0 overflow-x-auto md:overflow-x-visible hide-scrollbar w-full select-none cursor-grab active:cursor-grabbing"
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
+          className="flex w-full cursor-grab select-none flex-row items-stretch justify-start gap-5 overflow-x-auto px-[calc(50vw-145px)] py-10 [-ms-overflow-style:none] [scrollbar-width:none] active:cursor-grabbing md:justify-center md:overflow-x-visible md:px-0 [&::-webkit-scrollbar]:hidden"
         >
           {layers.map((layer, index) => {
             const distance = Math.abs(index - activeIndex);
@@ -218,25 +214,21 @@ export function Solution() {
               <div
                 key={layer.name}
                 className={cn(
-                  "quiet-card cascade-card flex flex-col justify-between cursor-default min-h-[170px] w-full max-w-[380px] min-w-[290px] relative rounded-card border p-7 select-none shrink-0",
+                  "relative flex min-h-[170px] w-full min-w-[290px] max-w-[380px] shrink-0 cursor-default select-none flex-col justify-between rounded-card border p-7 transition-all duration-[450ms] ease-sluice will-change-[transform,filter,opacity,box-shadow]",
                   isSluice
-                    ? "spotlight-active-card z-20"
+                    ? "z-20 !border-sluice-routeBlue/45 !bg-[#EBF0FF] !shadow-none"
                     : "bg-[#FAF9F5]/70 border-sluice-navy/15 z-10"
                 )}
                 style={isMobileState ? {} : {
-                  filter: distance === 0 ? "blur(0px)" : distance === 1 ? "blur(0px)" : "var(--cascade-blur)",
-                  opacity: distance === 0 ? 1 : distance === 1 ? 0.95 : "var(--cascade-opacity)",
-                  transform: distance === 0
-                    ? "var(--cascade-scale-active)"
-                    : distance === 1
-                      ? "var(--cascade-scale-near)"
-                      : "var(--cascade-scale-far)",
+                  filter: distance <= 1 ? "blur(0px)" : "blur(2.5px)",
+                  opacity: distance === 0 ? 1 : distance === 1 ? 0.95 : 0.45,
+                  transform: "scale(1) translateY(0)",
                 }}
               >
                 <div>
                   <div
                     className={cn(
-                      "section-label uppercase tracking-widest text-[11px] font-semibold",
+                      "font-sans text-[11px] font-semibold uppercase leading-none tracking-widest text-sluice-navy",
                       isSluice ? "text-sluice-routeBlue" : "text-sluice-navy/60"
                     )}
                   >
@@ -246,7 +238,7 @@ export function Solution() {
                     {layer.title}
                   </h3>
                 </div>
-                <p className="caption mt-4 text-sm leading-[1.5] text-sluice-muted">
+                <p className="mt-4 font-sans text-sm leading-[1.5] tracking-normal text-sluice-muted">
                   {layer.description}
                 </p>
               </div>

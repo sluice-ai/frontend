@@ -82,10 +82,12 @@ export function Roadmap() {
   };
 
   return (
-    <section id="roadmap" className="section-shell">
+    <section id="roadmap" className="scroll-mt-[4.5rem] py-12 md:py-16">
       <Container>
         <header>
-          <h2 className="section-title">Roadmap</h2>
+          <h2 className="font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-sluice-navy md:text-5xl lg:text-[3.5rem]">
+            Roadmap
+          </h2>
         </header>
 
         <div
@@ -94,11 +96,7 @@ export function Roadmap() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUpOrLeave}
           onMouseLeave={handleMouseUpOrLeave}
-          className="mt-10 overflow-x-auto rounded-frame border border-sluice-navy/15 bg-sluice-paper/40 backdrop-blur-[1px] select-none hide-scrollbar cursor-grab active:cursor-grabbing"
-          style={{
-            scrollbarWidth: "none",
-            msOverflowStyle: "none",
-          }}
+          className="mt-10 cursor-grab select-none overflow-x-auto rounded-frame border border-sluice-navy/15 bg-sluice-paper/40 backdrop-blur-[1px] [-ms-overflow-style:none] [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
         >
           <div className="min-w-[1440px] px-6 pb-8 pt-6 md:px-10 md:pb-10 md:pt-8">
             <WeekHeader />

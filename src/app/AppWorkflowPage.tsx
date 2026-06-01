@@ -32,6 +32,7 @@ import {
 } from "./appData";
 import { analyzeAndRoute, type GeminiError } from "./geminiService";
 import { useProviders, useRoutingPreferences } from "./useAppStore";
+import { cn } from "../lib/cn";
 
 type RunState = "idle" | "routing" | "complete";
 
@@ -604,12 +605,12 @@ function RoutingDrawer({
     const root = document.documentElement;
     const body = document.body;
 
-    root.classList.add("routing-drawer-open");
-    body.classList.add("routing-drawer-open");
+    root.classList.add("overflow-hidden");
+    body.classList.add("overflow-hidden");
 
     return () => {
-      root.classList.remove("routing-drawer-open");
-      body.classList.remove("routing-drawer-open");
+      root.classList.remove("overflow-hidden");
+      body.classList.remove("overflow-hidden");
     };
   }, [open]);
 
@@ -1008,7 +1009,7 @@ export function AppWorkflowPage() {
             e.preventDefault();
             handleSend();
           }}
-          className="relative flex w-full items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)]"
+          className="relative flex w-full items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)] [contain:inline-size]"
         >
           {/* Image attach button */}
           <button
@@ -1037,7 +1038,7 @@ export function AppWorkflowPage() {
             onPaste={handlePaste}
             placeholder={hasConversation ? "Ask a follow-up…" : defaultPrompt}
             disabled={busy}
-            className="max-h-44 min-h-[44px] w-0 min-w-0 flex-1 resize-none overflow-y-auto bg-transparent px-1 py-2.5 font-sans text-base leading-6 text-sluice-ink outline-none placeholder:text-sluice-muted/70 disabled:opacity-60 md:text-[15px]"
+            className="max-h-44 min-h-[44px] w-0 min-w-0 flex-1 resize-none overflow-y-auto bg-transparent px-1 py-2.5 font-sans text-base leading-6 text-sluice-ink outline-none [box-sizing:border-box] placeholder:text-sluice-muted/70 focus:outline-none focus-visible:outline-none focus:shadow-none focus-visible:shadow-none disabled:opacity-60 md:text-[15px]"
           />
           <button
             type="submit"
@@ -1062,7 +1063,7 @@ export function AppWorkflowPage() {
       <Navbar items={appNavItems} showProgress={false} />
       <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(74,119,220,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(29,52,135,0.1),transparent_30%)]" />
 
-      <section className="container-shell flex min-h-screen flex-col pb-3 pt-20 md:pt-24">
+      <section className="mx-auto flex min-h-screen w-full max-w-[1280px] flex-col px-6 pb-3 pt-20 sm:px-8 md:pt-24 lg:px-16">
         <div className="flex flex-wrap items-center justify-end gap-2 pb-3">
           <button
             type="button"

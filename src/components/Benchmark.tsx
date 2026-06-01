@@ -5,7 +5,7 @@ import { SectionHeader } from "./ui/SectionHeader";
 
 export function Benchmark() {
   return (
-    <section id="benchmark" className="section-shell">
+    <section id="benchmark" className="scroll-mt-[4.5rem] py-12 md:py-16">
       <Container>
         <SectionHeader
           title="Benchmark"

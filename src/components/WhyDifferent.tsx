@@ -5,7 +5,7 @@ import { SectionHeader } from "./ui/SectionHeader";
 
 export function WhyDifferent() {
   return (
-    <section id="why-different" className="section-shell">
+    <section id="why-different" className="scroll-mt-[4.5rem] py-12 md:py-16">
       <Container>
         <SectionHeader
           title="Why Sluice wins."
@@ -24,7 +24,9 @@ export function WhyDifferent() {
                 <h3 className="mt-6 font-display text-3xl font-bold leading-none tracking-normal text-sluice-navy">
                   {advantage.title}
                 </h3>
-                <p className="caption mt-5">{advantage.description}</p>
+                <p className="mt-5 font-sans text-sm leading-6 tracking-normal text-sluice-muted">
+                  {advantage.description}
+                </p>
               </Card>
             );
           })}

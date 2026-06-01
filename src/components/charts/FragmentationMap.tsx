@@ -115,7 +115,7 @@ export function FragmentationMap() {
               role="button"
               tabIndex={0}
               aria-label={`Focus ${node.label}`}
-              className="cursor-pointer"
+              className="group cursor-pointer"
               onClick={() => setActiveNode(node.label)}
               onKeyDown={(event) => {
                 if (event.key === "Enter" || event.key === " ") {
@@ -124,7 +124,7 @@ export function FragmentationMap() {
               }}
             >
               <circle
-                className="svg-focus-ring"
+                className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
                 cx={node.x}
                 cy={node.y}
                 r="35"
@@ -158,7 +158,7 @@ export function FragmentationMap() {
           role="button"
           tabIndex={0}
           aria-label="Focus route policy"
-          className="cursor-pointer"
+          className="group cursor-pointer"
           onClick={() => setActiveNode("Route policy")}
           onKeyDown={(event) => {
             if (event.key === "Enter" || event.key === " ") {
@@ -167,7 +167,7 @@ export function FragmentationMap() {
           }}
         >
           <rect
-            className="svg-focus-ring"
+            className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
             x="204"
             y="158"
             width="168"

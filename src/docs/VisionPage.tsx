@@ -15,17 +15,19 @@ const beliefs = [
 
 export function VisionPage() {
   return (
-    <article className="docs-article">
-      <div className="docs-placeholder__hero">
-        <h1 className="docs-placeholder__title">Vision</h1>
-        <p className="docs-index__subtitle">
+    <article className="animate-docs-fade-in motion-reduce:animate-none">
+      <div>
+        <h1 className="m-0 font-sans text-[clamp(1.375rem,2.2vw,1.75rem)] font-[650] leading-[1.18] tracking-normal text-sluice-navy">
+          Vision
+        </h1>
+        <p className="mt-4 max-w-[620px] font-sans text-[1.05rem] font-normal leading-[1.65] tracking-normal text-sluice-muted">
           The future of decentralized AI routing
         </p>
       </div>
 
-      <div className="docs-article__rule" />
+      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x" />
 
-      <div className="docs-article__body">
+      <div className="flex max-w-[720px] flex-col gap-[1.7rem] [&_p]:m-0 [&_p]:font-sans [&_p]:text-[1.05rem] [&_p]:font-normal [&_p]:leading-[1.72] [&_p]:tracking-normal [&_p]:text-sluice-ink [&_strong]:font-bold [&_strong]:text-sluice-navy">
         <p>
           AI isn't consolidating into one provider. It's going the other
           direction. Every few months there are more model APIs, more
@@ -47,35 +49,44 @@ export function VisionPage() {
         </p>
       </div>
 
-      <div className="sluice-core-section">
-        <h2 className="sluice-core-section-title">What we believe</h2>
-        <p className="sluice-core-section-body">
+      <div className="mt-11">
+        <h2 className="m-0 mb-2.5 font-sans text-lg font-[650] leading-normal tracking-[-0.01em] text-sluice-navy">
+          What we believe
+        </h2>
+        <p className="m-0 font-sans text-[1.025rem] leading-[1.72] text-sluice-ink">
           Three convictions underpin the Sluice design.
         </p>
-        <div className="vision-timeline" style={{ marginTop: "1.25rem" }}>
+        <div className="mt-5 flex flex-col">
           {beliefs.map((b, i) => (
-            <div key={b.title} className="vision-timeline__item">
-              <div className="vision-timeline__marker">
-                <span className="vision-timeline__num">
+            <div key={b.title} className="flex gap-5 pb-8 last:pb-0">
+              <div className="flex w-8 shrink-0 flex-col items-center">
+                <span className="mb-1 font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.04em] text-[#3b5bdb]">
                   {String(i + 1).padStart(2, "0")}
                 </span>
-                <span className="vision-timeline__dot" />
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full border-2 border-[#3b5bdb] bg-white" />
                 {i < beliefs.length - 1 && (
-                  <span className="vision-timeline__line" />
+                  <span className="mt-1 min-h-8 w-px flex-1 bg-sluice-navy/18" />
                 )}
               </div>
-              <div className="vision-timeline__content">
-                <span className="vision-timeline__title">{b.title}</span>
-                <p className="vision-timeline__desc" dangerouslySetInnerHTML={{ __html: b.desc }} />
+              <div>
+                <span className="mb-2 block font-sans text-[15px] font-semibold text-sluice-navy">
+                  {b.title}
+                </span>
+                <p
+                  className="m-0 font-sans text-[13px] leading-[1.65] text-sluice-muted [&_strong]:font-bold [&_strong]:text-sluice-navy"
+                  dangerouslySetInnerHTML={{ __html: b.desc }}
+                />
               </div>
             </div>
           ))}
         </div>
       </div>
 
-      <div className="sluice-core-section">
-        <h2 className="sluice-core-section-title">Not another AI provider</h2>
-        <div className="docs-article__body" style={{ marginTop: "0.75rem" }}>
+      <div className="mt-11">
+        <h2 className="m-0 mb-2.5 font-sans text-lg font-[650] leading-normal tracking-[-0.01em] text-sluice-navy">
+          Not another AI provider
+        </h2>
+        <div className="mt-3 flex max-w-[720px] flex-col gap-[1.7rem] [&_p]:m-0 [&_p]:font-sans [&_p]:text-[1.05rem] [&_p]:font-normal [&_p]:leading-[1.72] [&_p]:tracking-normal [&_p]:text-sluice-ink [&_strong]:font-bold [&_strong]:text-sluice-navy">
           <p>
             Sluice doesn't run models. It doesn't compete with Targon, Chutes,
             or any model API. The goal isn't to be the best provider; it's to
@@ -97,9 +108,11 @@ export function VisionPage() {
         </div>
       </div>
 
-      <div className="sluice-core-section">
-        <h2 className="sluice-core-section-title">The flywheel</h2>
-        <div className="docs-article__body" style={{ marginTop: "0.75rem" }}>
+      <div className="mt-11">
+        <h2 className="m-0 mb-2.5 font-sans text-lg font-[650] leading-normal tracking-[-0.01em] text-sluice-navy">
+          The flywheel
+        </h2>
+        <div className="mt-3 flex max-w-[720px] flex-col gap-[1.7rem] [&_p]:m-0 [&_p]:font-sans [&_p]:text-[1.05rem] [&_p]:font-normal [&_p]:leading-[1.72] [&_p]:tracking-normal [&_p]:text-sluice-ink [&_strong]:font-bold [&_strong]:text-sluice-navy">
           <p>
             The compounding effect of a routing network is the core
             long-term bet. Every request generates signal about which

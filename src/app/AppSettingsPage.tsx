@@ -300,12 +300,12 @@ export function SettingsModal({
     const root = document.documentElement;
     const body = document.body;
 
-    root.classList.add("sluice-modal-open");
-    body.classList.add("sluice-modal-open");
+    root.classList.add("overflow-hidden");
+    body.classList.add("overflow-hidden");
 
     return () => {
-      root.classList.remove("sluice-modal-open");
-      body.classList.remove("sluice-modal-open");
+      root.classList.remove("overflow-hidden");
+      body.classList.remove("overflow-hidden");
     };
   }, [open]);
 

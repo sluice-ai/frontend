@@ -2,6 +2,7 @@ import { ChevronRight } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
+import { cn } from "../lib/cn";
 import { docsSidebar } from "./docsData";
 import type { DocNavSection } from "./docsData";
 
@@ -46,19 +47,22 @@ export function DocsSidebar({
       {/* Mobile overlay */}
       {isOpen && (
         <div
-          className="docs-sidebar-overlay"
+          className="fixed inset-x-0 bottom-0 top-16 z-[29] bg-sluice-deepNavy/28 backdrop-blur-[2px] lg:hidden"
           onClick={onClose}
           aria-hidden="true"
         />
       )}
 
       <aside
-        className={`docs-sidebar ${isOpen ? "docs-sidebar--open" : ""}`}
+        className={cn(
+          "fixed bottom-0 left-0 top-16 z-30 w-[min(84vw,320px)] overflow-hidden border-r border-sluice-navy/12 bg-sluice-paper/97 transition-transform duration-[280ms] ease-sluice lg:sticky lg:bottom-auto lg:z-[1] lg:h-[calc(100vh-64px)] lg:w-[264px] lg:translate-x-0 lg:border-r-0 lg:bg-transparent",
+          isOpen ? "translate-x-0" : "-translate-x-full",
+        )}
         role="navigation"
         aria-label="Documentation navigation"
       >
-        <div className="docs-sidebar__inner">
-          <nav className="docs-sidebar__nav">
+        <div className="h-full overflow-y-auto py-4 pb-8 [scrollbar-color:rgba(29,52,135,0.12)_transparent] [scrollbar-width:thin] lg:py-8 lg:pb-20">
+          <nav className="flex flex-col gap-0.5">
             {docsSidebar.map((section) => (
               <SidebarSection
                 key={section.title}
@@ -113,30 +117,33 @@ function SidebarSection({
   }, [isOpen]);
 
   return (
-    <div className="docs-sidebar__section">
+    <div className="px-2.5">
       <button
         type="button"
-        className={`docs-sidebar__section-header ${isOpen ? "docs-sidebar__section-header--open" : ""}`}
+        className="flex w-full items-center justify-between rounded-lg border-0 bg-transparent px-3 py-2.5 font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.05em] text-sluice-navy transition-colors hover:text-sluice-navy"
         onClick={onToggle}
         aria-expanded={isOpen}
       >
         <span>{section.title}</span>
         <ChevronRight
           size={14}
-          className={`docs-sidebar__chevron ${isOpen ? "docs-sidebar__chevron--open" : ""}`}
+          className={cn(
+            "shrink-0 opacity-40 transition-transform duration-200 ease-sluice",
+            isOpen && "rotate-90",
+          )}
         />
       </button>
 
       <div
         ref={listRef}
-        className="docs-sidebar__items-wrap"
+        className="will-change-[height]"
         style={{
           height: animHeight,
           overflow: "hidden",
           transition: "height 240ms cubic-bezier(0.16, 1, 0.3, 1)",
         }}
       >
-        <ul className="docs-sidebar__items">
+        <ul className="m-0 list-none px-0 pb-1.5 pt-0.5">
           {section.items.map((item) => {
             const isActive = currentPath === item.href;
             const Icon = item.icon;
@@ -145,14 +152,19 @@ function SidebarSection({
               <li key={item.href}>
                 <Link
                   to={item.href}
-                  className={`docs-sidebar__link ${isActive ? "docs-sidebar__link--active" : ""}`}
+                  className={cn(
+                    "flex items-center gap-2.5 rounded-lg px-2.5 py-1.5 font-sans text-[13.5px] font-[450] tracking-[-0.005em] text-sluice-muted no-underline transition-colors hover:text-sluice-navy",
+                    isActive && "bg-sluice-navy/8 font-[520] text-sluice-navy",
+                  )}
                   aria-current={isActive ? "page" : undefined}
                   onClick={onNavigate}
                 >
-                  <span className="docs-sidebar__link-icon">
+                  <span className="flex h-[26px] w-[26px] shrink-0 items-center justify-center rounded-md text-inherit [&_svg]:overflow-visible [&_svg>*]:[transform-box:fill-box] [&_svg>*]:[transform-origin:center]">
                     <Icon size={18} strokeWidth={1.8} />
                   </span>
-                  <span className="docs-sidebar__link-label">{item.label}</span>
+                  <span className="min-w-0 overflow-hidden text-ellipsis whitespace-nowrap">
+                    {item.label}
+                  </span>
                 </Link>
               </li>
             );

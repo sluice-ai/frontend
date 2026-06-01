@@ -1,5 +1,6 @@
 import { useState } from "react";
 import { ChevronRight } from "lucide-react";
+import { cn } from "../lib/cn";
 
 interface FaqItem {
   q: string;
@@ -143,19 +144,33 @@ function FaqAccordionItem({ item, isOpen, onToggle }: {
   onToggle: () => void;
 }) {
   return (
-    <div className={`faq-item${isOpen ? " faq-item--open" : ""}`}>
+    <div className="border-b border-sluice-navy/10 last:border-b-0">
       <button
-        className="faq-item__trigger"
+        type="button"
+        className={cn(
+          "flex w-full cursor-pointer items-center justify-between gap-4 border-0 bg-transparent px-5 py-[1.125rem] text-left transition-colors hover:bg-sluice-navy/4",
+          isOpen && "bg-sluice-navy/4",
+        )}
         onClick={onToggle}
         aria-expanded={isOpen}
       >
-        <span className="faq-item__question">{item.q}</span>
-        <span className="faq-item__chevron" aria-hidden="true">
+        <span className="font-sans text-[14.5px] font-[580] leading-[1.4] tracking-[-0.005em] text-sluice-navy">
+          {item.q}
+        </span>
+        <span
+          className={cn(
+            "inline-flex shrink-0 items-center text-sluice-navy opacity-40 transition-[transform,opacity] duration-200 ease-sluice",
+            isOpen && "rotate-90 opacity-70",
+          )}
+          aria-hidden="true"
+        >
           <ChevronRight size={16} strokeWidth={2} />
         </span>
       </button>
-      <div className="faq-item__body" hidden={!isOpen}>
-        <p className="faq-item__answer">{item.a}</p>
+      <div className="px-5 pb-5" hidden={!isOpen}>
+        <p className="m-0 font-sans text-[13.5px] font-normal leading-[1.72] tracking-normal text-sluice-ink [&_strong]:font-[650] [&_strong]:text-sluice-navy">
+          {item.a}
+        </p>
       </div>
     </div>
   );
@@ -169,17 +184,23 @@ export function FaqPage() {
   }
 
   return (
-    <article className="docs-article">
-      <div className="docs-placeholder__hero">
-        <h1 className="docs-placeholder__title">Frequently Asked Questions</h1>
-        <p className="docs-index__subtitle">Frequently asked questions</p>
+    <article className="animate-docs-fade-in motion-reduce:animate-none">
+      <div>
+        <h1 className="m-0 font-sans text-[clamp(1.375rem,2.2vw,1.75rem)] font-[650] leading-[1.18] tracking-normal text-sluice-navy">
+          Frequently Asked Questions
+        </h1>
+        <p className="mt-4 max-w-[620px] font-sans text-[1.05rem] font-normal leading-[1.65] tracking-normal text-sluice-muted">
+          Frequently asked questions
+        </p>
       </div>
 
-      <div className="faq-sections">
+      <div className="mt-[clamp(1.5rem,3vw,2rem)] flex flex-col gap-11">
         {faqSections.map((section) => (
-          <section key={section.title} className="faq-section">
-            <h2 className="faq-section__title">{section.title}</h2>
-            <div className="faq-section__list">
+          <section key={section.title}>
+            <h2 className="m-0 mb-3.5 font-sans text-[0.8rem] font-bold uppercase tracking-[0.07em] text-sluice-navy opacity-55">
+              {section.title}
+            </h2>
+            <div className="flex flex-col gap-0 overflow-hidden rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/36">
               {section.items.map((item, i) => {
                 const key = `${section.title}-${i}`;
                 return (
