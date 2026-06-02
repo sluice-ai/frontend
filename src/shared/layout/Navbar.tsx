@@ -1,13 +1,14 @@
 import Menu from "lucide-react/dist/esm/icons/menu";
 import X from "lucide-react/dist/esm/icons/x";
 import type { ReactNode } from "react";
-import { useEffect, useState } from "react";
+import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { navItems, type NavItem } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import { isInternalRouteHref } from "@/shared/lib/links";
 import { BrandLogo } from "./BrandLogo";
+import { NavThread } from "./NavThread";
 
 type NavbarProps = {
   items?: NavItem[];
@@ -15,6 +16,21 @@ type NavbarProps = {
   leftAccessory?: ReactNode;
   rightContent?: ReactNode;
   position?: "fixed" | "sticky";
+};
+
+type ThreadGeometry = {
+  width: number;
+  height: number;
+  xStart: number;
+  xEnd: number;
+};
+
+const getScrollProgress = () => {
+  const scrollElement = document.scrollingElement ?? document.documentElement;
+  const scrollRange = scrollElement.scrollHeight - scrollElement.clientHeight;
+  if (scrollRange <= 0) return 0;
+
+  return Math.min(Math.max(scrollElement.scrollTop / scrollRange, 0), 1);
 };
 
 export function Navbar({
@@ -25,36 +41,115 @@ export function Navbar({
   position = "fixed",
 }: NavbarProps) {
   const [isOpen, setIsOpen] = useState(false);
-  const [scrollProgress, setScrollProgress] = useState(0);
+  const [geometry, setGeometry] = useState<ThreadGeometry | null>(null);
   const showItemNavigation = !rightContent && items.length > 0;
+
+  const navRef = useRef<HTMLElement | null>(null);
+  const barRef = useRef<HTMLDivElement | null>(null);
+  const brandRef = useRef<HTMLAnchorElement | null>(null);
+  const controlsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!showProgress) return;
 
-    const handleScroll = () => {
-      const totalScroll = document.documentElement.scrollTop;
-      const windowHeight = document.documentElement.scrollHeight - document.documentElement.clientHeight;
-      const progress = windowHeight > 0 ? (totalScroll / windowHeight) * 100 : 0;
-      setScrollProgress(progress);
+    const syncThreadProgress = () => {
+      navRef.current?.style.setProperty(
+        "--nav-thread-offset",
+        (1 - getScrollProgress()).toFixed(4),
+      );
     };
 
-    handleScroll();
-    window.addEventListener("scroll", handleScroll, { passive: true });
-    return () => window.removeEventListener("scroll", handleScroll);
+    syncThreadProgress();
+    window.addEventListener("scroll", syncThreadProgress, { passive: true });
+    window.addEventListener("resize", syncThreadProgress);
+
+    return () => {
+      window.removeEventListener("scroll", syncThreadProgress);
+      window.removeEventListener("resize", syncThreadProgress);
+    };
   }, [showProgress]);
+
+  // Measure where the thread should begin (brand logo) and end (last link) so
+  // the curve anchors to them across every breakpoint and label change.
+  useLayoutEffect(() => {
+    if (!showProgress) {
+      setGeometry(null);
+      return;
+    }
+
+    let frame = 0;
+    const measure = () => {
+      const nav = navRef.current;
+      const bar = barRef.current;
+      const brand = brandRef.current;
+      const controls = controlsRef.current;
+      if (!nav || !bar || !brand || !controls) return;
+
+      const navRect = nav.getBoundingClientRect();
+      // Desktop anchors the thread between the brand and the last link; mobile
+      // runs it full-bleed edge to edge (matches the `md` nav breakpoint).
+      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
+      const next: ThreadGeometry = {
+        width: navRect.width,
+        height: bar.getBoundingClientRect().height,
+        xStart: isDesktop ? brand.getBoundingClientRect().left - navRect.left : 0,
+        xEnd: isDesktop
+          ? controls.getBoundingClientRect().right - navRect.left
+          : navRect.width,
+      };
+
+      setGeometry((prev) =>
+        prev &&
+        prev.width === next.width &&
+        prev.height === next.height &&
+        prev.xStart === next.xStart &&
+        prev.xEnd === next.xEnd
+          ? prev
+          : next,
+      );
+    };
+
+    const schedule = () => {
+      cancelAnimationFrame(frame);
+      frame = requestAnimationFrame(measure);
+    };
+
+    measure();
+    const observer = new ResizeObserver(schedule);
+    if (navRef.current) observer.observe(navRef.current);
+    window.addEventListener("resize", schedule);
+
+    return () => {
+      cancelAnimationFrame(frame);
+      observer.disconnect();
+      window.removeEventListener("resize", schedule);
+    };
+  }, [showProgress, items, rightContent, leftAccessory]);
 
   return (
     <nav
+      ref={navRef}
       className={cn(
-        "left-0 right-0 top-0 z-50 border-b border-sluice-navy/10 bg-sluice-paper/80 backdrop-blur-xl",
+        "left-0 right-0 top-0 z-50",
         position === "fixed" ? "fixed" : "sticky",
+        // With the thread active, the strip background and border are painted
+        // by the curved mask; otherwise keep the frosted-glass treatment.
+        showProgress
+          ? "bg-transparent"
+          : "border-b border-sluice-navy/10 bg-sluice-paper/80 backdrop-blur-xl",
       )}
       aria-label="Primary navigation"
     >
-      <div className="mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-16">
+      {showProgress && geometry && geometry.width > 0 && <NavThread {...geometry} />}
+
+      <div
+        ref={barRef}
+        className="relative z-10 mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-16"
+      >
         <div className="flex min-w-0 items-center gap-4 max-sm:gap-3">
           {leftAccessory}
           <Link
+            ref={brandRef}
             to="/"
             className="flex min-w-0 items-center gap-2 font-sans text-2xl font-semibold leading-none tracking-tight text-sluice-navy no-underline"
             onClick={() => setIsOpen(false)}
@@ -63,7 +158,7 @@ export function Navbar({
           </Link>
         </div>
 
-        <div className="flex items-center gap-3 sm:gap-4">
+        <div ref={controlsRef} className="flex items-center gap-3 sm:gap-4">
           {rightContent ? (
             rightContent
           ) : (
@@ -101,7 +196,7 @@ export function Navbar({
         <div
           id="mobile-navigation"
           className={cn(
-            "border-t border-sluice-navy/10 bg-sluice-paper/75 px-6 py-5 backdrop-blur-xl md:hidden",
+            "relative z-10 border-t border-sluice-navy/10 bg-sluice-paper/75 px-6 py-5 backdrop-blur-xl md:hidden",
             !isOpen && "hidden",
           )}
         >
@@ -119,18 +214,6 @@ export function Navbar({
               />
             ))}
           </div>
-        </div>
-      )}
-
-      {showProgress && (
-        <div
-          data-navbar-progress-track
-          className="absolute inset-x-0 bottom-0 h-[3px] bg-sluice-paper/80 dark:bg-transparent"
-        >
-          <div
-            className="h-full bg-sluice-navy transition-all duration-75 ease-out dark:bg-sluice-routeBlue"
-            style={{ width: `${scrollProgress}%` }}
-          />
         </div>
       )}
     </nav>
