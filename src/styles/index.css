@@ -31,6 +31,7 @@
   --animate-rfd-pulse-line: rfd-pulse-line 2.6s ease-in-out 600ms infinite;
   --animate-docs-fade-in: docs-fade-in 400ms var(--ease-sluice) both;
   --animate-docs-skeleton: docs-skeleton-pulse 2s ease-in-out infinite;
+  --animate-sluice-layer-marquee: sluice-layer-marquee 24s linear infinite;
 }
 
 /* ============================================================
@@ -190,5 +191,15 @@
 
   50% {
     background-position: -200% 0;
+  }
+}
+
+@keyframes sluice-layer-marquee {
+  from {
+    transform: translate3d(0, 0, 0);
+  }
+
+  to {
+    transform: translate3d(-50%, 0, 0);
   }
 }

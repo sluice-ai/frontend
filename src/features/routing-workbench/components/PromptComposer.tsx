@@ -93,7 +93,7 @@ export function PromptComposer({
             event.preventDefault();
             void onSend();
           }}
-          className="relative flex w-full items-end rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)] dark:border-white/12 dark:bg-sluice-paperMuted dark:shadow-none [contain:inline-size]"
+          className="relative flex w-full items-center rounded-[28px] border border-sluice-navy/20 bg-white px-4 py-2 shadow-[0_8px_24px_-12px_rgba(29,52,135,0.18)] dark:border-white/12 dark:bg-sluice-paperMuted dark:shadow-none [contain:inline-size]"
         >
           <button
             type="button"
@@ -101,9 +101,9 @@ export function PromptComposer({
             disabled={busy}
             aria-label="Attach image"
             title="Attach an image"
-            className="mb-0.5 mr-1 inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-sluice-navy/50 transition-colors hover:bg-sluice-navy/5 hover:text-sluice-navy disabled:cursor-not-allowed disabled:opacity-40"
+            className="mr-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full text-sluice-navy/50 transition-colors hover:bg-sluice-navy/5 hover:text-sluice-navy disabled:cursor-not-allowed disabled:opacity-40 cursor-pointer"
           >
-            <Paperclip size={18} strokeWidth={1.8} />
+            <Paperclip size={20} strokeWidth={2} />
           </button>
 
           <textarea
@@ -127,9 +127,9 @@ export function PromptComposer({
             type="submit"
             disabled={!prompt.trim() || busy}
             aria-label="Send prompt"
-            className="ml-2 inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-colors hover:bg-sluice-deepNavy disabled:cursor-not-allowed disabled:opacity-40 dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue"
+            className="ml-2 inline-flex h-10 w-10 shrink-0 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-colors hover:bg-sluice-deepNavy disabled:cursor-not-allowed disabled:opacity-40 dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue cursor-pointer"
           >
-            <ArrowUp size={16} strokeWidth={2.4} />
+            <ArrowUp size={20} strokeWidth={2.5} />
           </button>
         </form>
         <div className="mt-2.5 flex items-center justify-center">

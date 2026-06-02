@@ -7,7 +7,6 @@ import { Link } from "react-router-dom";
 import { navItems, type NavItem } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import { isInternalRouteHref } from "@/shared/lib/links";
-import { ThemeToggle } from "@/shared/ui/ThemeToggle";
 import { BrandLogo } from "./BrandLogo";
 
 type NavbarProps = {
@@ -82,8 +81,6 @@ export function Navbar({
               ))}
             </div>
           )}
-
-          <ThemeToggle />
 
           {showItemNavigation && (
             <button

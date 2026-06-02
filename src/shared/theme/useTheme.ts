@@ -20,20 +20,17 @@ function getSystemTheme(): ResolvedTheme {
 }
 
 function readPreference(): ThemePreference {
-  if (typeof window === "undefined") return "system";
-  try {
-    const raw = window.localStorage.getItem(THEME_KEY);
-    if (raw === "light" || raw === "dark" || raw === "system") return raw;
-  } catch {
-    /* Local storage can fail in private contexts; fall back to system. */
-  }
   return "system";
 }
 
 function writePreference(preference: ThemePreference) {
   if (typeof window === "undefined") return;
   try {
-    window.localStorage.setItem(THEME_KEY, preference);
+    if (preference === "system") {
+      window.localStorage.removeItem(THEME_KEY);
+    } else {
+      window.localStorage.setItem(THEME_KEY, preference);
+    }
   } catch {
     /* Keep the UI usable even if persistence fails. */
   }
