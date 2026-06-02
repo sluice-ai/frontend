@@ -66,7 +66,7 @@ export function RoutingDrawer({ open, onClose }: RoutingDrawerProps) {
         aria-hidden={!open}
         aria-label="Routing controls"
         className={[
-          "fixed inset-x-0 bottom-0 z-[60] flex max-h-[calc(100dvh-12rem)] min-h-0 flex-col rounded-t-[24px] border-t border-sluice-navy/15 bg-white shadow-[0_-12px_48px_-15px_rgba(29,52,135,0.25)] transition-transform duration-300 ease-sluice md:mx-auto md:max-h-[90vh] md:max-w-6xl md:border-x",
+          "fixed inset-x-0 bottom-0 z-[60] flex max-h-[calc(100dvh-12rem)] min-h-0 flex-col rounded-t-[24px] border-t border-sluice-navy/15 bg-white shadow-[0_-12px_48px_-15px_rgba(29,52,135,0.25)] transition-transform duration-300 ease-sluice dark:bg-sluice-paperMuted dark:shadow-[0_-12px_48px_-15px_rgba(0,0,0,0.6)] md:mx-auto md:max-h-[90vh] md:max-w-6xl md:border-x",
           open ? "translate-y-0" : "translate-y-full",
         ].join(" ")}
       >
@@ -119,7 +119,7 @@ export function RoutingDrawer({ open, onClose }: RoutingDrawerProps) {
                     return (
                       <span
                         key={id}
-                        className="inline-flex items-center gap-1.5 rounded-pill border border-rose-200 bg-rose-50/70 px-3 py-1.5 font-sans text-xs font-semibold text-rose-700"
+                        className="inline-flex items-center gap-1.5 rounded-pill border border-rose-200 bg-rose-50/70 px-3 py-1.5 font-sans text-xs font-semibold text-rose-700 dark:border-rose-400/30 dark:bg-rose-500/15 dark:text-rose-300"
                       >
                         {provider.privacyMax === "confidential" && (
                           <LockKeyhole size={11} strokeWidth={2} />
@@ -172,7 +172,7 @@ export function RoutingDrawer({ open, onClose }: RoutingDrawerProps) {
                     onChange={(event) =>
                       setPrefs({ qualityFloor: Number(event.target.value) })
                     }
-                    className="flex-1 cursor-pointer accent-sluice-navy"
+                    className="flex-1 cursor-pointer accent-sluice-navy dark:accent-sluice-routeBlue"
                   />
                   <span className="w-12 text-right font-mono text-sm font-semibold text-sluice-navy">
                     {prefs.qualityFloor.toFixed(2)}

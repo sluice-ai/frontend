@@ -9,10 +9,10 @@ export function CallToAction() {
       className="scroll-mt-24 bg-sluice-deepNavy px-6 py-20 text-center md:px-16 md:py-28"
     >
       <div className="mx-auto max-w-3xl">
-        <h2 className="font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-sluice-paper md:text-5xl lg:text-[3.5rem]">
+        <h2 className="font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-white md:text-5xl lg:text-[3.5rem]">
           Stop guessing. Start routing intelligently.
         </h2>
-        <p className="mx-auto mt-7 max-w-2xl font-sans text-base leading-7 tracking-normal text-sluice-paper/70 md:text-lg">
+        <p className="mx-auto mt-7 max-w-2xl font-sans text-base leading-7 tracking-normal text-white/70 md:text-lg">
           Join the first measurable, policy-aware market that decides exactly
           where your AI work should go.
         </p>

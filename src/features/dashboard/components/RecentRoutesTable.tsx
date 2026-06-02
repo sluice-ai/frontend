@@ -4,7 +4,7 @@ export function RecentRoutesTable() {
   return (
     <section
       id="routes"
-      className="min-w-0 rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-4 sm:p-5 lg:col-span-5 lg:self-end"
+      className="min-w-0 rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-4 sm:p-5 lg:col-span-5 lg:self-end dark:bg-white/[0.03]"
     >
       <h2 className="font-sans text-xl font-semibold leading-tight tracking-normal text-sluice-navy">
         Recent routes

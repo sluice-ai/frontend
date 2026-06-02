@@ -86,12 +86,12 @@ export function RoutingEfficiencyChart() {
             setHoveredIndex(null);
           }}
           options={timeframeOptions}
-          className="w-fit bg-sluice-paper"
+          className="w-fit bg-sluice-paper dark:bg-white/[0.04]"
           buttonClassName=""
         />
       </div>
 
-      <div className="mt-4 overflow-hidden rounded-[18px] border border-sluice-navy/10 bg-sluice-paper/60">
+      <div className="mt-4 overflow-hidden rounded-[18px] border border-sluice-navy/10 bg-sluice-paper/60 dark:bg-white/[0.03]">
         <svg
           ref={svgRef}
           viewBox={`0 0 ${WIDTH} ${HEIGHT}`}
@@ -104,8 +104,8 @@ export function RoutingEfficiencyChart() {
         >
           <defs>
             <linearGradient id="requests-area" x1="0" x2="0" y1="0" y2="1">
-              <stop offset="0%" stopColor="#1D3487" stopOpacity="0.16" />
-              <stop offset="100%" stopColor="#1D3487" stopOpacity="0" />
+              <stop offset="0%" stopColor="var(--color-sluice-navy)" stopOpacity="0.16" />
+              <stop offset="100%" stopColor="var(--color-sluice-navy)" stopOpacity="0" />
             </linearGradient>
           </defs>
 
@@ -120,7 +120,8 @@ export function RoutingEfficiencyChart() {
                   x2={CHART_RIGHT}
                   y1={y}
                   y2={y}
-                  stroke="rgba(29, 52, 135, 0.08)"
+                  stroke="var(--color-sluice-navy)"
+                  strokeOpacity={0.08}
                   strokeDasharray={index === 0 ? "none" : "4 4"}
                 />
                 <text
@@ -154,7 +155,7 @@ export function RoutingEfficiencyChart() {
           <polyline
             points={requestPolyline}
             fill="none"
-            stroke="#1D3487"
+            stroke="var(--color-sluice-navy)"
             strokeLinecap="round"
             strokeLinejoin="round"
             strokeWidth="2.5"
@@ -162,7 +163,7 @@ export function RoutingEfficiencyChart() {
           <polyline
             points={savingsPolyline}
             fill="none"
-            stroke="#4A77DC"
+            stroke="var(--color-sluice-routeBlue)"
             strokeDasharray="5 7"
             strokeLinecap="round"
             strokeLinejoin="round"
@@ -175,8 +176,8 @@ export function RoutingEfficiencyChart() {
                 cx={coordinate.x}
                 cy={coordinate.yReq}
                 r={hoveredIndex === index ? 5 : 3}
-                fill="#1D3487"
-                stroke="#f2f3f5"
+                fill="var(--color-sluice-navy)"
+                stroke="var(--color-sluice-paper)"
                 strokeWidth="2"
                 style={{ transition: "r 150ms ease" }}
               />
@@ -184,8 +185,8 @@ export function RoutingEfficiencyChart() {
                 cx={coordinate.x}
                 cy={coordinate.ySav}
                 r={hoveredIndex === index ? 5 : 3}
-                fill="#4A77DC"
-                stroke="#f2f3f5"
+                fill="var(--color-sluice-routeBlue)"
+                stroke="var(--color-sluice-paper)"
                 strokeWidth="2"
                 style={{ transition: "r 150ms ease" }}
               />
@@ -270,7 +271,8 @@ function ChartTooltip({
         x2={coordinate.x}
         y1={CHART_TOP}
         y2={CHART_BOTTOM}
-        stroke="rgba(29, 52, 135, 0.18)"
+        stroke="var(--color-sluice-navy)"
+        strokeOpacity={0.18}
         strokeWidth="1"
         strokeDasharray="4 3"
       />
@@ -281,15 +283,15 @@ function ChartTooltip({
           width={tooltipWidth}
           height={tooltipHeight}
           rx="10"
-          fill="#1D3487"
-          fillOpacity="0.95"
+          fill="var(--sluice-dg-brand)"
+          fillOpacity="0.97"
         />
         <text
           x={x + tooltipWidth / 2}
           y={tooltipY + 20}
           textAnchor="middle"
           className="font-sans text-[11px] font-semibold"
-          fill="#fff"
+          fill="var(--sluice-dg-on-brand)"
         >
           {point.requests.toLocaleString()} reqs
         </text>
@@ -298,7 +300,7 @@ function ChartTooltip({
           y={tooltipY + 38}
           textAnchor="middle"
           className="font-sans text-[10px]"
-          fill="rgba(255,255,255,0.7)"
+          fill="var(--sluice-dg-on-brand-soft)"
         >
           ${point.savings.toLocaleString()} saved
         </text>

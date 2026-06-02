@@ -91,7 +91,7 @@ export function CustomSelect<T extends string | number>({
       <button
         type="button"
         onClick={toggleOpen}
-        className="flex w-full items-center justify-between rounded-pill border border-sluice-navy/20 bg-white px-3.5 py-2 font-sans text-sm font-semibold text-sluice-navy outline-none focus:!outline-none focus-visible:!outline-none focus:!ring-0 focus-visible:!ring-0"
+        className="flex w-full items-center justify-between rounded-pill border border-sluice-navy/20 bg-white px-3.5 py-2 font-sans text-sm font-semibold text-sluice-navy outline-none focus:!outline-none focus-visible:!outline-none focus:!ring-0 focus-visible:!ring-0 dark:bg-white/[0.04]"
       >
         <span>{selectedOption ? selectedOption.label : placeholder}</span>
         <ChevronDown
@@ -104,7 +104,7 @@ export function CustomSelect<T extends string | number>({
         <div
           ref={menuRef}
           style={menuStyle}
-          className="fixed z-[70] overflow-y-auto overscroll-contain rounded-card border border-sluice-navy/15 bg-white p-1.5 shadow-[0_16px_34px_-12px_rgba(29,52,135,0.3)]"
+          className="fixed z-[70] overflow-y-auto overscroll-contain rounded-card border border-sluice-navy/15 bg-white p-1.5 shadow-[0_16px_34px_-12px_rgba(29,52,135,0.3)] dark:border-white/10 dark:bg-sluice-paperMuted dark:shadow-[0_16px_34px_-12px_rgba(0,0,0,0.6)]"
         >
           {options.length > 0 ? (
             <div className="grid gap-0.5">
@@ -125,7 +125,7 @@ export function CustomSelect<T extends string | number>({
                 >
                   <span>{p.label}</span>
                   {p.rightLabel && (
-                    <span className="rounded-pill bg-amber-50 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-amber-700 ring-1 ring-amber-100">
+                    <span className="rounded-pill bg-amber-50 px-2 py-0.5 text-[9px] font-semibold uppercase tracking-wider text-amber-700 ring-1 ring-amber-100 dark:bg-amber-400/15 dark:text-amber-300 dark:ring-amber-400/25">
                       {p.rightLabel}
                     </span>
                   )}

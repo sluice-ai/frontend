@@ -10,7 +10,7 @@ export function KpiGrid() {
         return (
           <article
             key={card.label}
-            className="animate-rise-in rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5 backdrop-blur-[1px] motion-reduce:animate-none"
+            className="animate-rise-in rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5 backdrop-blur-[1px] dark:bg-white/[0.03] motion-reduce:animate-none"
             style={{ animationDelay: `${index * 70}ms` }}
           >
             <div className="flex items-start justify-between gap-4">

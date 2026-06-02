@@ -200,7 +200,7 @@ export function FaqPage() {
             <h2 className="m-0 mb-3.5 font-sans text-[0.8rem] font-bold uppercase tracking-[0.07em] text-sluice-navy opacity-55">
               {section.title}
             </h2>
-            <div className="flex flex-col gap-0 overflow-hidden rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/36">
+            <div className="flex flex-col gap-0 overflow-hidden rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/36 dark:bg-white/[0.03]">
               {section.items.map((item, i) => {
                 const key = `${section.title}-${i}`;
                 return (

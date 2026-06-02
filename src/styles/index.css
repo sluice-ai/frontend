@@ -1,6 +1,11 @@
 @import "tailwindcss";
 
+/* Enable `dark:` utilities driven by a `.dark` class on <html>. */
+@custom-variant dark (&:where(.dark, .dark *));
+
 @theme {
+  /* Light theme is the source of truth for utility generation. The same
+     variables are re-assigned for dark mode in the `.dark` block below. */
   --color-sluice-navy: #1d3487;
   --color-sluice-deepNavy: #101422;
   --color-sluice-ink: #1b1b1d;
@@ -26,6 +31,98 @@
   --animate-rfd-pulse-line: rfd-pulse-line 2.6s ease-in-out 600ms infinite;
   --animate-docs-fade-in: docs-fade-in 400ms var(--ease-sluice) both;
   --animate-docs-skeleton: docs-skeleton-pulse 2s ease-in-out infinite;
+}
+
+/* ============================================================
+   Theme tokens that are not Tailwind color utilities: the page
+   canvas (vertical wash + dotted route-blue grid) and the SVG
+   diagram palette. Light values live here; `.dark` overrides below.
+   ============================================================ */
+:root {
+  color-scheme: light;
+
+  /* Page canvas */
+  --sluice-canvas-from: rgba(242, 243, 245, 0.92);
+  --sluice-canvas-to: rgba(237, 238, 238, 0.74);
+  --sluice-canvas-dot-1: rgba(29, 52, 135, 0.1);
+  --sluice-canvas-dot-2: rgba(74, 119, 220, 0.06);
+
+  /* Decorative ambient glow (dashboard / workbench / settings / subnet) */
+  --sluice-glow-1: rgba(74, 119, 220, 0.18);
+  --sluice-glow-2: rgba(29, 52, 135, 0.1);
+
+  /* SVG diagram palette (mirrors the mock's --dg-* tokens) */
+  --sluice-dg-line: rgba(29, 52, 135, 1);
+  --sluice-dg-line-soft: rgba(29, 52, 135, 0.26);
+  --sluice-dg-node-bg: rgba(242, 243, 245, 0.58);
+  --sluice-dg-node-border: rgba(29, 52, 135, 0.72);
+  --sluice-dg-text: #1d3487;
+  --sluice-dg-text-muted: #707380;
+  --sluice-dg-on-accent: #f2f3f5;
+  --sluice-dg-on-accent-muted: #dce7ff;
+
+  /* Brand-filled diagram box (navy in light, accent in dark) */
+  --sluice-dg-brand: #1d3487;
+  --sluice-dg-on-brand: #f2f3f5;
+  --sluice-dg-on-brand-soft: rgba(242, 243, 245, 0.7);
+}
+
+.dark {
+  color-scheme: dark;
+
+  /* Re-assign the shared color tokens to the dark palette. */
+  --color-sluice-navy: #edeff5; /* --ink: primary fg / headings / light borders */
+  --color-sluice-deepNavy: #06080f; /* --navy-deep */
+  --color-sluice-ink: #c3c8d6; /* --ink-soft: body text */
+  --color-sluice-paper: #0a0d16; /* --bg: page background + nav glass */
+  --color-sluice-paperWarm: #0c1020; /* --bg-2 */
+  --color-sluice-paperMuted: #131826; /* --surface-solid */
+  --color-sluice-routeBlue: #6d96f0; /* --accent */
+  --color-sluice-softBlue: #8aabf4; /* --accent-strong */
+  --color-sluice-muted: #838a9d; /* --muted */
+
+  /* Page canvas */
+  --sluice-canvas-from: #0c1020;
+  --sluice-canvas-to: #0a0d16;
+  --sluice-canvas-dot-1: rgba(109, 150, 240, 0.1);
+  --sluice-canvas-dot-2: rgba(138, 171, 244, 0.055);
+
+  /* Decorative ambient glow (softened for dark) */
+  --sluice-glow-1: rgba(109, 150, 240, 0.14);
+  --sluice-glow-2: rgba(109, 150, 240, 0.06);
+
+  /* SVG diagram palette */
+  --sluice-dg-line: rgba(160, 172, 205, 0.7);
+  --sluice-dg-line-soft: rgba(160, 172, 205, 0.28);
+  --sluice-dg-node-bg: rgba(255, 255, 255, 0.04);
+  --sluice-dg-node-border: rgba(255, 255, 255, 0.24);
+  --sluice-dg-text: #d8dceb;
+  --sluice-dg-text-muted: #8a90a3;
+  --sluice-dg-on-accent: #06080f;
+  --sluice-dg-on-accent-muted: #cdd9f6;
+
+  --sluice-dg-brand: #6d96f0;
+  --sluice-dg-on-brand: #06080f;
+  --sluice-dg-on-brand-soft: rgba(6, 8, 15, 0.72);
+}
+
+/* Shared page background: vertical wash + dual dotted route-blue grid.
+   Used by <body> and the docs layout; adapts via the canvas tokens above. */
+@utility app-canvas {
+  background-color: var(--color-sluice-paper);
+  background-image:
+    linear-gradient(180deg, var(--sluice-canvas-from), var(--sluice-canvas-to) 60%),
+    radial-gradient(var(--sluice-canvas-dot-1) 1px, transparent 1.2px),
+    radial-gradient(var(--sluice-canvas-dot-2) 1px, transparent 1.2px);
+  background-position: 0 0, 0 0, 12px 12px;
+  background-size: auto, 18px 18px, 18px 18px;
+}
+
+/* Soft ambient glow overlay for app/docs pages. */
+@utility app-glow {
+  background-image:
+    radial-gradient(circle at top left, var(--sluice-glow-1), transparent 34%),
+    radial-gradient(circle at bottom right, var(--sluice-glow-2), transparent 30%);
 }
 
 @keyframes rise-in {

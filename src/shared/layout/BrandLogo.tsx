@@ -13,7 +13,10 @@ export function BrandLogo({ markClassName, textClassName }: BrandLogoProps) {
         fill="none"
         aria-hidden="true"
         focusable="false"
-        className={cn("h-6 w-auto shrink-0 text-sluice-navy", markClassName)}
+        className={cn(
+          "h-6 w-auto shrink-0 text-sluice-navy dark:text-sluice-softBlue",
+          markClassName,
+        )}
       >
         <g
           stroke="currentColor"

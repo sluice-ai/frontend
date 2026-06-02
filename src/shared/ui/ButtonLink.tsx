@@ -14,13 +14,13 @@ type ButtonLinkProps = AnchorHTMLAttributes<HTMLAnchorElement> & {
 
 const variantClasses: Record<ButtonLinkVariant, string> = {
   primary:
-    "border-sluice-navy bg-sluice-navy text-sluice-paper hover:bg-sluice-deepNavy",
+    "border-sluice-navy bg-sluice-navy text-sluice-paper hover:bg-sluice-deepNavy dark:border-sluice-routeBlue dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:border-sluice-softBlue dark:hover:bg-sluice-softBlue",
   secondary:
-    "border-sluice-navy bg-transparent text-sluice-navy hover:bg-sluice-navy/5",
+    "border-sluice-navy bg-transparent text-sluice-navy hover:bg-sluice-navy/5 dark:border-white/20",
   inverse:
-    "border-sluice-paper bg-sluice-paper text-sluice-deepNavy hover:bg-white",
+    "border-sluice-paper bg-sluice-paper text-sluice-deepNavy hover:bg-white dark:border-sluice-navy dark:bg-sluice-navy",
   darkSecondary:
-    "border-sluice-paper/35 bg-transparent text-sluice-paper hover:bg-sluice-paper/10",
+    "border-white/35 bg-transparent text-white hover:bg-white/10",
 };
 
 export function ButtonLink({

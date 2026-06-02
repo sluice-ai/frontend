@@ -84,7 +84,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
           role="dialog"
           aria-modal="true"
           aria-labelledby="settings-modal-title"
-          className="flex h-[calc(100dvh-2rem)] max-h-[760px] w-full max-w-4xl flex-col overflow-hidden rounded-[28px] border border-sluice-navy/15 bg-white sm:h-[calc(100dvh-6rem)] sm:min-h-[620px]"
+          className="flex h-[calc(100dvh-2rem)] max-h-[760px] w-full max-w-4xl flex-col overflow-hidden rounded-[28px] border border-sluice-navy/15 bg-white sm:h-[calc(100dvh-6rem)] sm:min-h-[620px] dark:border-white/10 dark:bg-sluice-paperMuted"
         >
           <header className="relative flex shrink-0 items-center justify-between border-b border-sluice-navy/10 px-5 py-4 md:px-6">
             <h2
@@ -120,7 +120,7 @@ export function SettingsModal({ open, onClose }: SettingsModalProps) {
             </div>
           </div>
 
-          <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-sluice-navy/10 bg-sluice-paper/60 px-5 py-2.5 md:px-6">
+          <footer className="flex shrink-0 items-center justify-between gap-3 border-t border-sluice-navy/10 bg-sluice-paper/60 px-5 py-2.5 md:px-6 dark:bg-white/[0.02]">
             <p className="font-mono text-[11px] text-sluice-muted">
               {APP_VERSION}
             </p>

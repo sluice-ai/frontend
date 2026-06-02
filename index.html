@@ -1,5 +1,5 @@
 <!doctype html>
-<html lang="en" class="scroll-smooth scroll-pt-[88px] overflow-x-clip [color-scheme:light] md:[scrollbar-gutter:stable]">
+<html lang="en" class="scroll-smooth scroll-pt-[88px] overflow-x-clip md:[scrollbar-gutter:stable]">
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, interactive-widget=overlays-content" />
@@ -17,7 +17,7 @@
     <meta name="author" content="Sluice" />
     <meta name="application-name" content="Sluice" />
     <meta name="theme-color" content="#F2F3F5" />
-    <meta name="color-scheme" content="light" />
+    <meta name="color-scheme" content="light dark" />
     <link rel="canonical" href="https://thesluice.vercel.app/" />
     <meta property="og:type" content="website" />
     <meta property="og:site_name" content="Sluice" />
@@ -51,8 +51,37 @@
     <title>Sluice | Decentralized AI Routing Layer</title>
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
     <link rel="shortcut icon" href="/favicon.svg" />
+    <script>
+      // Apply the saved (or system) theme before first paint to avoid a flash.
+      // Keep this logic in sync with src/shared/theme/useTheme.ts.
+      (function () {
+        try {
+          var stored = localStorage.getItem("sluice.theme");
+          var pref =
+            stored === "light" || stored === "dark" || stored === "system"
+              ? stored
+              : "system";
+          var resolved =
+            pref === "system"
+              ? window.matchMedia &&
+                window.matchMedia("(prefers-color-scheme: dark)").matches
+                ? "dark"
+                : "light"
+              : pref;
+          var root = document.documentElement;
+          if (resolved === "dark") root.classList.add("dark");
+          root.style.colorScheme = resolved;
+          var meta = document.querySelector('meta[name="theme-color"]');
+          if (meta)
+            meta.setAttribute(
+              "content",
+              resolved === "dark" ? "#0a0d16" : "#f2f3f5",
+            );
+        } catch (e) {}
+      })();
+    </script>
   </head>
-  <body class="min-w-80 overflow-x-clip bg-sluice-paper bg-[linear-gradient(180deg,rgba(242,243,245,0.92),rgba(237,238,238,0.74)),radial-gradient(rgba(29,52,135,0.1)_1px,transparent_1.2px),radial-gradient(rgba(74,119,220,0.06)_1px,transparent_1.2px)] bg-[position:0_0,0_0,12px_12px] bg-[size:auto,18px_18px,18px_18px] font-sans leading-[1.55] text-sluice-ink antialiased [text-rendering:optimizeLegibility] selection:bg-sluice-routeBlue/30">
+  <body class="app-canvas min-w-80 overflow-x-clip font-sans leading-[1.55] text-sluice-ink antialiased [text-rendering:optimizeLegibility] selection:bg-sluice-routeBlue/30">
     <div id="root"></div>
     <script type="module" src="/src/main.tsx"></script>
   </body>

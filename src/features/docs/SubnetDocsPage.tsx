@@ -46,7 +46,7 @@ export function SubnetDocsPage() {
     <main className="flex min-h-screen flex-col overflow-x-clip bg-sluice-paper text-sluice-ink">
       <Navbar items={subnetNavItems} showProgress={false} />
 
-      <div className="pointer-events-none fixed inset-0 -z-10 bg-[radial-gradient(circle_at_top_left,rgba(74,119,220,0.18),transparent_34%),radial-gradient(circle_at_bottom_right,rgba(29,52,135,0.1),transparent_30%)]" />
+      <div className="app-glow pointer-events-none fixed inset-0 -z-10" />
 
       <section className="mx-auto flex w-full max-w-[1280px] flex-1 items-center justify-center px-6 pb-16 pt-28 sm:px-8 md:pt-24 lg:px-16">
         <div className="w-full">
@@ -54,7 +54,7 @@ export function SubnetDocsPage() {
             {subnetStats.map((stat, index) => (
               <article
                 key={stat.label}
-                className="flex animate-rise-in flex-col gap-2.5 rounded-2xl border border-sluice-navy/16 bg-sluice-paper/50 p-7 shadow-[0_4px_20px_rgba(16,20,34,0.02)] transition-colors motion-reduce:animate-none hover:border-sluice-navy/28 hover:bg-sluice-paper/80"
+                className="flex animate-rise-in flex-col gap-2.5 rounded-2xl border border-sluice-navy/16 bg-sluice-paper/50 p-7 shadow-[0_4px_20px_rgba(16,20,34,0.02)] transition-colors motion-reduce:animate-none hover:border-sluice-navy/28 hover:bg-sluice-paper/80 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                 style={{ animationDelay: `${index * 70}ms` }}
               >
                 <span className="font-sans text-[12.5px] font-semibold uppercase tracking-[0.06em] text-sluice-muted">

@@ -27,7 +27,7 @@ export function DocsIndex() {
         </p>
       </div>
 
-      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x" />
+      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.16)_0,rgba(255,255,255,0.16)_9px,transparent_9px,transparent_18px)]" />
 
       <div className="flex max-w-[720px] flex-col gap-[1.7rem] [&_p]:m-0 [&_p]:font-sans [&_p]:text-[1.05rem] [&_p]:font-normal [&_p]:leading-[1.72] [&_p]:tracking-normal [&_p]:text-sluice-ink [&_strong]:font-bold [&_strong]:text-sluice-navy">
         <p>
@@ -64,9 +64,9 @@ export function DocsIndex() {
             <Link
               key={item.href}
               to={item.href}
-              className="group grid min-h-[132px] min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-2xl border border-sluice-navy/16 bg-sluice-paper/46 p-[1.125rem] text-inherit no-underline transition-colors hover:border-sluice-navy/32 hover:bg-sluice-paper/70"
+              className="group grid min-h-[132px] min-w-0 grid-cols-[auto_minmax(0,1fr)_auto] items-start gap-3 rounded-2xl border border-sluice-navy/16 bg-sluice-paper/46 p-[1.125rem] text-inherit no-underline transition-colors hover:border-sluice-navy/32 hover:bg-sluice-paper/70 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
             >
-              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-sluice-navy/16 bg-sluice-navy/5 text-sluice-navy transition-colors group-hover:border-sluice-navy group-hover:bg-sluice-navy group-hover:text-sluice-paper">
+              <span className="inline-flex h-9 w-9 shrink-0 items-center justify-center rounded-[10px] border border-sluice-navy/16 bg-sluice-navy/5 text-sluice-navy transition-colors group-hover:border-sluice-navy group-hover:bg-sluice-navy group-hover:text-sluice-paper dark:group-hover:border-sluice-routeBlue dark:group-hover:bg-sluice-routeBlue dark:group-hover:text-sluice-deepNavy">
                 <Icon
                   size={19}
                   strokeWidth={1.8}
@@ -141,7 +141,7 @@ export function DocsPlaceholder() {
         )}
       </div>
 
-      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x" />
+      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.16)_0,rgba(255,255,255,0.16)_9px,transparent_9px,transparent_18px)]" />
 
       <div className="max-w-[720px] border-l border-sluice-navy/22 pl-5">
         <div className="mb-4 inline-flex h-7 items-center rounded-full border border-sluice-navy/14 bg-sluice-navy/6 px-2.5 font-sans text-[11px] font-bold uppercase leading-none tracking-normal text-sluice-navy">
@@ -152,11 +152,11 @@ export function DocsPlaceholder() {
           comprehensive documentation on <strong>{currentItem.label}</strong>.
         </p>
         <div className="mt-[1.6rem] flex flex-col gap-2.5">
-          <div className="h-2.5 w-full animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] motion-reduce:animate-none" />
-          <div className="h-2.5 w-4/5 animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] motion-reduce:animate-none" />
-          <div className="h-2.5 w-3/5 animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] motion-reduce:animate-none" />
-          <div className="h-2.5 w-[90%] animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] motion-reduce:animate-none" />
-          <div className="h-2.5 w-2/5 animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] motion-reduce:animate-none" />
+          <div className="h-2.5 w-full animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.13)_50%,rgba(255,255,255,0.05)_100%)] motion-reduce:animate-none" />
+          <div className="h-2.5 w-4/5 animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.13)_50%,rgba(255,255,255,0.05)_100%)] motion-reduce:animate-none" />
+          <div className="h-2.5 w-3/5 animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.13)_50%,rgba(255,255,255,0.05)_100%)] motion-reduce:animate-none" />
+          <div className="h-2.5 w-[90%] animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.13)_50%,rgba(255,255,255,0.05)_100%)] motion-reduce:animate-none" />
+          <div className="h-2.5 w-2/5 animate-docs-skeleton rounded-full bg-[linear-gradient(90deg,rgba(29,52,135,0.05)_0%,rgba(29,52,135,0.12)_50%,rgba(29,52,135,0.05)_100%)] bg-[length:200%_100%] dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.05)_0%,rgba(255,255,255,0.13)_50%,rgba(255,255,255,0.05)_100%)] motion-reduce:animate-none" />
         </div>
       </div>
     </article>

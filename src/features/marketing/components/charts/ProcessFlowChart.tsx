@@ -31,7 +31,7 @@ export function ProcessFlowChart() {
             refX="6"
             refY="3"
           >
-            <path d="M0,0 L0,6 L6,3 z" fill="#1D3487" />
+            <path d="M0,0 L0,6 L6,3 z" fill="var(--sluice-dg-line)" />
           </marker>
         </defs>
         <rect
@@ -53,7 +53,7 @@ export function ProcessFlowChart() {
                 next.x - 72
               } 100 ${next.x - 44} 100`}
               fill="none"
-              stroke={index < activeIndex ? "#4A77DC" : "#1D3487"}
+              stroke={index < activeIndex ? "var(--color-sluice-routeBlue)" : "var(--sluice-dg-line)"}
               strokeWidth={index < activeIndex ? "2.6" : "1.5"}
               markerEnd="url(#process-arrow)"
             />
@@ -66,7 +66,7 @@ export function ProcessFlowChart() {
             role="button"
             tabIndex={0}
             aria-label={`${node.label}: ${node.detail}`}
-            className="group cursor-pointer"
+            className="group cursor-pointer outline-none [-webkit-tap-highlight-color:transparent] focus:outline-none focus-visible:outline-none"
             onClick={() => setActiveIndex(index)}
             onKeyDown={(event) => {
               if (event.key === "Enter" || event.key === " ") {
@@ -75,29 +75,22 @@ export function ProcessFlowChart() {
           }}
         >
             <circle
-              className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
-              cx={node.x}
-              cy="100"
-              r="48"
-              stroke="#4A77DC"
-              strokeWidth="2.5"
-              fill="none"
-            />
-            <circle
               cx={node.x}
               cy="100"
               r="40"
               fill={
-                index === activeIndex ? "#1D3487" : "rgba(242,243,245,0.58)"
+                index === activeIndex
+                  ? "var(--sluice-dg-brand)"
+                  : "var(--sluice-dg-node-bg)"
               }
-              stroke="#1D3487"
+              stroke="var(--sluice-dg-node-border)"
               strokeWidth={index === activeIndex ? "2" : "1.25"}
             />
             <text
               x={node.x}
               y="94"
               textAnchor="middle"
-              fill={index === activeIndex ? "#F2F3F5" : "#1D3487"}
+              fill={index === activeIndex ? "var(--sluice-dg-on-brand)" : "var(--sluice-dg-text)"}
               fontSize="12"
               fontWeight="700"
             >
@@ -107,7 +100,7 @@ export function ProcessFlowChart() {
               x={node.x}
               y="113"
               textAnchor="middle"
-              fill={index === activeIndex ? "#DCE7FF" : "#707380"}
+              fill={index === activeIndex ? "var(--sluice-dg-on-brand-soft)" : "var(--sluice-dg-text-muted)"}
               fontSize="9"
             >
               {node.detail}

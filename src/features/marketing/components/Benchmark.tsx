@@ -14,7 +14,7 @@ export function Benchmark() {
 
         <div className="mt-12 grid gap-10 min-w-0 lg:grid-cols-[0.78fr_1.22fr] lg:gap-[72px] lg:items-end">
           <div className="min-w-0">
-            <div className="rounded-card border border-sluice-navy/15 bg-sluice-paper/55 p-6">
+            <div className="rounded-card border border-sluice-navy/15 bg-sluice-paper/55 p-6 dark:bg-white/[0.03]">
               <div className="font-mono text-[15px] leading-relaxed">
                 <span className="text-sluice-navy/60">score =</span>{" "}
                 <span className="font-semibold text-sluice-routeBlue">gate</span>{" "}
@@ -59,7 +59,7 @@ export function Benchmark() {
                       </div>
                       <div className="h-1.5 overflow-hidden rounded-full bg-sluice-navy/10">
                         <div
-                          className="h-full rounded-full bg-sluice-navy"
+                          className="h-full rounded-full bg-sluice-navy dark:bg-sluice-routeBlue"
                           style={{ width: `${weight.value * 100}%` }}
                           aria-hidden="true"
                         />

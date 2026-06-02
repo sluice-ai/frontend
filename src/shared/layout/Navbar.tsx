@@ -7,6 +7,7 @@ import { Link } from "react-router-dom";
 import { navItems, type NavItem } from "@/shared/config/navigation";
 import { cn } from "@/shared/lib/cn";
 import { isInternalRouteHref } from "@/shared/lib/links";
+import { ThemeToggle } from "@/shared/ui/ThemeToggle";
 import { BrandLogo } from "./BrandLogo";
 
 type NavbarProps = {
@@ -63,36 +64,40 @@ export function Navbar({
           </Link>
         </div>
 
-        {rightContent ? (
-          rightContent
-        ) : (
-          <div className="hidden items-center gap-8 md:flex">
-            {items.map((item) => (
-              <NavItemLink
-                key={item.href}
-                item={item}
-                className={cn(
-                  "font-sans text-[15px] font-medium tracking-normal text-sluice-navy transition-opacity hover:opacity-70",
-                  item.isPrimary &&
-                    "rounded-pill bg-sluice-navy px-4 py-2 text-sm font-semibold text-sluice-paper hover:bg-sluice-deepNavy hover:opacity-100",
-                )}
-              />
-            ))}
-          </div>
-        )}
+        <div className="flex items-center gap-3 sm:gap-4">
+          {rightContent ? (
+            rightContent
+          ) : (
+            <div className="hidden items-center gap-8 md:flex">
+              {items.map((item) => (
+                <NavItemLink
+                  key={item.href}
+                  item={item}
+                  className={cn(
+                    "font-sans text-[15px] font-medium tracking-normal text-sluice-navy transition-opacity hover:opacity-70",
+                    item.isPrimary &&
+                      "rounded-pill bg-sluice-navy px-4 py-2 text-sm font-semibold text-sluice-paper hover:bg-sluice-deepNavy hover:opacity-100 dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue",
+                  )}
+                />
+              ))}
+            </div>
+          )}
 
-        {showItemNavigation && (
-          <button
-            type="button"
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sluice-navy/20 text-sluice-navy outline-none focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 md:hidden"
-            aria-controls="mobile-navigation"
-            aria-expanded={isOpen}
-            aria-label="Toggle navigation"
-            onClick={() => setIsOpen((current) => !current)}
-          >
-            {isOpen ? <X size={20} /> : <Menu size={20} />}
-          </button>
-        )}
+          <ThemeToggle />
+
+          {showItemNavigation && (
+            <button
+              type="button"
+              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sluice-navy/20 text-sluice-navy outline-none focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 md:hidden"
+              aria-controls="mobile-navigation"
+              aria-expanded={isOpen}
+              aria-label="Toggle navigation"
+              onClick={() => setIsOpen((current) => !current)}
+            >
+              {isOpen ? <X size={20} /> : <Menu size={20} />}
+            </button>
+          )}
+        </div>
       </div>
 
       {showItemNavigation && (
@@ -110,7 +115,8 @@ export function Navbar({
                 item={item}
                 className={cn(
                   "rounded-pill px-4 py-3 font-sans text-base font-medium tracking-normal text-sluice-navy",
-                  item.isPrimary && "bg-sluice-navy text-sluice-paper",
+                  item.isPrimary &&
+                    "bg-sluice-navy text-sluice-paper dark:bg-sluice-routeBlue dark:text-sluice-deepNavy",
                 )}
                 onClick={() => setIsOpen(false)}
               />
@@ -122,10 +128,10 @@ export function Navbar({
       {showProgress && (
         <div
           data-navbar-progress-track
-          className="absolute inset-x-0 bottom-0 h-[3px] bg-sluice-paper/80"
+          className="absolute inset-x-0 bottom-0 h-[3px] bg-sluice-paper/80 dark:bg-transparent"
         >
           <div
-            className="h-full bg-sluice-navy transition-all duration-75 ease-out"
+            className="h-full bg-sluice-navy transition-all duration-75 ease-out dark:bg-sluice-routeBlue"
             style={{ width: `${scrollProgress}%` }}
           />
         </div>

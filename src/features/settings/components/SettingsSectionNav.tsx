@@ -19,7 +19,7 @@ export function SettingsSectionNav({
   return (
     <nav
       aria-label="Settings sections"
-      className="shrink-0 border-b border-sluice-navy/10 bg-sluice-paper/60 md:w-[200px] md:border-b-0 md:border-r md:border-sluice-navy/10"
+      className="shrink-0 border-b border-sluice-navy/10 bg-sluice-paper/60 md:w-[200px] md:border-b-0 md:border-r md:border-sluice-navy/10 dark:bg-white/[0.02]"
     >
       <ul className="flex gap-1 overflow-x-auto p-2 md:flex-col md:gap-0.5 md:overflow-visible md:p-3">
         {sections.map((section) => {
@@ -55,7 +55,7 @@ export function SettingsSectionNav({
                     className={[
                       "inline-flex h-[18px] min-w-[18px] items-center justify-center rounded-pill px-1.5 font-sans text-[10px] font-semibold",
                       isActive
-                        ? "bg-sluice-navy text-sluice-paper"
+                        ? "bg-sluice-navy text-sluice-paper dark:bg-sluice-routeBlue dark:text-sluice-deepNavy"
                         : "bg-sluice-navy/10 text-sluice-navy",
                     ].join(" ")}
                   >

@@ -8,10 +8,10 @@ type MinerDecisionCardProps = {
 
 export function MinerDecisionCard({ decision }: MinerDecisionCardProps) {
   return (
-    <section className="rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5">
+    <section className="rounded-card border border-sluice-navy/15 bg-sluice-paper/58 p-5 dark:bg-white/[0.03]">
       <div className="flex flex-wrap items-center justify-between gap-3">
         <div className="flex items-center gap-3">
-          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-deepNavy text-sluice-paper">
+          <span className="inline-flex h-9 w-9 items-center justify-center rounded-full bg-sluice-deepNavy text-sluice-paper dark:bg-sluice-routeBlue dark:text-sluice-deepNavy">
             <Sparkles size={17} strokeWidth={2} />
           </span>
           <div>
@@ -27,14 +27,14 @@ export function MinerDecisionCard({ decision }: MinerDecisionCardProps) {
           <span className="inline-flex items-center gap-1.5 rounded-pill bg-sluice-navy/10 px-3 py-1 font-sans text-[12px] font-semibold text-sluice-navy">
             {decision.taskType}
           </span>
-          <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-3 py-1 font-sans text-[12px] font-semibold text-emerald-700 ring-1 ring-emerald-200">
+          <span className="inline-flex items-center gap-1.5 rounded-pill bg-emerald-50 px-3 py-1 font-sans text-[12px] font-semibold text-emerald-700 ring-1 ring-emerald-200 dark:bg-emerald-500/15 dark:text-emerald-300 dark:ring-emerald-400/30">
             {Math.round(decision.confidence * 100)}% confidence
           </span>
         </div>
       </div>
 
       <div className="mt-4 flex flex-wrap items-center gap-3">
-        <span className="rounded-pill border border-sluice-navy/15 bg-white/60 px-3 py-1.5 font-sans text-sm font-semibold text-sluice-navy">
+        <span className="rounded-pill border border-sluice-navy/15 bg-white/60 px-3 py-1.5 font-sans text-sm font-semibold text-sluice-navy dark:bg-white/[0.06]">
           {decision.selectedProvider}
         </span>
         <span className="font-sans text-sm text-sluice-muted">/</span>
@@ -64,7 +64,7 @@ export function MinerDecisionCard({ decision }: MinerDecisionCardProps) {
 
 function DecisionFactor({ label, value }: { label: string; value: string }) {
   return (
-    <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3">
+    <div className="rounded-card border border-sluice-navy/10 bg-white/60 p-3 dark:bg-white/[0.05]">
       <p className="font-sans text-[11px] font-semibold uppercase tracking-[0.06em] text-sluice-navy/55">
         {label}
       </p>

@@ -195,7 +195,7 @@ export function RoutingFlowDiagram({
           role="button"
           tabIndex={0}
           aria-label={`Cycle route policy. Current policy is ${activePolicy.label}`}
-          className="group cursor-pointer animate-rfd-node-in [animation-delay:80ms] [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none"
+          className="group cursor-pointer outline-none [-webkit-tap-highlight-color:transparent] focus:outline-none focus-visible:outline-none animate-rfd-node-in [animation-delay:80ms] [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none"
           onClick={cyclePolicy}
           onKeyDown={(event) => {
             if (event.key === "Enter" || event.key === " ") {
@@ -204,26 +204,17 @@ export function RoutingFlowDiagram({
           }}
         >
           <circle
-            className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
-            cx="68"
-            cy="160"
-            r="45"
-            stroke="#4A77DC"
-            strokeWidth="2.5"
-            fill="none"
-          />
-          <circle
             cx="68"
             cy="160"
             r="36"
-            fill="rgba(242,243,245,0.58)"
-            stroke="#1D3487"
+            fill="var(--sluice-dg-node-bg)"
+            stroke="var(--sluice-dg-node-border)"
           />
           <text
             x="68"
             y="153"
             textAnchor="middle"
-            fill="#1D3487"
+            fill="var(--sluice-dg-text)"
             fontSize="14"
             fontWeight="700"
           >
@@ -233,7 +224,7 @@ export function RoutingFlowDiagram({
             x="68"
             y="173"
             textAnchor="middle"
-            fill="#707380"
+            fill="var(--sluice-dg-text-muted)"
             fontSize="10"
           >
             constraints
@@ -243,7 +234,7 @@ export function RoutingFlowDiagram({
         <path
           d="M104 160 H180"
           fill="none"
-          stroke="#1D3487"
+          stroke="var(--sluice-dg-line)"
           strokeWidth="1.8"
           pathLength={1}
           className="animate-rfd-draw [stroke-dasharray:1] motion-reduce:animate-none"
@@ -257,15 +248,15 @@ export function RoutingFlowDiagram({
             width="168"
             height="112"
             rx="22"
-            fill="rgba(242,243,245,0.44)"
-            stroke="#1D3487"
+            fill="var(--sluice-dg-node-bg)"
+            stroke="var(--sluice-dg-node-border)"
             strokeWidth="1.35"
           />
           <text
             x="264"
             y="148"
             textAnchor="middle"
-            fill="#1D3487"
+            fill="var(--sluice-dg-text)"
             fontSize="18"
             fontWeight="700"
           >
@@ -275,7 +266,7 @@ export function RoutingFlowDiagram({
             x="264"
             y="173"
             textAnchor="middle"
-            fill="#707380"
+            fill="var(--sluice-dg-text-muted)"
             fontSize="12"
           >
             {activePolicy.label} policy
@@ -284,7 +275,7 @@ export function RoutingFlowDiagram({
             x="264"
             y="195"
             textAnchor="middle"
-            fill="#707380"
+            fill="var(--sluice-dg-text-muted)"
             fontSize="11"
           >
             live score + route fit
@@ -301,7 +292,7 @@ export function RoutingFlowDiagram({
               role="button"
               tabIndex={0}
               aria-label={`Select ${provider.name} route`}
-              className="group cursor-pointer animate-rfd-node-in [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none"
+              className="group cursor-pointer outline-none [-webkit-tap-highlight-color:transparent] focus:outline-none focus-visible:outline-none animate-rfd-node-in [transform-box:fill-box] [transform-origin:center] motion-reduce:animate-none"
               style={{ animationDelay: `${320 + index * 60}ms` }}
               onClick={() => setFocusedProviderId(provider.id)}
               onKeyDown={(event) => {
@@ -310,20 +301,11 @@ export function RoutingFlowDiagram({
                 }
               }}
             >
-              <circle
-                className="pointer-events-none opacity-0 transition-opacity duration-[160ms] group-focus-visible:opacity-100"
-                cx="570"
-                cy={provider.y}
-                r="35"
-                stroke="#4A77DC"
-                strokeWidth="2.5"
-                fill="none"
-              />
               <path
                 id={`route-path-${provider.id}`}
                 d={getRoutePath(provider)}
                 fill="none"
-                stroke={isSelected ? "#4A77DC" : "rgba(29,52,135,0.26)"}
+                stroke={isSelected ? "var(--color-sluice-routeBlue)" : "var(--sluice-dg-line-soft)"}
                 strokeLinecap="round"
                 strokeWidth={isSelected ? "3" : "1.35"}
                 pathLength={1}
@@ -340,15 +322,15 @@ export function RoutingFlowDiagram({
                 cx="570"
                 cy={provider.y}
                 r="28"
-                fill={isSelected ? "#1D3487" : "rgba(242,243,245,0.58)"}
-                stroke={isSelected ? "#1D3487" : "rgba(29,52,135,0.72)"}
+                fill={isSelected ? "var(--sluice-dg-brand)" : "var(--sluice-dg-node-bg)"}
+                stroke={isSelected ? "var(--sluice-dg-brand)" : "var(--sluice-dg-node-border)"}
                 strokeWidth="1.35"
               />
               <text
                 x="570"
                 y={provider.y - 7}
                 textAnchor="middle"
-                fill={isSelected ? "#F2F3F5" : "#1D3487"}
+                fill={isSelected ? "var(--sluice-dg-on-brand)" : "var(--sluice-dg-text)"}
                 fontSize="11"
                 fontWeight="700"
               >
@@ -358,7 +340,7 @@ export function RoutingFlowDiagram({
                 x="570"
                 y={provider.y + 9}
                 textAnchor="middle"
-                fill={isSelected ? "#DCE7FF" : "#707380"}
+                fill={isSelected ? "var(--sluice-dg-on-brand-soft)" : "var(--sluice-dg-text-muted)"}
                 fontSize="10"
               >
                 {score}
@@ -373,7 +355,7 @@ export function RoutingFlowDiagram({
             <circle
               key={`${provider.id}-dot-${dotIndex}`}
               r="3.5"
-              fill="#4A77DC"
+              fill="var(--color-sluice-routeBlue)"
               fillOpacity="0"
               pointerEvents="none"
             >

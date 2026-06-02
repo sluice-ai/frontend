@@ -96,7 +96,7 @@ export function Roadmap() {
           onMouseMove={handleMouseMove}
           onMouseUp={handleMouseUpOrLeave}
           onMouseLeave={handleMouseUpOrLeave}
-          className="mt-10 cursor-grab select-none overflow-x-auto rounded-frame border border-sluice-navy/15 bg-sluice-paper/40 backdrop-blur-[1px] [-ms-overflow-style:none] [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
+          className="mt-10 cursor-grab select-none overflow-x-auto rounded-frame border border-sluice-navy/15 bg-sluice-paper/40 backdrop-blur-[1px] dark:bg-white/[0.03] [-ms-overflow-style:none] [scrollbar-width:none] active:cursor-grabbing [&::-webkit-scrollbar]:hidden"
         >
           <div className="min-w-[1440px] px-6 pb-8 pt-6 md:px-10 md:pb-10 md:pt-8">
             <WeekHeader />

@@ -216,8 +216,8 @@ export function Solution() {
                 className={cn(
                   "relative flex min-h-[170px] w-full min-w-[290px] max-w-[380px] shrink-0 cursor-default select-none flex-col justify-between rounded-card border p-7 transition-all duration-[450ms] ease-sluice will-change-[transform,filter,opacity,box-shadow]",
                   isSluice
-                    ? "z-20 !border-sluice-routeBlue/45 !bg-[#EBF0FF] !shadow-none"
-                    : "bg-[#FAF9F5]/70 border-sluice-navy/15 z-10"
+                    ? "z-20 !border-sluice-routeBlue/45 !bg-[#EBF0FF] !shadow-none dark:!bg-sluice-routeBlue/12"
+                    : "bg-[#FAF9F5]/70 border-sluice-navy/15 z-10 dark:bg-white/[0.03]"
                 )}
                 style={isMobileState ? {} : {
                   filter: distance <= 1 ? "blur(0px)" : "blur(2.5px)",

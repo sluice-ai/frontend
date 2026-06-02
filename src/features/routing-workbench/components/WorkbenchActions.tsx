@@ -48,7 +48,7 @@ function ActionButton({
       aria-label={label}
       title={title}
       aria-expanded={expanded}
-      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sluice-navy/15 bg-sluice-paper/70 text-sluice-navy transition-colors hover:bg-sluice-navy/5"
+      className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-sluice-navy/15 bg-sluice-paper/70 text-sluice-navy transition-colors hover:bg-sluice-navy/5 dark:bg-white/[0.05] dark:hover:bg-white/[0.08]"
     >
       {icon}
     </button>

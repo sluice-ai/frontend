@@ -14,15 +14,15 @@ export function TrendSparkline({ card, index }: TrendSparklineProps) {
     <svg viewBox="0 0 96 40" className="h-11 w-24" aria-hidden="true">
       <defs>
         <linearGradient id={gradientId} x1="0" x2="0" y1="0" y2="1">
-          <stop offset="0%" stopColor="#4A77DC" stopOpacity="0.2" />
-          <stop offset="100%" stopColor="#4A77DC" stopOpacity="0" />
+          <stop offset="0%" stopColor="var(--color-sluice-routeBlue)" stopOpacity="0.2" />
+          <stop offset="100%" stopColor="var(--color-sluice-routeBlue)" stopOpacity="0" />
         </linearGradient>
       </defs>
       <polygon points={areaPoints} fill={`url(#${gradientId})`} />
       <polyline
         points={points}
         fill="none"
-        stroke="#4A77DC"
+        stroke="var(--color-sluice-routeBlue)"
         strokeLinecap="round"
         strokeLinejoin="round"
         strokeWidth="2"

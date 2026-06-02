@@ -47,7 +47,7 @@ export function ValidationMetrics() {
           {validationLoopSteps.map((step, index) => (
             <li key={step} className="flex items-center md:contents">
               <span className="flex items-center gap-2 whitespace-nowrap rounded-full border border-sluice-navy/10 bg-sluice-navy/5 px-3 py-1.5">
-                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sluice-navy text-[10px] text-white">
+                <span className="flex h-5 w-5 shrink-0 items-center justify-center rounded-full bg-sluice-navy text-[10px] text-white dark:bg-sluice-routeBlue dark:text-sluice-deepNavy">
                   {index + 1}
                 </span>
                 {step}

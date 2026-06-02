@@ -28,7 +28,7 @@ export function ResponseBlock({
   return (
     <div className="space-y-6">
       <div className="flex justify-end">
-        <div className="max-w-[80%] rounded-card rounded-tr-md bg-sluice-navy px-4 py-3">
+        <div className="max-w-[80%] rounded-card rounded-tr-md bg-sluice-navy px-4 py-3 dark:bg-sluice-routeBlue">
           {imagePreview && (
             <div className="mb-2">
               <img
@@ -74,22 +74,22 @@ function FailurePanel({
   onOpenSettings: () => void;
 }) {
   return (
-    <section className="rounded-card border border-amber-300 bg-amber-50/70 p-5">
+    <section className="rounded-card border border-amber-300 bg-amber-50/70 p-5 dark:border-amber-400/25 dark:bg-amber-400/10">
       <div className="flex items-start gap-3">
         <AlertTriangle
           size={18}
-          className="mt-0.5 text-amber-700"
+          className="mt-0.5 text-amber-700 dark:text-amber-300"
           strokeWidth={1.8}
         />
         <div className="min-w-0">
-          <p className="font-sans text-sm font-semibold text-amber-900">
+          <p className="font-sans text-sm font-semibold text-amber-900 dark:text-amber-200">
             {failure.kind === "no_providers"
               ? "No providers available"
               : failure.kind === "gemini_error"
                 ? "Miner routing failed"
                 : "No route satisfies your constraints"}
           </p>
-          <p className="mt-1 font-sans text-sm leading-6 text-amber-900/85">
+          <p className="mt-1 font-sans text-sm leading-6 text-amber-900/85 dark:text-amber-100/85">
             <FailureMessage failure={failure} onOpenSettings={onOpenSettings} />
           </p>
         </div>
@@ -129,7 +129,7 @@ function FailureMessage({
     return (
       <>
         No Gemini API key configured. Please set the{" "}
-        <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-[13px] font-semibold text-amber-900">
+        <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-[13px] font-semibold text-amber-900 dark:bg-amber-400/15 dark:text-amber-100">
           VITE_GEMINI_API_KEY
         </code>{" "}
         environment variable and redeploy.
@@ -141,7 +141,7 @@ function FailureMessage({
     return (
       <>
         Your Gemini API key is invalid. Please check your{" "}
-        <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-[13px] font-semibold text-amber-900">
+        <code className="rounded bg-amber-100 px-1 py-0.5 font-mono text-[13px] font-semibold text-amber-900 dark:bg-amber-400/15 dark:text-amber-100">
           VITE_GEMINI_API_KEY
         </code>{" "}
         environment variable and trigger a new deployment.

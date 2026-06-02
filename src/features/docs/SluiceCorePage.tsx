@@ -38,7 +38,7 @@ const pillars = [
 
 function SluiceNetworkDiagram() {
   return (
-    <figure className="my-10 mb-6 overflow-visible rounded-card border border-sluice-navy/12 bg-sluice-paper/38 px-4 pb-4 pt-6">
+    <figure className="my-10 mb-6 overflow-visible rounded-card border border-sluice-navy/12 bg-sluice-paper/38 px-4 pb-4 pt-6 dark:bg-white/[0.03]">
       <svg
         viewBox="0 0 580 620"
         role="img"
@@ -145,12 +145,12 @@ function SluiceNetworkDiagram() {
         </text>
 
         {/* ─── Sluice box ─── */}
-        <rect x="142" y="120" width="296" height="64" rx="14" fill="#1D3487" />
+        <rect x="142" y="120" width="296" height="64" rx="14" fill="var(--sluice-dg-brand)" />
         <text
           x="290"
           y="149"
           textAnchor="middle"
-          fill="#F2F3F5"
+          fill="var(--sluice-dg-on-brand)"
           fontSize="17"
           fontWeight="700"
           fontFamily="Inter, system-ui, sans-serif"
@@ -161,7 +161,7 @@ function SluiceNetworkDiagram() {
           x="290"
           y="171"
           textAnchor="middle"
-          fill="rgba(242,243,245,0.7)"
+          fill="var(--sluice-dg-on-brand-soft)"
           fontSize="11"
           fontFamily="Inter, system-ui, sans-serif"
         >
@@ -402,7 +402,7 @@ export function SluiceCorePage() {
         </p>
       </div>
 
-      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x" />
+      <div className="my-[clamp(1.5rem,3vw,2rem)] h-px bg-[linear-gradient(90deg,rgba(29,52,135,0.18)_0,rgba(29,52,135,0.18)_9px,transparent_9px,transparent_18px)] bg-[length:18px_1px] bg-repeat-x dark:bg-[linear-gradient(90deg,rgba(255,255,255,0.16)_0,rgba(255,255,255,0.16)_9px,transparent_9px,transparent_18px)]" />
 
       {/* Intro */}
       <div className="flex max-w-[720px] flex-col gap-[1.7rem] [&_p]:m-0 [&_p]:font-sans [&_p]:text-[1.05rem] [&_p]:font-normal [&_p]:leading-[1.72] [&_p]:tracking-normal [&_p]:text-sluice-ink [&_strong]:font-bold [&_strong]:text-sluice-navy">
@@ -441,10 +441,10 @@ export function SluiceCorePage() {
           {steps.map((step, i) => (
             <div key={step.num} className="flex gap-5 pb-8 last:pb-0">
               <div className="flex w-8 shrink-0 flex-col items-center">
-                <span className="mb-1 font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.04em] text-[#3b5bdb]">
+                <span className="mb-1 font-sans text-[11px] font-semibold uppercase leading-none tracking-[0.04em] text-[#3b5bdb] dark:text-sluice-routeBlue">
                   {step.num}
                 </span>
-                <span className="h-2.5 w-2.5 shrink-0 rounded-full border-2 border-[#3b5bdb] bg-white" />
+                <span className="h-2.5 w-2.5 shrink-0 rounded-full border-2 border-[#3b5bdb] bg-white dark:border-sluice-routeBlue dark:bg-sluice-paperMuted" />
                 {i < steps.length - 1 && (
                   <span className="mt-1 min-h-8 w-px flex-1 bg-sluice-navy/18" />
                 )}
@@ -471,7 +471,7 @@ export function SluiceCorePage() {
           {pillars.map((pillar) => (
             <div
               key={pillar.title}
-              className="rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/38 p-5"
+              className="rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/38 p-5 dark:bg-white/[0.03]"
             >
               <span className="mb-2 block font-sans text-sm font-bold text-sluice-navy">
                 {pillar.title}

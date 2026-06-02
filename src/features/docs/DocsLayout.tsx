@@ -22,7 +22,7 @@ export function DocsLayout(): JSX.Element {
     currentIndex < allPages.length - 1 ? allPages[currentIndex + 1] : null;
 
   return (
-    <div className="min-h-screen overflow-x-clip bg-sluice-paper bg-[linear-gradient(180deg,rgba(242,243,245,0.92),rgba(237,238,238,0.74)),radial-gradient(rgba(29,52,135,0.1)_1px,transparent_1.2px),radial-gradient(rgba(74,119,220,0.06)_1px,transparent_1.2px)] bg-[position:0_0,0_0,12px_12px] bg-[size:auto,18px_18px,18px_18px]">
+    <div className="app-canvas min-h-screen overflow-x-clip">
       <Navbar
         items={[]}
         showProgress={false}
@@ -66,7 +66,7 @@ export function DocsLayout(): JSX.Element {
                 {prevPage && (
                   <Link
                     to={prevPage.href}
-                    className="flex min-w-0 flex-col gap-1 rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/42 px-4 py-[0.95rem] text-inherit no-underline transition-colors hover:border-sluice-navy/32 hover:bg-sluice-paper/70"
+                    className="flex min-w-0 flex-col gap-1 rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/42 px-4 py-[0.95rem] text-inherit no-underline transition-colors hover:border-sluice-navy/32 hover:bg-sluice-paper/70 dark:bg-white/[0.03] dark:hover:bg-white/[0.06]"
                   >
                     <span className="overflow-hidden text-ellipsis whitespace-nowrap font-sans text-xs font-semibold tracking-normal text-sluice-muted">
                       Previous
@@ -79,7 +79,7 @@ export function DocsLayout(): JSX.Element {
                 {nextPage && (
                   <Link
                     to={nextPage.href}
-                    className="flex min-w-0 flex-col gap-1 rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/42 px-4 py-[0.95rem] text-inherit no-underline transition-colors hover:border-sluice-navy/32 hover:bg-sluice-paper/70 sm:text-right"
+                    className="flex min-w-0 flex-col gap-1 rounded-[14px] border border-sluice-navy/14 bg-sluice-paper/42 px-4 py-[0.95rem] text-inherit no-underline transition-colors hover:border-sluice-navy/32 hover:bg-sluice-paper/70 dark:bg-white/[0.03] dark:hover:bg-white/[0.06] sm:text-right"
                   >
                     <span className="overflow-hidden text-ellipsis whitespace-nowrap font-sans text-xs font-semibold tracking-normal text-sluice-muted">
                       Next

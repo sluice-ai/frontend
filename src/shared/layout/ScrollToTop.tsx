@@ -31,7 +31,7 @@ export function ScrollToTop() {
       type="button"
       onClick={scrollToTop}
       className={cn(
-        "fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-all duration-300 ease-sluice hover:bg-sluice-deepNavy focus:outline-none focus-visible:ring-2 focus-visible:ring-sluice-routeBlue focus-visible:ring-offset-2 md:bottom-10 md:right-10",
+        "fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-all duration-300 ease-sluice hover:bg-sluice-deepNavy focus:outline-none focus-visible:ring-2 focus-visible:ring-sluice-routeBlue focus-visible:ring-offset-2 dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue md:bottom-10 md:right-10",
         isVisible
           ? "opacity-100"
           : "pointer-events-none opacity-0"

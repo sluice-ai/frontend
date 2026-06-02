@@ -12,7 +12,7 @@ export function SegmentedSelect<T extends string | number>({
   value,
   onChange,
   options,
-  className = "w-full bg-white",
+  className = "w-full bg-white dark:bg-white/[0.04]",
   buttonClassName = "flex-1",
 }: SegmentedSelectProps<T>) {
   return (
@@ -26,7 +26,7 @@ export function SegmentedSelect<T extends string | number>({
             onClick={() => onChange(o.value)}
             className={`rounded-pill px-3 py-1.5 font-sans text-xs font-semibold transition-colors outline-none focus:!outline-none focus-visible:!outline-none focus:!ring-0 focus-visible:!ring-0 ${
               active
-                ? "bg-sluice-navy text-sluice-paper"
+                ? "bg-sluice-navy text-sluice-paper dark:bg-sluice-routeBlue dark:text-sluice-deepNavy"
                 : "text-sluice-navy/70 hover:bg-sluice-navy/5 hover:text-sluice-navy"
             } ${buttonClassName}`}
           >
