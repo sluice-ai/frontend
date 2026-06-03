@@ -1,5 +1,3 @@
-import Menu from "lucide-react/dist/esm/icons/menu";
-import X from "lucide-react/dist/esm/icons/x";
 import type { ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
@@ -48,6 +46,29 @@ export function Navbar({
   const barRef = useRef<HTMLDivElement | null>(null);
   const brandRef = useRef<HTMLAnchorElement | null>(null);
   const controlsRef = useRef<HTMLDivElement | null>(null);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const closeOnEscape = (event: KeyboardEvent) => {
+      if (event.key === "Escape") setIsOpen(false);
+    };
+
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+
+    const media = window.matchMedia("(min-width: 768px)");
+    const closeOnDesktop = (event: MediaQueryListEvent) => {
+      if (event.matches) setIsOpen(false);
+    };
+
+    media.addEventListener("change", closeOnDesktop);
+    return () => media.removeEventListener("change", closeOnDesktop);
+  }, [isOpen]);
 
   useEffect(() => {
     if (!showProgress) return;
@@ -144,7 +165,7 @@ export function Navbar({
 
       <div
         ref={barRef}
-        className="relative z-10 mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-16"
+        className="relative z-30 mx-auto flex h-16 w-full max-w-[1280px] items-center justify-between px-6 sm:px-8 lg:px-16"
       >
         <div className="flex min-w-0 items-center gap-4 max-sm:gap-3">
           {leftAccessory}
@@ -180,41 +201,61 @@ export function Navbar({
           {showItemNavigation && (
             <button
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sluice-navy/20 text-sluice-navy outline-none focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 md:hidden"
+              className={cn(
+                "group relative inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-sluice-navy outline-none transition-[background-color,color,transform] duration-300 ease-sluice hover:bg-sluice-navy/6 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 active:scale-[0.96] md:hidden dark:text-sluice-softBlue dark:hover:bg-white/[0.06]",
+                isOpen && "bg-sluice-navy/8 text-sluice-routeBlue shadow-[0_10px_28px_-18px_rgba(29,52,135,0.85)] dark:bg-white/[0.08] dark:shadow-[0_10px_28px_-18px_rgba(0,0,0,0.9)]",
+              )}
               aria-controls="mobile-navigation"
               aria-expanded={isOpen}
               aria-label="Toggle navigation"
               onClick={() => setIsOpen((current) => !current)}
             >
-              {isOpen ? <X size={20} /> : <Menu size={20} />}
+              <MobileNavGlyph isOpen={isOpen} />
             </button>
           )}
         </div>
       </div>
 
       {showItemNavigation && (
-        <div
-          id="mobile-navigation"
-          className={cn(
-            "relative z-10 border-t border-sluice-navy/10 bg-sluice-paper/75 px-6 py-5 backdrop-blur-xl md:hidden",
-            !isOpen && "hidden",
-          )}
-        >
-          <div className="flex flex-col gap-4">
-            {items.map((item) => (
-              <NavItemLink
-                key={item.href}
-                item={item}
-                className={cn(
-                  "rounded-pill px-4 py-3 font-sans text-base font-medium tracking-normal text-sluice-navy",
-                  item.isPrimary &&
-                    "bg-sluice-navy text-sluice-paper dark:bg-sluice-routeBlue dark:text-sluice-deepNavy",
-                )}
-                onClick={() => setIsOpen(false)}
-              />
-            ))}
+        <>
+          <button
+            type="button"
+            tabIndex={-1}
+            aria-hidden="true"
+            className={cn(
+              "fixed inset-x-0 bottom-0 top-16 z-10 cursor-default bg-sluice-deepNavy/12 opacity-0 backdrop-blur-[1px] transition-opacity duration-300 ease-sluice md:hidden",
+              isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none",
+            )}
+            onClick={() => setIsOpen(false)}
+          />
+          <div
+            id="mobile-navigation"
+            aria-hidden={!isOpen}
+            className={cn(
+              "fixed inset-x-0 top-0 z-20 overflow-hidden bg-sluice-paper/88 shadow-[0_28px_80px_-54px_rgba(29,52,135,0.45)] backdrop-blur-xl transition-[height,border-radius,opacity,background-color,box-shadow] duration-[600ms] ease-sluice motion-reduce:transition-none md:hidden dark:bg-sluice-paper/95 dark:shadow-[0_28px_80px_-54px_rgba(0,0,0,0.65)]",
+              isOpen
+                ? "h-[min(52dvh,430px)] rounded-bl-[clamp(9rem,72vw,32rem)] opacity-100"
+                : "pointer-events-none h-0 rounded-bl-none opacity-0",
+            )}
+          >
+            <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col items-end gap-3 px-6 pb-8 pt-20 text-right sm:px-8">
+              {items.map((item) => (
+                <NavItemLink
+                  key={item.href}
+                  item={item}
+                  className={cn(
+                    "group/link inline-flex min-h-11 max-w-full items-center justify-end rounded-[16px] px-4 py-2.5 font-sans text-base font-medium tracking-normal text-sluice-navy transition-[background-color,color,opacity,transform] duration-[420ms] ease-sluice hover:bg-sluice-navy/6 dark:hover:bg-white/[0.06]",
+                    item.isPrimary &&
+                      "bg-sluice-navy text-sluice-paper hover:bg-sluice-deepNavy dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue",
+                    isOpen ? "translate-y-0 opacity-100" : "-translate-y-3 opacity-0",
+                  )}
+                  onClick={() => setIsOpen(false)}
+                  tabIndex={isOpen ? undefined : -1}
+                />
+              ))}
+            </div>
           </div>
-        </div>
+        </>
       )}
     </nav>
   );
@@ -224,22 +265,50 @@ function NavItemLink({
   className,
   item,
   onClick,
+  tabIndex,
 }: {
   className?: string;
   item: NavItem;
   onClick?: () => void;
+  tabIndex?: number;
 }) {
   if (isInternalRouteHref(item.href)) {
     return (
-      <Link to={item.href} className={className} onClick={onClick}>
+      <Link to={item.href} className={className} onClick={onClick} tabIndex={tabIndex}>
         {item.label}
       </Link>
     );
   }
 
   return (
-    <a href={item.href} className={className} onClick={onClick}>
+    <a href={item.href} className={className} onClick={onClick} tabIndex={tabIndex}>
       {item.label}
     </a>
+  );
+}
+
+function MobileNavGlyph({ isOpen }: { isOpen: boolean }) {
+  return (
+    <span className="relative block h-6 w-6" aria-hidden="true">
+      <span
+        className={cn(
+          "absolute inset-0 transition-[opacity,transform] duration-300 ease-sluice",
+          isOpen ? "scale-0 rotate-[-12deg] opacity-0" : "scale-100 rotate-0 opacity-100",
+        )}
+      >
+        <span className="absolute left-0 top-[4px] h-[2px] w-6 -translate-y-1/2 rounded-full bg-current" />
+        <span className="absolute left-0 top-1/2 h-[2px] w-6 -translate-y-1/2 rounded-full bg-current" />
+        <span className="absolute left-0 top-[20px] h-[2px] w-6 -translate-y-1/2 rounded-full bg-current" />
+      </span>
+      <span
+        className={cn(
+          "absolute inset-0 transition-[opacity,transform] duration-300 ease-sluice",
+          isOpen ? "scale-100 rotate-0 opacity-100" : "scale-0 rotate-12 opacity-0",
+        )}
+      >
+        <span className="absolute left-[2px] top-1/2 h-[2px] w-5 -translate-y-1/2 rotate-45 rounded-full bg-current" />
+        <span className="absolute left-[2px] top-1/2 h-[2px] w-5 -translate-y-1/2 -rotate-45 rounded-full bg-current" />
+      </span>
+    </span>
   );
 }
