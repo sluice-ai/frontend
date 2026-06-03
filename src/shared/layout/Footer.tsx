@@ -7,7 +7,7 @@ const links = [
 
 export function Footer() {
   return (
-    <footer className="border-t border-sluice-navy/10 py-10">
+    <footer className="py-10">
       <Container>
         <div className="flex flex-col items-center justify-between gap-4 text-center md:flex-row md:text-left">
           <p className="font-sans text-sm leading-6 tracking-normal text-sluice-muted">

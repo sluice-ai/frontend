@@ -1,40 +1,5 @@
-import { steps } from "@/features/marketing/content";
-import { ProcessFlowChart } from "./charts/ProcessFlowChart";
-import { Container } from "@/shared/ui/Container";
-import { SectionHeader } from "@/shared/ui/SectionHeader";
+import { RoutingProcess } from "./RoutingProcess";
 
 export function HowItWorks() {
-  return (
-    <section id="how-it-works" className="scroll-mt-[4.5rem] py-12 md:py-16">
-      <Container>
-        <div className="grid gap-8 lg:grid-cols-[0.9fr_1.1fr] lg:items-center">
-          <SectionHeader
-            title="The routing process."
-            copy="The network treats routing as a measurable competition rather than a static provider list."
-          />
-          <ProcessFlowChart />
-        </div>
-
-        <div className="mt-12 grid gap-px overflow-hidden rounded-card border border-sluice-navy/15 md:grid-cols-4">
-          {steps.map((step, index) => (
-            <div
-              key={step.number}
-              className={`bg-sluice-paper/40 p-6 backdrop-blur-[1px] dark:bg-white/[0.03] ${index < steps.length - 1 ? "md:border-r md:border-sluice-navy/10" : ""
-                }`}
-            >
-              <div className="font-display text-4xl font-normal leading-none tracking-normal text-sluice-navy/40">
-                {step.number}
-              </div>
-              <h3 className="mt-4 font-display text-xl font-normal leading-[1.1] tracking-[-0.01em] text-sluice-navy">
-                {step.title}
-              </h3>
-              <p className="mt-3 font-sans text-sm leading-6 tracking-normal text-sluice-muted">
-                {step.description}
-              </p>
-            </div>
-          ))}
-        </div>
-      </Container>
-    </section>
-  );
+  return <RoutingProcess />;
 }

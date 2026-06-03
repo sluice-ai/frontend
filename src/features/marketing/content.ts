@@ -37,27 +37,75 @@ export const layers: Layer[] = [
 export const steps: Step[] = [
   {
     number: "01",
+    subtitle: "Entry",
     title: "Request enters",
     description:
-      "Prompt metadata, budget, latency target, quality threshold, and privacy needs enter the network.",
+      "Prompt metadata, budget, latency target, quality threshold, and privacy needs arrive as a routing policy.",
+    stageLabel: "policy.json",
+    stageData: {
+      kind: "policy",
+      params: [
+        { key: "latency", value: "< 200 ms" },
+        { key: "budget", value: "$0.02 / 1k tok" },
+        { key: "quality", value: ">= 0.85" },
+        { key: "privacy", value: "standard" },
+        { key: "region", value: "us, eu" },
+      ],
+    },
   },
   {
     number: "02",
+    subtitle: "Competition",
     title: "Miners propose routes",
     description:
-      "Competing miners produce route policies against current provider conditions.",
+      "Competing miners produce route policies against current provider conditions and submit them within milliseconds.",
+    stageLabel: "miners / proposals",
+    stageData: {
+      kind: "proposals",
+      proposals: [
+        { name: "Together AI", detail: "$0.018 / 142 ms", routeId: "m-7a" },
+        { name: "Fireworks", detail: "$0.022 / 118 ms", routeId: "m-2c" },
+        { name: "Anyscale", detail: "$0.024 / 165 ms", routeId: "m-9f" },
+        { name: "DeepInfra", detail: "$0.020 / 154 ms", routeId: "m-1b" },
+      ],
+    },
   },
   {
     number: "03",
+    subtitle: "Evaluation",
     title: "Validators benchmark",
     description:
-      "Validators execute candidate routes and compare quality, cost, latency, and reliability.",
+      "Validators compare quality, cost, latency, and reliability, then produce a composite score for each proposal.",
+    stageLabel: "validators / score",
+    stageData: {
+      kind: "scores",
+      rows: [
+        { name: "Together", score: 82 },
+        { name: "Fireworks", score: 91, isWinner: true },
+        { name: "Anyscale", score: 68 },
+        { name: "DeepInfra", score: 77 },
+      ],
+    },
   },
   {
     number: "04",
+    subtitle: "Resolution",
     title: "Best route wins",
     description:
-      "The best valid route that satisfies task requirements is selected and rewarded.",
+      "The best valid route is selected, executed, and the winning miner is rewarded for satisfying the task requirements.",
+    stageLabel: "winner / routed",
+    stageData: {
+      kind: "winner",
+      winner: {
+        name: "Fireworks / m-2c",
+        detail: "$0.022 / 1k · 118 ms · score 91",
+        runners: [
+          "Together AI / m-7a / 82",
+          "DeepInfra / m-1b / 77",
+          "Anyscale / m-9f / 68",
+        ],
+      },
+    },
   },
 ];
 

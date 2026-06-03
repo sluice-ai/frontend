@@ -6,9 +6,11 @@ export function CallToAction() {
   return (
     <section
       id="cta"
-      className="scroll-mt-24 bg-sluice-deepNavy px-6 py-20 text-center md:px-16 md:py-28"
+      className="relative scroll-mt-24 overflow-hidden px-6 py-20 text-center md:px-16 md:py-28"
     >
-      <div className="mx-auto max-w-3xl">
+      <CtaShape />
+
+      <div className="relative z-[1] mx-auto max-w-3xl">
         <h2 className="font-display text-4xl font-normal leading-[1.08] tracking-[-0.02em] text-white md:text-5xl lg:text-[3.5rem]">
           Stop guessing. Start routing intelligently.
         </h2>
@@ -30,5 +32,22 @@ export function CallToAction() {
         </div>
       </div>
     </section>
+  );
+}
+
+function CtaShape() {
+  return (
+    <svg
+      className="pointer-events-none absolute inset-0 h-full w-full text-sluice-deepNavy"
+      viewBox="0 0 1000 100"
+      preserveAspectRatio="none"
+      aria-hidden="true"
+      focusable="false"
+    >
+      <path
+        d="M0 8 C120 5 220 11 340 8 S580 5 700 8 S900 11 1000 8 V92 C880 95 780 89 660 92 S420 95 300 92 S100 89 0 92 Z"
+        fill="currentColor"
+      />
+    </svg>
   );
 }
