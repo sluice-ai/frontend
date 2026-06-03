@@ -9,7 +9,7 @@ export function SettingsPage() {
 
   return (
     <main className="min-h-screen overflow-x-clip bg-sluice-paper text-sluice-ink">
-      <Navbar items={appNavItems} showProgress={false} />
+      <Navbar items={appNavItems} />
       <div className="app-glow pointer-events-none fixed inset-0 -z-10" />
       <SettingsModal open onClose={() => navigate("/app")} />
     </main>

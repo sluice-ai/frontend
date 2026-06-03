@@ -103,7 +103,7 @@ export function RoutingProcess() {
   return (
     <section
       id="how-it-works"
-      className="routing-process-section scroll-mt-[4.5rem] overflow-clip pb-12 pt-4 md:pb-16 md:pt-6"
+      className="routing-process-section scroll-mt-[4.5rem] overflow-clip pb-0 pt-4 md:pb-0 md:pt-6"
     >
       <Container>
         <div

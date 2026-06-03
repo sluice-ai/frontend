@@ -7,7 +7,7 @@ import { Navbar } from "@/shared/layout/Navbar";
 export function DashboardPage() {
   return (
     <main className="min-h-screen overflow-x-clip bg-sluice-paper text-sluice-ink">
-      <Navbar items={dashboardNavItems} showProgress={false} />
+      <Navbar items={dashboardNavItems} />
       <div className="app-glow pointer-events-none fixed inset-0 -z-10" />
 
       <section

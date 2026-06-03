@@ -1,4 +1,3 @@
-import { ArrowUp } from "lucide-react";
 import { useEffect, useRef, useState } from "react";
 import { cn } from "@/shared/lib/cn";
 
@@ -57,18 +56,39 @@ export function ScrollToTop() {
   };
 
   return (
-    <button
-      type="button"
+    <div
       onClick={scrollToTop}
+      onKeyDown={(e) => {
+        if (e.key === "Enter" || e.key === " ") {
+          e.preventDefault();
+          scrollToTop();
+        }
+      }}
+      role="button"
+      tabIndex={0}
       className={cn(
-        "fixed bottom-6 right-6 z-50 flex h-12 w-12 items-center justify-center rounded-full bg-sluice-navy text-sluice-paper transition-all duration-300 ease-sluice hover:bg-sluice-deepNavy focus:outline-none focus-visible:ring-2 focus-visible:ring-sluice-routeBlue focus-visible:ring-offset-2 dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue md:bottom-10 md:right-10",
+        "fixed bottom-6 right-6 z-50 flex h-10 w-10 cursor-pointer items-center justify-center rounded-full bg-sluice-navy text-white transition-opacity duration-200 focus:outline-none focus-visible:ring-2 focus-visible:ring-sluice-routeBlue focus-visible:ring-offset-2 dark:bg-sluice-routeBlue dark:text-sluice-deepNavy md:bottom-10 md:right-10",
         isVisible
-          ? "opacity-100"
-          : "pointer-events-none opacity-0"
+          ? "opacity-85 hover:opacity-100 pointer-events-auto"
+          : "opacity-0 pointer-events-none"
       )}
       aria-label="Scroll to top"
     >
-      <ArrowUp size={24} />
-    </button>
+      <svg
+        xmlns="http://www.w3.org/2000/svg"
+        fill="none"
+        viewBox="0 0 24 24"
+        strokeWidth={1.8}
+        stroke="currentColor"
+        className="h-5 w-5"
+      >
+        <path
+          strokeLinecap="round"
+          strokeLinejoin="round"
+          d="M4.5 10.5 12 3m0 0 7.5 7.5M12 3v18"
+        />
+      </svg>
+    </div>
   );
 }
+

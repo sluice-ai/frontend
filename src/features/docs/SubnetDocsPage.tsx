@@ -44,7 +44,7 @@ const subnetStats: SubnetStat[] = [
 export function SubnetDocsPage() {
   return (
     <main className="flex min-h-screen flex-col overflow-x-clip bg-sluice-paper text-sluice-ink">
-      <Navbar items={subnetNavItems} showProgress={false} />
+      <Navbar items={subnetNavItems} />
 
       <div className="app-glow pointer-events-none fixed inset-0 -z-10" />
 

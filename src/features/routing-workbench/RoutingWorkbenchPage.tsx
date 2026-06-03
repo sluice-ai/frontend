@@ -54,7 +54,7 @@ export function RoutingWorkbenchPage() {
 
   return (
     <main className="min-h-screen overflow-x-clip bg-sluice-paper text-sluice-ink">
-      <Navbar items={appNavItems} showProgress={false} />
+      <Navbar items={appNavItems} />
       <div className="app-glow pointer-events-none fixed inset-0 -z-10" />
 
       <section className="mx-auto flex min-h-screen w-full max-w-[1280px] flex-col px-6 pb-3 pt-20 sm:px-8 md:pt-24 lg:px-16">

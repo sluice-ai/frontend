@@ -1,4 +1,4 @@
-import type { ReactNode } from "react";
+import type { CSSProperties, ReactNode } from "react";
 import { useEffect, useLayoutEffect, useRef, useState } from "react";
 import { Link } from "react-router-dom";
 
@@ -44,8 +44,6 @@ export function Navbar({
 
   const navRef = useRef<HTMLElement | null>(null);
   const barRef = useRef<HTMLDivElement | null>(null);
-  const brandRef = useRef<HTMLAnchorElement | null>(null);
-  const controlsRef = useRef<HTMLDivElement | null>(null);
 
   useEffect(() => {
     if (!isOpen) return;
@@ -90,8 +88,8 @@ export function Navbar({
     };
   }, [showProgress]);
 
-  // Measure where the thread should begin (brand logo) and end (last link) so
-  // the curve anchors to them across every breakpoint and label change.
+  // Measure where the thread should begin and end. The thread runs
+  // full-bleed edge to edge on all screen sizes.
   useLayoutEffect(() => {
     if (!showProgress) {
       setGeometry(null);
@@ -102,21 +100,14 @@ export function Navbar({
     const measure = () => {
       const nav = navRef.current;
       const bar = barRef.current;
-      const brand = brandRef.current;
-      const controls = controlsRef.current;
-      if (!nav || !bar || !brand || !controls) return;
+      if (!nav || !bar) return;
 
       const navRect = nav.getBoundingClientRect();
-      // Desktop anchors the thread between the brand and the last link; mobile
-      // runs it full-bleed edge to edge (matches the `md` nav breakpoint).
-      const isDesktop = window.matchMedia("(min-width: 768px)").matches;
       const next: ThreadGeometry = {
         width: navRect.width,
         height: bar.getBoundingClientRect().height,
-        xStart: isDesktop ? brand.getBoundingClientRect().left - navRect.left : 0,
-        xEnd: isDesktop
-          ? controls.getBoundingClientRect().right - navRect.left
-          : navRect.width,
+        xStart: 0,
+        xEnd: navRect.width,
       };
 
       setGeometry((prev) =>
@@ -145,7 +136,7 @@ export function Navbar({
       observer.disconnect();
       window.removeEventListener("resize", schedule);
     };
-  }, [showProgress, items, rightContent, leftAccessory]);
+  }, [showProgress]);
 
   return (
     <nav
@@ -170,7 +161,6 @@ export function Navbar({
         <div className="flex min-w-0 items-center gap-4 max-sm:gap-3">
           {leftAccessory}
           <Link
-            ref={brandRef}
             to="/"
             className="flex min-w-0 items-center gap-2 font-sans text-2xl font-semibold leading-none tracking-tight text-sluice-navy no-underline"
             onClick={() => setIsOpen(false)}
@@ -179,7 +169,7 @@ export function Navbar({
           </Link>
         </div>
 
-        <div ref={controlsRef} className="flex items-center gap-3 sm:gap-4">
+        <div className="flex items-center gap-3 sm:gap-4">
           {rightContent ? (
             rightContent
           ) : (
@@ -223,7 +213,7 @@ export function Navbar({
             tabIndex={-1}
             aria-hidden="true"
             className={cn(
-              "fixed inset-x-0 bottom-0 top-16 z-10 cursor-default bg-sluice-deepNavy/12 opacity-0 backdrop-blur-[1px] transition-opacity duration-300 ease-sluice md:hidden",
+              "fixed inset-x-0 bottom-0 top-16 z-10 cursor-default bg-sluice-deepNavy/20 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-sluice md:hidden",
               isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none",
             )}
             onClick={() => setIsOpen(false)}
@@ -234,12 +224,12 @@ export function Navbar({
             className={cn(
               "fixed inset-x-0 top-0 z-20 overflow-hidden bg-sluice-paper/88 shadow-[0_28px_80px_-54px_rgba(29,52,135,0.45)] backdrop-blur-xl transition-[height,border-radius,opacity,background-color,box-shadow] duration-[600ms] ease-sluice motion-reduce:transition-none md:hidden dark:bg-sluice-paper/95 dark:shadow-[0_28px_80px_-54px_rgba(0,0,0,0.65)]",
               isOpen
-                ? "h-[min(52dvh,430px)] rounded-bl-[clamp(9rem,72vw,32rem)] opacity-100"
+                ? "h-[min(57dvh,380px)] rounded-bl-[clamp(9rem,72vw,32rem)] opacity-100"
                 : "pointer-events-none h-0 rounded-bl-none opacity-0",
             )}
           >
-            <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col items-end gap-3 px-6 pb-8 pt-20 text-right sm:px-8">
-              {items.map((item) => (
+            <div className="mx-auto flex h-full w-full max-w-[1280px] flex-col items-end gap-3 px-6 pb-6 pt-20 text-right sm:px-8">
+              {items.map((item, index) => (
                 <NavItemLink
                   key={item.href}
                   item={item}
@@ -249,6 +239,11 @@ export function Navbar({
                       "bg-sluice-navy text-sluice-paper hover:bg-sluice-deepNavy dark:bg-sluice-routeBlue dark:text-sluice-deepNavy dark:hover:bg-sluice-softBlue",
                     isOpen ? "translate-y-0 opacity-100" : "-translate-y-3 opacity-0",
                   )}
+                  style={{
+                    transitionDelay: isOpen
+                      ? `${index * 45}ms`
+                      : `${(items.length - 1 - index) * 28}ms`,
+                  }}
                   onClick={() => setIsOpen(false)}
                   tabIndex={isOpen ? undefined : -1}
                 />
@@ -266,22 +261,24 @@ function NavItemLink({
   item,
   onClick,
   tabIndex,
+  style,
 }: {
   className?: string;
   item: NavItem;
   onClick?: () => void;
   tabIndex?: number;
+  style?: CSSProperties;
 }) {
   if (isInternalRouteHref(item.href)) {
     return (
-      <Link to={item.href} className={className} onClick={onClick} tabIndex={tabIndex}>
+      <Link to={item.href} className={className} onClick={onClick} tabIndex={tabIndex} style={style}>
         {item.label}
       </Link>
     );
   }
 
   return (
-    <a href={item.href} className={className} onClick={onClick} tabIndex={tabIndex}>
+    <a href={item.href} className={className} onClick={onClick} tabIndex={tabIndex} style={style}>
       {item.label}
     </a>
   );
@@ -306,8 +303,8 @@ function MobileNavGlyph({ isOpen }: { isOpen: boolean }) {
           isOpen ? "scale-100 rotate-0 opacity-100" : "scale-0 rotate-12 opacity-0",
         )}
       >
-        <span className="absolute left-[2px] top-1/2 h-[2px] w-5 -translate-y-1/2 rotate-45 rounded-full bg-current" />
-        <span className="absolute left-[2px] top-1/2 h-[2px] w-5 -translate-y-1/2 -rotate-45 rounded-full bg-current" />
+        <span className="absolute left-0 top-1/2 h-[2px] w-6 -translate-y-1/2 rotate-45 rounded-full bg-current" />
+        <span className="absolute left-0 top-1/2 h-[2px] w-6 -translate-y-1/2 -rotate-45 rounded-full bg-current" />
       </span>
     </span>
   );

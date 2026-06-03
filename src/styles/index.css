@@ -32,6 +32,7 @@
   --animate-docs-fade-in: docs-fade-in 400ms var(--ease-sluice) both;
   --animate-docs-skeleton: docs-skeleton-pulse 2s ease-in-out infinite;
   --animate-sluice-layer-marquee: sluice-layer-marquee 24s linear infinite;
+  --animate-caret: caret 1.05s steps(2) infinite;
 }
 
 /* ============================================================
@@ -204,6 +205,15 @@
   }
 }
 
+@keyframes caret {
+  0%, 49% {
+    opacity: 1;
+  }
+  50%, 100% {
+    opacity: 0;
+  }
+}
+
 /* ============================================================
    Routing Process — scroll-driven thread section
    ============================================================ */
@@ -270,7 +280,7 @@
 .routing-step-copy {
   position: relative;
   z-index: 2;
-  padding: 0 0 16vh !important;
+  padding: 0 0 4vh !important;
 }
 
 .routing-step-panel {

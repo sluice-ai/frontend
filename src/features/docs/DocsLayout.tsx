@@ -25,7 +25,6 @@ export function DocsLayout(): JSX.Element {
     <div className="app-canvas min-h-screen overflow-x-clip">
       <Navbar
         items={[]}
-        showProgress={false}
         position="sticky"
         rightContent={
           <div className="ml-4 flex items-center gap-3 sm:gap-7">
