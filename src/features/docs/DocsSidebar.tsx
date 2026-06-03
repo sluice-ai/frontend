@@ -3,6 +3,7 @@ import { useEffect, useRef, useState } from "react";
 import { useLocation, Link } from "react-router-dom";
 
 import { cn } from "@/shared/lib/cn";
+import { MobileNavGlyph } from "@/shared/layout/Navbar";
 import { docsSidebar } from "./docsData";
 import type { DocNavSection } from "./docsData";
 
@@ -33,6 +34,25 @@ export function DocsSidebar({
     }
   }, [location.pathname]);
 
+  useEffect(() => {
+    if (!isOpen) return;
+    const closeOnEscape = (e: KeyboardEvent) => {
+      if (e.key === "Escape") onClose();
+    };
+    window.addEventListener("keydown", closeOnEscape);
+    return () => window.removeEventListener("keydown", closeOnEscape);
+  }, [isOpen, onClose]);
+
+  useEffect(() => {
+    if (!isOpen) return;
+    const media = window.matchMedia("(min-width: 1024px)");
+    const closeOnDesktop = (e: MediaQueryListEvent) => {
+      if (e.matches) onClose();
+    };
+    media.addEventListener("change", closeOnDesktop);
+    return () => media.removeEventListener("change", closeOnDesktop);
+  }, [isOpen, onClose]);
+
   const toggleSection = (title: string) => {
     setOpenSections((prev) => {
       const next = new Set(prev);
@@ -44,24 +64,41 @@ export function DocsSidebar({
 
   return (
     <>
-      {/* Mobile overlay */}
-      {isOpen && (
-        <div
-          className="fixed inset-x-0 bottom-0 top-16 z-[29] bg-sluice-deepNavy/28 backdrop-blur-[2px] lg:hidden"
-          onClick={onClose}
-          aria-hidden="true"
-        />
-      )}
+      {/* Full-screen overlay — sits below panel (z-49) but above everything else */}
+      <button
+        type="button"
+        tabIndex={-1}
+        aria-hidden="true"
+        className={cn(
+          "fixed inset-0 z-[49] cursor-default bg-sluice-deepNavy/20 opacity-0 backdrop-blur-[2px] transition-opacity duration-300 ease-sluice lg:hidden",
+          isOpen ? "pointer-events-auto opacity-100" : "pointer-events-none",
+        )}
+        onClick={onClose}
+      />
 
       <aside
         className={cn(
-          "fixed bottom-0 left-0 top-16 z-30 w-[min(84vw,320px)] overflow-hidden border-r border-sluice-navy/12 bg-sluice-paper/97 transition-transform duration-[280ms] ease-sluice lg:sticky lg:bottom-auto lg:z-[1] lg:h-[calc(100vh-64px)] lg:w-[264px] lg:translate-x-0 lg:border-r-0 lg:bg-transparent",
-          isOpen ? "translate-x-0" : "-translate-x-full",
+          "fixed right-0 top-0 z-[51] w-[min(84vw,320px)] overflow-hidden bg-sluice-paper/88 shadow-[0_28px_80px_-54px_rgba(29,52,135,0.45)] backdrop-blur-xl transition-[height,border-radius,opacity] duration-[600ms] ease-sluice motion-reduce:transition-none dark:bg-sluice-paper/95 dark:shadow-[0_28px_80px_-54px_rgba(0,0,0,0.65)]",
+          isOpen
+            ? "h-[100dvh] rounded-bl-3xl opacity-100"
+            : "pointer-events-none h-0 rounded-bl-none opacity-0",
+          "lg:pointer-events-auto lg:sticky lg:bottom-auto lg:top-16 lg:z-[1] lg:h-[calc(100vh-64px)] lg:w-[264px] lg:rounded-bl-none lg:opacity-100 lg:shadow-none lg:dark:shadow-none lg:[backdrop-filter:none] lg:bg-transparent lg:dark:bg-transparent",
         )}
         role="navigation"
         aria-label="Documentation navigation"
       >
-        <div className="h-full overflow-y-auto py-4 pb-8 [scrollbar-color:rgba(29,52,135,0.12)_transparent] [scrollbar-width:thin] lg:py-8 lg:pb-20">
+        {/* Close button — replaces the navbar toggle button that's now behind the panel */}
+        <button
+          type="button"
+          className="absolute right-6 top-[10px] z-10 inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full bg-sluice-navy/8 text-sluice-routeBlue shadow-[0_10px_28px_-18px_rgba(29,52,135,0.85)] outline-none transition-[background-color,color,transform] duration-300 ease-sluice hover:bg-sluice-navy/12 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 active:scale-[0.96] dark:bg-white/[0.08] dark:text-sluice-softBlue dark:shadow-[0_10px_28px_-18px_rgba(0,0,0,0.9)] dark:hover:bg-white/[0.12] lg:hidden"
+          onClick={onClose}
+          aria-label="Close navigation"
+          tabIndex={isOpen ? undefined : -1}
+        >
+          <MobileNavGlyph isOpen={true} />
+        </button>
+
+        <div className="h-full overflow-hidden pb-8 pt-20 lg:overflow-y-auto lg:py-8 lg:pb-20 lg:pt-8 lg:[scrollbar-color:rgba(29,52,135,0.12)_transparent] lg:[scrollbar-width:thin]">
           <nav className="flex flex-col gap-0.5">
             {docsSidebar.map((section) => (
               <SidebarSection

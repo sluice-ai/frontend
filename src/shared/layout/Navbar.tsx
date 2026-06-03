@@ -284,7 +284,7 @@ function NavItemLink({
   );
 }
 
-function MobileNavGlyph({ isOpen }: { isOpen: boolean }) {
+export function MobileNavGlyph({ isOpen }: { isOpen: boolean }) {
   return (
     <span className="relative block h-6 w-6" aria-hidden="true">
       <span

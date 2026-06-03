@@ -1,12 +1,10 @@
-import Menu from "lucide-react/dist/esm/icons/menu";
-import X from "lucide-react/dist/esm/icons/x";
 import { useState } from "react";
 import { Outlet, Link, useLocation } from "react-router-dom";
 
 import { DocsSidebar } from "./DocsSidebar";
 import { docsSidebar } from "./docsData";
-import { APP_VERSION } from "@/shared/config/appMeta";
-import { Navbar } from "@/shared/layout/Navbar";
+import { cn } from "@/shared/lib/cn";
+import { MobileNavGlyph, Navbar } from "@/shared/layout/Navbar";
 
 export function DocsLayout(): JSX.Element {
   const [sidebarOpen, setSidebarOpen] = useState(false);
@@ -22,15 +20,13 @@ export function DocsLayout(): JSX.Element {
     currentIndex < allPages.length - 1 ? allPages[currentIndex + 1] : null;
 
   return (
-    <div className="app-canvas min-h-screen overflow-x-clip">
+    <div className="app-canvas min-h-screen">
       <Navbar
         items={[]}
         position="sticky"
         rightContent={
           <div className="ml-4 flex items-center gap-3 sm:gap-7">
-            <span className="inline-flex h-7 items-center whitespace-nowrap rounded-full border border-sluice-navy/12 bg-sluice-navy/6 px-2.5 font-sans text-[11px] font-semibold leading-none tracking-normal text-sluice-navy">
-              {APP_VERSION}
-            </span>
+
             <Link
               to="/dashboard"
               className="whitespace-nowrap font-sans text-[15px] font-medium leading-none tracking-normal text-sluice-navy no-underline transition-opacity hover:opacity-70 max-sm:hidden"
@@ -39,11 +35,14 @@ export function DocsLayout(): JSX.Element {
             </Link>
             <button
               type="button"
-              className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-sluice-navy/18 bg-transparent text-sluice-navy outline-none transition-colors hover:border-sluice-navy/30 hover:bg-sluice-navy/6 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 lg:hidden"
+              className={cn(
+                "group relative inline-flex h-11 w-11 cursor-pointer items-center justify-center rounded-full text-sluice-navy outline-none transition-[background-color,color,transform] duration-300 ease-sluice hover:bg-sluice-navy/6 focus-visible:outline-[3px] focus-visible:outline-offset-[3px] focus-visible:outline-sluice-routeBlue/35 active:scale-[0.96] lg:hidden dark:text-sluice-softBlue dark:hover:bg-white/[0.06]",
+                sidebarOpen && "bg-sluice-navy/8 text-sluice-routeBlue shadow-[0_10px_28px_-18px_rgba(29,52,135,0.85)] dark:bg-white/[0.08] dark:shadow-[0_10px_28px_-18px_rgba(0,0,0,0.9)]",
+              )}
               onClick={() => setSidebarOpen((prev) => !prev)}
               aria-label="Toggle sidebar"
             >
-              {sidebarOpen ? <X size={20} /> : <Menu size={20} />}
+              <MobileNavGlyph isOpen={sidebarOpen} />
             </button>
           </div>
         }
