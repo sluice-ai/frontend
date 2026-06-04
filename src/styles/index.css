@@ -67,21 +67,36 @@
   --sluice-dg-brand: #1d3487;
   --sluice-dg-on-brand: #f2f3f5;
   --sluice-dg-on-brand-soft: rgba(242, 243, 245, 0.7);
+
+  /* Roadmap track accents — RGB triplets so we can compose translucent
+     bar fills via rgb(var(--x) / <alpha>). Tuned for the light canvas. */
+  --roadmap-tech: 47 95 208;
+  --roadmap-net: 11 100 112;
+  --roadmap-com: 104 86 198;
 }
 
 .dark {
   color-scheme: dark;
 
   /* Re-assign the shared color tokens to the dark palette. */
-  --color-sluice-navy: #edeff5; /* --ink: primary fg / headings / light borders */
-  --color-sluice-deepNavy: #06080f; /* --navy-deep */
-  --color-sluice-ink: #c3c8d6; /* --ink-soft: body text */
-  --color-sluice-paper: #0a0d16; /* --bg: page background + nav glass */
-  --color-sluice-paperWarm: #0c1020; /* --bg-2 */
-  --color-sluice-paperMuted: #131826; /* --surface-solid */
-  --color-sluice-routeBlue: #6d96f0; /* --accent */
-  --color-sluice-softBlue: #8aabf4; /* --accent-strong */
-  --color-sluice-muted: #838a9d; /* --muted */
+  --color-sluice-navy: #edeff5;
+  /* --ink: primary fg / headings / light borders */
+  --color-sluice-deepNavy: #06080f;
+  /* --navy-deep */
+  --color-sluice-ink: #c3c8d6;
+  /* --ink-soft: body text */
+  --color-sluice-paper: #0a0d16;
+  /* --bg: page background + nav glass */
+  --color-sluice-paperWarm: #0c1020;
+  /* --bg-2 */
+  --color-sluice-paperMuted: #131826;
+  /* --surface-solid */
+  --color-sluice-routeBlue: #6d96f0;
+  /* --accent */
+  --color-sluice-softBlue: #8aabf4;
+  /* --accent-strong */
+  --color-sluice-muted: #838a9d;
+  /* --muted */
 
   /* Page canvas */
   --sluice-canvas-from: #0c1020;
@@ -106,18 +121,19 @@
   --sluice-dg-brand: #6d96f0;
   --sluice-dg-on-brand: #06080f;
   --sluice-dg-on-brand-soft: rgba(6, 8, 15, 0.72);
+
+  /* Roadmap track accents — brighter for the dark canvas. */
+  --roadmap-tech: 109 150 240;
+  --roadmap-net: 95 196 209;
+  --roadmap-com: 160 133 240;
 }
 
-/* Shared page background: vertical wash + dual dotted route-blue grid.
+/* Shared page background: vertical wash.
    Used by <body> and the docs layout; adapts via the canvas tokens above. */
 @utility app-canvas {
   background-color: var(--color-sluice-paper);
   background-image:
-    linear-gradient(180deg, var(--sluice-canvas-from), var(--sluice-canvas-to) 60%),
-    radial-gradient(var(--sluice-canvas-dot-1) 1px, transparent 1.2px),
-    radial-gradient(var(--sluice-canvas-dot-2) 1px, transparent 1.2px);
-  background-position: 0 0, 0 0, 12px 12px;
-  background-size: auto, 18px 18px, 18px 18px;
+    linear-gradient(180deg, var(--sluice-canvas-from), var(--sluice-canvas-to) 60%);
 }
 
 /* Soft ambient glow overlay for app/docs pages. */
@@ -162,6 +178,7 @@
 }
 
 @keyframes rfd-pulse-line {
+
   0%,
   100% {
     stroke-opacity: 1;
@@ -185,6 +202,7 @@
 }
 
 @keyframes docs-skeleton-pulse {
+
   0%,
   100% {
     background-position: 200% 0;
@@ -206,10 +224,14 @@
 }
 
 @keyframes caret {
-  0%, 49% {
+
+  0%,
+  49% {
     opacity: 1;
   }
-  50%, 100% {
+
+  50%,
+  100% {
     opacity: 0;
   }
 }
@@ -223,7 +245,7 @@
   background: rgba(10, 13, 22, 0.98) !important;
 }
 
-.dark .routing-step-cloud > div:first-child {
+.dark .routing-step-cloud>div:first-child {
   background: var(--color-sluice-routeBlue) !important;
 }
 
@@ -317,7 +339,7 @@
 .routing-stage-card {
   position: relative;
   z-index: 5 !important;
-  width: min(100%, 28rem);
+  width: min(100%, 34rem);
 }
 
 .routing-stage-card--policy {
@@ -339,7 +361,7 @@
     padding: 6vh 0 8vh !important;
   }
 
-  .routing-step-copy > [data-step="2"] .routing-step-panel {
+  .routing-step-copy>[data-step="2"] .routing-step-panel {
     padding-top: 10vh !important;
   }
 
@@ -372,7 +394,7 @@
     top: var(--cloud-top-mobile) !important;
   }
 
-  .routing-step-copy > [data-step="2"] .routing-step-panel {
+  .routing-step-copy>[data-step="2"] .routing-step-panel {
     padding-top: 10vh !important;
   }
 
@@ -384,13 +406,17 @@
 
 @media (max-width: 720px) {
   .routing-process-section {
-    --routing-edge-lane: clamp(7.5rem, 31vw, 10rem);
-    --routing-text-max: 32rem;
+    --routing-edge-lane: clamp(6rem, 26vw, 8.5rem);
+    --routing-text-max: 34rem;
   }
 
   .routing-step-panel {
     min-height: 72vh !important;
     padding: 6vh 0 8vh !important;
+  }
+
+  .routing-stage-card {
+    width: 100%;
   }
 
   .routing-step-cloud {

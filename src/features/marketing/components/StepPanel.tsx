@@ -23,11 +23,11 @@ function PolicyStage({ params }: Extract<StageData, { kind: "policy" }>["params"
 
 function ProposalStage({ proposals }: { proposals: Extract<StageData, { kind: "proposals" }>["proposals"] }) {
   return (
-    <div className="grid gap-2">
+    <div className="grid gap-1.5">
       {proposals.map((p) => (
         <div
           key={p.routeId}
-          className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-lg border border-sluice-navy/10 bg-white/60 px-3 py-2.5 dark:border-white/10 dark:bg-white/[0.04]"
+          className="grid grid-cols-[1fr_auto] items-center gap-3 rounded-lg border border-sluice-navy/10 bg-white/60 px-3 py-1.5 dark:border-white/10 dark:bg-white/[0.04]"
         >
           <span>
             <strong className="block text-[13px] font-semibold text-sluice-navy">
@@ -100,7 +100,7 @@ function StageCard({ stageLabel, stageData }: { stageLabel: string; stageData: S
   return (
     <div
       className={cn(
-        "routing-stage-card relative z-[5] overflow-hidden rounded-lg border border-sluice-navy/12 p-4 shadow-lg dark:border-white/10",
+        "routing-stage-card relative z-[5] overflow-hidden rounded-lg border border-sluice-navy/12 px-4 py-3 shadow-lg dark:border-white/10",
         `routing-stage-card--${stageData.kind}`,
       )}
       style={{
@@ -108,18 +108,7 @@ function StageCard({ stageLabel, stageData }: { stageLabel: string; stageData: S
         background: "var(--color-sluice-paper, #f2f3f5)",
       }}
     >
-      {/* Dot-grid overlay */}
-      <div
-        className="pointer-events-none absolute inset-0"
-        style={{
-          backgroundImage:
-            "radial-gradient(var(--color-sluice-navy, #1d3487) 0.8px, transparent 0.8px)",
-          backgroundSize: "12px 12px",
-          opacity: 0.06,
-        }}
-        aria-hidden="true"
-      />
-      <span className="relative z-[1] mb-3 inline-flex font-mono text-[11px] text-sluice-muted">
+      <span className="mb-2 inline-flex font-mono text-[11px] text-sluice-muted">
         {stageLabel}
       </span>
       <div className="relative z-[1]">

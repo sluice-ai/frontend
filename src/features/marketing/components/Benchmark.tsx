@@ -112,15 +112,6 @@ export function Benchmark() {
                   );
                 })}
 
-                <div className="grid grid-cols-[22px_1fr] gap-3.5 items-baseline">
-                  <span className="select-none text-right text-xs text-[#5b6275]">
-                    {scoringWeights.length + 2}
-                  </span>
-                  <span className="text-[#c3c8d6]">
-                    <span className="text-[#5b6275]">)</span>
-                    <span className="ml-0.5 inline-block h-3.5 w-[7px] align-text-bottom bg-[#6d96f0] animate-caret" />
-                  </span>
-                </div>
 
                 {/* weight distribution separator */}
                 <div

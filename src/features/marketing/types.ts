@@ -35,15 +35,11 @@ export type RoadmapItem = {
   label: string;
   startWeek: number;
   endWeek: number;
-  lane: number;
 };
 
 export type RoadmapTrack = {
   title: string;
   window: string;
-  windowStart: number;
-  windowEnd: number;
-  lanes: number;
   color: "navy" | "blue" | "violet";
   items: RoadmapItem[];
 };
