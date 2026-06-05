@@ -1,4 +1,4 @@
-import { ArrowRight, BookOpen } from "lucide-react";
+import { ArrowRight, SquareTerminal } from "lucide-react";
 
 import { ButtonLink } from "@/shared/ui/ButtonLink";
 import { Container } from "@/shared/ui/Container";
@@ -28,12 +28,12 @@ export function Hero() {
                 Dashboard
               </ButtonLink>
               <ButtonLink
-                href="#benchmark"
+                href="/subnet"
                 variant="secondary"
-                icon={<BookOpen size={18} />}
+                icon={<SquareTerminal size={18} />}
                 className="w-full sm:w-auto justify-center whitespace-nowrap"
               >
-                See benchmark
+                View Subnet
               </ButtonLink>
             </div>
 

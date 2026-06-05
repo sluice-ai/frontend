@@ -8,7 +8,7 @@ export const navItems: NavItem[] = [
   { label: "How it works", href: "#how-it-works" },
   { label: "Benchmark", href: "#benchmark" },
   { label: "Roadmap", href: "#roadmap" },
-  { label: "Subnet", href: "/subnet" },
+  { label: "Team", href: "#team" },
   { label: "Docs", href: "/docs" },
 ];
 

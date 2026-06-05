@@ -3,6 +3,7 @@ import type {
   RoadmapTrack,
   ScoreWeight,
   Step,
+  TeamMember,
 } from "@/features/marketing/types";
 
 export const layers: Layer[] = [
@@ -167,5 +168,40 @@ export const roadmap: RoadmapTrack[] = [
       { label: "Start premium routing", startWeek: 8, endWeek: 9 },
       { label: "Onboard first design partners", startWeek: 7, endWeek: 8 },
     ],
+  },
+];
+
+export const teamMembers: TeamMember[] = [
+  {
+    name: "whoisanku",
+    role: "Chief Executive Officer",
+    handle: "@whoisanku",
+    initials: "WA",
+    xHref: "https://x.com/whoisanku",
+    palette: "blue",
+    imageSrc: "/team/whoisanku-avatar.png",
+    imageAlt: "Blue-lit silhouette avatar for whoisanku",
+    githubHref: "https://github.com/ankitbhandari-dev",
+  },
+  {
+    name: "0xAustin",
+    role: "Chief Business Officer",
+    handle: "@0xAustin",
+    initials: "0x",
+    xHref: "https://x.com/0xAustin",
+    palette: "teal",
+    imageSrc: "/team/austin-avatar.png",
+    imageAlt: "Pixel art avatar for 0xAustin",
+  },
+  {
+    name: "segoyal",
+    role: "Chief Operations Officer",
+    handle: "@segoyal",
+    initials: "SG",
+    xHref: "https://x.com/segoyal",
+    palette: "violet",
+    imageSrc: "/team/segoyal-avatar.png",
+    imageAlt: "Blue-lit developer silhouette avatar for segoyal",
+    githubHref: "https://github.com/segoyal",
   },
 ];

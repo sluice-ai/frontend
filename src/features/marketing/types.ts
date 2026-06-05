@@ -43,3 +43,15 @@ export type RoadmapTrack = {
   color: "navy" | "blue" | "violet";
   items: RoadmapItem[];
 };
+
+export type TeamMember = {
+  name: string;
+  role: string;
+  handle: string;
+  initials: string;
+  xHref: string;
+  palette: "blue" | "teal" | "violet";
+  imageSrc?: string;
+  imageAlt?: string;
+  githubHref?: string;
+};
