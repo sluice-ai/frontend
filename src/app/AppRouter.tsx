@@ -4,6 +4,7 @@ import { DashboardPage } from "@/features/dashboard/DashboardPage";
 import { DocsLayout } from "@/features/docs/DocsLayout";
 import { DocsIndex, DocsPlaceholder } from "@/features/docs/DocsPages";
 import { FaqPage } from "@/features/docs/FaqPage";
+import { SdkReferencePage } from "@/features/docs/SdkReferencePage";
 import { SluiceCorePage } from "@/features/docs/SluiceCorePage";
 import { SubnetDocsPage } from "@/features/docs/SubnetDocsPage";
 import { VisionPage } from "@/features/docs/VisionPage";
@@ -44,7 +45,7 @@ export default function AppRouter() {
 
         {/* API Reference */}
         <Route path="api/route" element={<DocsPlaceholder />} />
-        <Route path="api/sdk" element={<DocsPlaceholder />} />
+        <Route path="api/sdk" element={<SdkReferencePage />} />
 
         {/* Resources */}
         <Route path="resources/changelog" element={<DocsPlaceholder />} />

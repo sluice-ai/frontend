@@ -95,7 +95,7 @@ export const docsSidebar: DocNavSection[] = [
         label: "SDK Reference",
         href: "/docs/api/sdk",
         icon: SdkReferenceIcon,
-        description: "TypeScript and Python client libraries",
+        description: "Python & TypeScript clients with BYOK routing",
       },
     ],
   },
