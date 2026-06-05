@@ -1,5 +1,6 @@
-import { useState, type ReactNode } from "react";
-import { Check, Copy } from "lucide-react";
+import { useId, useState, type ReactNode } from "react";
+import { Check, Copy, CircleAlert, Lightbulb } from "lucide-react";
+import { AnimatePresence, MotionConfig, motion } from "motion/react";
 
 /* ============================================================
    Lightweight Python / TypeScript syntax highlighter.
@@ -107,6 +108,7 @@ interface CodeTab {
 function CodeTabs({ tabs }: { tabs: CodeTab[] }) {
   const [activeId, setActiveId] = useState(tabs[0]?.id ?? "");
   const [copied, setCopied] = useState(false);
+  const indicatorId = useId();
   const active = tabs.find((tab) => tab.id === activeId) ?? tabs[0];
   const tokens = tokenize(active.code, active.language);
 
@@ -123,35 +125,44 @@ function CodeTabs({ tabs }: { tabs: CodeTab[] }) {
   return (
     <div className="my-6 overflow-hidden rounded-[14px] border border-white/10 bg-[#0d1117] shadow-[0_18px_40px_-24px_rgba(0,0,0,0.7)]">
       <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/8 bg-white/[0.02] px-3 py-2.5">
-        <div
-          role="tablist"
-          aria-label="SDK language"
-          className="inline-flex rounded-md border border-white/10 bg-white/[0.03] p-0.5"
-        >
-          {tabs.map((tab) => {
-            const isActive = tab.id === active.id;
+        <MotionConfig transition={{ type: "spring", bounce: 0, duration: 0.4 }}>
+          <div
+            role="tablist"
+            aria-label="SDK language"
+            className="inline-flex rounded-md border border-white/10 bg-white/[0.03] p-0.5"
+          >
+            {tabs.map((tab) => {
+              const isActive = tab.id === active.id;
 
-            return (
-              <button
-                key={tab.id}
-                type="button"
-                role="tab"
-                aria-selected={isActive}
-                onClick={() => {
-                  setActiveId(tab.id);
-                  setCopied(false);
-                }}
-                className={`h-7 rounded px-2.5 font-sans text-[11px] font-semibold transition-colors ${
-                  isActive
-                    ? "bg-white/12 text-[#c9d1d9]"
-                    : "text-[#8b949e] hover:bg-white/[0.06] hover:text-[#c9d1d9]"
-                }`}
-              >
-                {tab.label}
-              </button>
-            );
-          })}
-        </div>
+              return (
+                <button
+                  key={tab.id}
+                  type="button"
+                  role="tab"
+                  aria-selected={isActive}
+                  onClick={() => {
+                    setActiveId(tab.id);
+                    setCopied(false);
+                  }}
+                  className={`relative h-7 rounded px-2.5 font-sans text-[11px] font-semibold outline-none transition-colors focus:!outline-none focus-visible:!outline-none ${
+                    isActive
+                      ? "text-[#e6edf3]"
+                      : "text-[#8b949e] hover:text-[#c9d1d9]"
+                  }`}
+                >
+                  {isActive && (
+                    <motion.span
+                      layoutId={indicatorId}
+                      className="absolute inset-0 rounded bg-white/[0.12]"
+                      style={{ zIndex: 0 }}
+                    />
+                  )}
+                  <span className="relative z-10">{tab.label}</span>
+                </button>
+              );
+            })}
+          </div>
+        </MotionConfig>
         <button
           type="button"
           onClick={handleCopy}
@@ -171,15 +182,26 @@ function CodeTabs({ tabs }: { tabs: CodeTab[] }) {
           )}
         </button>
       </div>
-      <pre className="overflow-x-auto px-4 py-4 text-[13px] leading-[1.7]">
-        <code className="font-mono">
-          {tokens.map((tok, i) => (
-            <span key={i} className={TOKEN_COLORS[tok.cls]}>
-              {tok.text}
-            </span>
-          ))}
-        </code>
-      </pre>
+      <div className="relative overflow-x-auto overflow-y-hidden">
+        <AnimatePresence mode="wait" initial={false}>
+          <motion.pre
+            key={active.id}
+            initial={{ opacity: 0, y: 4 }}
+            animate={{ opacity: 1, y: 0 }}
+            exit={{ opacity: 0, y: -4 }}
+            transition={{ duration: 0.18, ease: [0.16, 1, 0.3, 1] }}
+            className="px-4 py-4 text-[13px] leading-[1.7] motion-reduce:!transform-none"
+          >
+            <code className="font-mono">
+              {tokens.map((tok, i) => (
+                <span key={i} className={TOKEN_COLORS[tok.cls]}>
+                  {tok.text}
+                </span>
+              ))}
+            </code>
+          </motion.pre>
+        </AnimatePresence>
+      </div>
     </div>
   );
 }
@@ -208,21 +230,36 @@ function Callout({
   title: string;
   children: ReactNode;
 }) {
-  const accent =
+  const Icon = tone === "warn" ? CircleAlert : Lightbulb;
+
+  const textToneColor =
     tone === "warn"
-      ? "border-l-[#EA580C] dark:border-l-[#f59e0b]"
-      : "border-l-sluice-routeBlue";
+      ? "text-orange-700 dark:text-amber-400"
+      : "text-[#1d3487] dark:text-[#6d96f0]";
+
+  const iconColor =
+    tone === "warn"
+      ? "text-orange-600 dark:text-amber-400"
+      : "text-[#4a77dc] dark:text-[#6d96f0]";
+
+  const bgGradient =
+    tone === "warn"
+      ? "bg-gradient-to-r from-amber-500/[0.06] via-amber-500/[0.02] to-transparent dark:from-amber-500/[0.05] dark:via-amber-500/[0.01]"
+      : "bg-gradient-to-r from-sluice-routeBlue/[0.07] via-sluice-routeBlue/[0.02] to-transparent dark:from-sluice-routeBlue/[0.06] dark:via-sluice-routeBlue/[0.01]";
 
   return (
-    <div
-      className={`my-6 rounded-[12px] border border-sluice-navy/14 border-l-[3px] ${accent} bg-sluice-paper/46 p-4 dark:bg-white/[0.03]`}
-    >
-      <span className="mb-1.5 block font-sans text-[13px] font-bold text-sluice-navy">
-        {title}
-      </span>
-      <p className="m-0 font-sans text-[13.5px] leading-[1.7] text-sluice-ink [&_code]:rounded [&_code]:bg-sluice-navy/8 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[12.5px] [&_code]:text-sluice-navy [&_strong]:font-[650] [&_strong]:text-sluice-navy dark:[&_code]:bg-white/[0.08]">
+    <div className={`my-6 flex flex-col gap-2 p-4 pl-5 relative overflow-hidden rounded-lg ${bgGradient}`}>
+      <div className="flex items-center gap-2.5">
+        <span className={`${iconColor} flex items-center justify-center shrink-0`} aria-hidden="true">
+          <Icon size={16} strokeWidth={2.5} />
+        </span>
+        <span className={`font-sans text-[11px] font-bold tracking-wider uppercase ${textToneColor}`}>
+          {title}
+        </span>
+      </div>
+      <div className="pl-[26px] font-sans text-[13.5px] leading-[1.7] text-sluice-ink [&_code]:rounded [&_code]:bg-sluice-navy/8 [&_code]:px-1.5 [&_code]:py-0.5 [&_code]:font-mono [&_code]:text-[12.5px] [&_code]:text-sluice-navy [&_strong]:font-[650] [&_strong]:text-sluice-navy dark:[&_code]:bg-white/[0.08] dark:[&_code]:text-white dark:[&_strong]:text-white">
         {children}
-      </p>
+      </div>
     </div>
   );
 }
@@ -335,17 +372,7 @@ const FALLBACK_EXAMPLE_TS = `const response = await client.chat.completions.crea
 console.log(response.route.suggested.provider); // Sluice's best pick
 console.log(response.route.provider);           // BYOK match or BYOK fallback`;
 
-const DISABLE_FALLBACK_PY = `client = SluiceClient(
-    sluice_api_key="SLUICE_X...",
-    byok_providers={"chutes": "CHUTES_API_KEY"},
-    allow_fallback=False,
-)`;
 
-const DISABLE_FALLBACK_TS = `const client = new SluiceClient({
-  sluiceApiKey: "SLUICE_X...",
-  byokProviders: { chutes: "CHUTES_API_KEY" },
-  allowFallback: false,
-});`;
 
 /* ============================================================
    Page
@@ -528,12 +555,7 @@ export function SdkReferencePage() {
           Set <code>allow_fallback=False</code> if the SDK should only execute
           the top Sluice suggestion when that exact provider is in your BYOK map.
         </Callout>
-        <CodeTabs
-          tabs={[
-            { id: "python", label: "Python", code: DISABLE_FALLBACK_PY, language: "python" },
-            { id: "typescript", label: "TypeScript", code: DISABLE_FALLBACK_TS, language: "typescript" },
-          ]}
-        />
+
       </div>
 
       {/* create() reference */}
